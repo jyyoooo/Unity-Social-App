@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "299488500745",
+    "project_id": "unity-social-6483e",
+    "storage_bucket": "unity-social-6483e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299488500745:android:8ee1fea8aa9e6b4d5d6cd8",
+        "android_client_info": {
+          "package_name": "com.example.unitysocial"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtZPP6rrkwh7U8A8vKYwb4Rekeu4y_l6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
