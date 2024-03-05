@@ -4,8 +4,10 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:unitysocial/core/enums/auth_status.dart';
-import 'package:unitysocial/features/auth_feature/data/models/sign_up_model.dart';
-import 'package:unitysocial/features/auth_feature/data/repository/auth_repo.dart';
+import 'package:unitysocial/features/auth/data/models/login_model.dart';
+import 'package:unitysocial/features/auth/data/models/sign_up_model.dart';
+import 'package:unitysocial/features/auth/data/models/user_model.dart';
+import 'package:unitysocial/features/auth/data/repository/auth_repo.dart';
 
 part 'auth_events.dart';
 part 'auth_states.dart';
@@ -34,7 +36,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         : emit(AuthErrorState(authStatus: authStatus));
   }
 
-  FutureOr<void> loginEvent(LoginEvent event, Emitter<AuthState> emit) {}
+  FutureOr<void> loginEvent(LoginEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+    AuthenticationStatus authStatus =
+        await AuthRepository().signInWithEmail(login: event.login);
+    authStatus == AuthenticationStatus.signUpSuccess
+        ? emit(LoginSuccesState(authStatus: authStatus))
+        : emit(AuthErrorState(authStatus: authStatus));
+  }
 
   FutureOr<void> verifyEmailEvent(
       VerifyEmailEvent event, Emitter<AuthState> emit) {}

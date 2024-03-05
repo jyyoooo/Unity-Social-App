@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:unitysocial/features/community/screens/community_page.dart';
+import 'package:unitysocial/features/home/screens/home_page.dart';
+import 'package:unitysocial/features/profile/screens/profile_page.dart';
+import 'package:unitysocial/features/recruit/screens/recruit_page.dart';
 
 const defaultProfileImage =
     "https://imgs.search.brave.com/GrTMprW4fg05XTsfzacsNofnbaMJuXlbLIXZqUAn9vg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzI3/LzM2MF9GXzY0Njcy/NzM2X1U1a3BkR3M5/a2VVbGw4Q1JRM3Az/WWFFdjJNNnFrVlk1/LmpwZw";
@@ -61,13 +64,12 @@ ValueNotifier<bool> isEditMode = ValueNotifier(false);
 ValueNotifier<bool> loadingNotifier = ValueNotifier(false);
 ValueNotifier<bool> isReadMore = ValueNotifier(false);
 
-// List<Widget> screens = const [
-//   HomeScreen(),
-//   SearchScreen(),
-//   NotificationScreen(),
-//   ProfileScreen(),
-// ];
-
+List<Widget> screens = const [
+  HomePage(),
+  CommunityPage(),
+  RecruitPage(),
+  ProfilePage(),
+];
 
 final TextEditingController nameController = TextEditingController();
 final TextEditingController usernameController = TextEditingController();

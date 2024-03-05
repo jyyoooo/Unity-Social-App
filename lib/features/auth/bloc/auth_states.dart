@@ -16,6 +16,13 @@ class AuthSuccessState extends AuthState {
   AuthSuccessState({required this.authStatus});
 }
 
+class LoginSuccesState extends AuthState {
+  final AuthenticationStatus authStatus;
+  LoginSuccesState({required this.authStatus});
+}
+
+class UserState extends AuthState {}
+
 class EmailVerifiedState extends AuthState {}
 
 class PasswordResetSuccessState extends AuthState {}

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/features/auth_feature/bloc/auth_bloc.dart';
+import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 
 bool isEmailValid(String email) {
   final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');

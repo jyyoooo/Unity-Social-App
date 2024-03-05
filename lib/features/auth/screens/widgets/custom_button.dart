@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
 
 class CustomButton extends StatelessWidget {
-  CustomButton({super.key, required this.label,required this.onPressed});
+  CustomButton({super.key, required this.label, required this.onPressed});
 
   String label = '';
   Function() onPressed;
@@ -15,7 +15,7 @@ class CustomButton extends StatelessWidget {
           backgroundColor: MaterialStatePropertyAll(buttonGreen),
           shape: MaterialStatePropertyAll(
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
-      onPressed:  onPressed,
+      onPressed: onPressed,
       child: Text(
         label,
         style: const TextStyle(color: Colors.white),

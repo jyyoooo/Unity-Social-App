@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:unitysocial/core/utils/validators.dart';
-import 'package:unitysocial/features/auth_feature/data/repository/firestore_service.dart';
+import 'package:unitysocial/features/auth/data/repository/firestore_service.dart';
 
-import '../../../../core/utils/constants/constants.dart';
+import '../utils/constants/constants.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -70,10 +70,11 @@ class CustomTextField extends StatelessWidget {
                             isObscure.value = !isObscure.value;
                           },
                           icon: Icon(
+                            size: 20,
                             isObscure.value
                                 ? CupertinoIcons.eye
                                 : CupertinoIcons.eye_slash,
-                            color: Colors.grey,
+                            color: Colors.black54,
                           )),
                     )
                   : null
