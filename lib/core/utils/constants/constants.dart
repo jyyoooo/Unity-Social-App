@@ -1,31 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:unitysocial/features/community/screens/community_page.dart';
-import 'package:unitysocial/features/home/screens/home_page.dart';
-import 'package:unitysocial/features/profile/screens/profile_page.dart';
-import 'package:unitysocial/features/recruit/screens/recruit_page.dart';
 
-const defaultProfileImage =
-    "https://imgs.search.brave.com/GrTMprW4fg05XTsfzacsNofnbaMJuXlbLIXZqUAn9vg/rs:fit:860:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzI3/LzM2MF9GXzY0Njcy/NzM2X1U1a3BkR3M5/a2VVbGw4Q1JRM3Az/WWFFdjJNNnFrVlk1/LmpwZw";
-const notificationAuthToken =
-    "key=AAAAAHP5NW8:APA91bF2-vqWD1UTmRwsZ1Y_Xr-eFkz-cQO19pVa13x17fG3Ol5zTqd-zGeWGpGsgdgiO1JjAdmnyL0fylqSs2f-RZbhPtxKXzGTWMtkDcXpSVOwg1-9JX0MqqlESLQGkC2gGNn5rQKL";
-customFontStyle(
-    {double size = 20,
-    Color color = Colors.grey,
-    double letterSpacing = 0,
-    FontWeight fontWeight = FontWeight.w400,
-    FontStyle italic = FontStyle.normal}) {
-  return GoogleFonts.lato(
-    fontSize: textSize * size,
-    color: color,
-    letterSpacing: letterSpacing,
-    fontWeight: fontWeight,
-    fontStyle: italic,
-  );
-}
 
-// reactive text size
-double textSize = 0;
+
 
 // reactive height
 double screenHeight = 0;
@@ -33,7 +10,6 @@ double screenWidth = 0;
 setScreenSize(BuildContext context) {
   screenHeight = MediaQuery.of(context).size.height;
   screenWidth = MediaQuery.of(context).size.width;
-  textSize = MediaQuery.of(context).textScaleFactor;
 }
 
 // constant heights
@@ -64,12 +40,7 @@ ValueNotifier<bool> isEditMode = ValueNotifier(false);
 ValueNotifier<bool> loadingNotifier = ValueNotifier(false);
 ValueNotifier<bool> isReadMore = ValueNotifier(false);
 
-List<Widget> screens = const [
-  HomePage(),
-  CommunityPage(),
-  RecruitPage(),
-  ProfilePage(),
-];
+
 
 final TextEditingController nameController = TextEditingController();
 final TextEditingController usernameController = TextEditingController();

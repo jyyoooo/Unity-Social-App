@@ -24,7 +24,9 @@ validation(Function function, String input) {
     return isPasswordValid(input);
   } else if (function == isUsernameValid) {
     return isUsernameValid(input);
-  } 
+  } else{
+    return true;
+  }
 }
 
 validationResult(Function function) {
@@ -34,6 +36,8 @@ validationResult(Function function) {
     return 'password should contain atleast 8 characters';
   } else if (function == isUsernameValid) {
     return 'Username can only contain letters, numbers, and underscores';
+  }else{
+    return 'field cannot be empty';
   }
 }
 
@@ -63,6 +67,6 @@ String fieldIsEmpty(TextEditingController controller, context) {
   } else if (provider.nameController == controller) {
     return 'name is required';
   } else {
-    return 'field is empty';
+    return 'field cannot be empty';
   }
 }

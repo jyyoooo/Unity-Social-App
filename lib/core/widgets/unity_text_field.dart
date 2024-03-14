@@ -2,10 +2,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:unitysocial/core/utils/constants/constants.dart';
 import 'package:unitysocial/core/utils/validators.dart';
-import 'package:unitysocial/features/auth/data/repository/firestore_service.dart';
-
-import '../utils/constants/constants.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -13,6 +11,8 @@ class CustomTextField extends StatelessWidget {
   final Function validator;
   final bool obscureText;
   final bool suffixIcon;
+  final int maxLines;
+  final bool onlyNumbers;
 
   const CustomTextField({
     Key? key,
@@ -21,13 +21,18 @@ class CustomTextField extends StatelessWidget {
     required this.validator,
     this.obscureText = false,
     this.suffixIcon = false,
+    this.maxLines = 1,
+    this.onlyNumbers = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      margin: const EdgeInsets.only(top: 2,bottom: 8),
       child: TextFormField(
+        keyboardType:onlyNumbers? TextInputType.number:null,
+        maxLines: maxLines,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         obscureText: obscureText ? isObscure.value : !isObscure.value,
         validator: (value) {
           if (value!.isEmpty) {
@@ -37,19 +42,21 @@ class CustomTextField extends StatelessWidget {
           }
           return null;
         },
-        onChanged: (value) async {
-          hintText.contains('password')
-              ? controller.text.length >= 8
-                  ? isValid.value = true
-                  : isValid.value = false
-              : null;
-          hintText.contains('Username') && controller.text.isNotEmpty
-              ? isAvailable.value =
-                  await FireStoreService.existingUsername(value.trim())
-              : null;
-        },
+        // onChanged: (value) async {
+        //   hintText.contains('password')
+        //       ? controller.text.length >= 8
+        //           ? isValid.value = true
+        //           : isValid.value = false
+        //       : null;
+        //   hintText.contains('Username') && controller.text.isNotEmpty
+        //       ? isAvailable.value =
+        //           await FireStoreService.existingUsername(value.trim())
+        //       : null;
+        // },
         controller: controller,
+
         decoration: InputDecoration(
+          hintStyle: const TextStyle(fontSize: 15),
           hintText: hintText,
           filled: true,
           fillColor: Colors.grey[200],

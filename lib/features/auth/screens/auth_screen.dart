@@ -6,8 +6,8 @@ import 'widgets/signup_form.dart';
 import 'widgets/tab_properties.dart';
 import 'widgets/unity_branding.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+class AuthPage extends StatelessWidget {
+  const AuthPage({super.key});
 
   @override
   Widget build(BuildContext context) {
