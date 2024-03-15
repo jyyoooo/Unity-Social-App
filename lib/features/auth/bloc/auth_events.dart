@@ -3,6 +3,8 @@ part of 'auth_bloc.dart';
 
 abstract class AuthEvent {}
 
+class AppStartEvent extends AuthEvent {}
+
 class SignUpEvent extends AuthEvent {
   final SignUpModel user;
 

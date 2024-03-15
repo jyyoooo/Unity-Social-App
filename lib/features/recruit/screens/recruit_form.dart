@@ -2,9 +2,13 @@
 import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_search/flutter_location_search.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 import 'package:unitysocial/core/widgets/custom_button.dart';
 import 'package:unitysocial/core/widgets/snack_bar.dart';
@@ -12,6 +16,8 @@ import 'package:unitysocial/core/widgets/unity_appbar.dart';
 import 'package:unitysocial/core/widgets/unity_text_field.dart';
 import 'package:unitysocial/features/recruit/bloc/recruit_bloc.dart';
 import 'package:unitysocial/features/recruit/data/models/badge_model.dart';
+import 'package:unitysocial/features/recruit/data/models/location_model.dart';
+import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/date_time_range_widgets.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/location_picker_widgets.dart';
 
@@ -57,7 +63,7 @@ class _RecruitFormState extends State<RecruitForm> {
     final recruitProvider = BlocProvider.of<RecruitBloc>(context);
     return Scaffold(
       appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(60),
+          preferredSize: Size.fromHeight(100),
           child: UnityAppBar(
             showBackBtn: true,
             title: 'Recruitment Form',
@@ -124,6 +130,7 @@ class _RecruitFormState extends State<RecruitForm> {
                   builder: (context, state) {
                     if (state is LocationUpdatedState) {
                       selectedLocation = state.selectedLocation;
+                      log('${selectedLocation?.addressData}');
                       return LocationWidget(
                           recruitBloc: recruitProvider,
                           selectedLocation: state.selectedLocation);
@@ -139,7 +146,9 @@ class _RecruitFormState extends State<RecruitForm> {
                 BlocBuilder<RecruitBloc, RecruitState>(
                   builder: (context, state) {
                     if (state is LoadingState) {
-                      return const CircularProgressIndicator();
+                      return const CircularProgressIndicator(
+                        strokeWidth: 1.5,
+                      );
                     } else if (state is BadgeFetchSuccessState) {
                       allbadges = state.allbadges;
                       return BadgesGridWidget(
@@ -156,31 +165,87 @@ class _RecruitFormState extends State<RecruitForm> {
                   },
                 ),
 
-                CustomButton(
-                  label: 'Submit for approval',
-                  onPressed: () {
-                    log('selected cat $selectedCategory');
-                    log('selected daterange $selectedDateTimeRange');
-                    log('selected location ${selectedLocation?.address}');
-                    log('selected badges: ${selectedBadges.map((e) => e)}');
-                    log(FirebaseAuth.instance.currentUser.toString());
-                    recruitProvider.recruitFormKey.currentState!.validate();
-                    if (selectedLocation?.address == '') {
-                      log('hererere');
-                      showSnackbar(context, 'Location is not selected');
-                    }
-                    if (selectedDateTimeRange?.start.day == today.day ||
-                        selectedDateTimeRange == null) {
-                      showSnackbar(context, 'Date range is not selected');
-                    }
-                    if (selectedCategory == '') {
-                      showSnackbar(context, 'Category is not selected');
-                    }
-                  },
-                ),
+                BlocBuilder<RecruitBloc, RecruitState>(
+                    builder: (context, state) {
+                  if (state is SentForApproval) {
+                    return sentForApprovalWidget();
+                  }
+                  return CustomButton(
+                    label: 'Submit for approval',
+                    onPressed: () {
+                      String errorMsg = '';
+                      final form = recruitProvider.recruitFormKey.currentState!;
+                      if (!form.validate()) {
+                        errorMsg = 'Check missing fields';
+                      } else if (selectedCategory == '') {
+                        errorMsg = 'Category is not selected';
+                      } else if (selectedDateTimeRange?.start.day ==
+                              DateTime.now().day ||
+                          selectedDateTimeRange == null) {
+                        errorMsg = 'Date range is not selected';
+                      } else if (selectedLocation == null) {
+                        errorMsg = 'Location is not selected';
+                      } else if (selectedBadges.isEmpty) {
+                        errorMsg = 'No badges selected';
+                      }
+                      if (errorMsg.isNotEmpty) {
+                        // showSnackbar(context, errorMsg);
+                        showTopSnackBar(Overlay.of(context), CustomSnackBar.info(message: errorMsg));
+                        return;
+                      }
+
+                      String host = FirebaseAuth.instance.currentUser!.uid;
+
+                      final data = RecruitmentPost(
+                          host: host,
+                          title: recruitProvider.titleController.text.trim(),
+                          description:
+                              recruitProvider.descriptionController.text.trim(),
+                          category: selectedCategory,
+                          maximumMembers:
+                              int.parse(recruitProvider.membersController.text),
+                          duration: selectedDateTimeRange!,
+                          location: Location(
+                              address: selectedLocation!.address,
+                              latitude: selectedLocation!.latitude,
+                              longitude: selectedLocation!.longitude),
+                          badges: selectedBadges);
+
+                      context
+                          .read<RecruitBloc>()
+                          .add(CreateRecruitmentEvent(data: data));
+                          recruitProvider.descriptionController.clear();
+                          recruitProvider.titleController.clear();
+                          recruitProvider.membersController.clear();
+                    },
+                  );
+                }),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Card sentForApprovalWidget() {
+    return const Card(
+      margin: EdgeInsets.all(10),
+      child: Padding(
+        padding: EdgeInsets.all(12.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(CupertinoIcons.check_mark, color: CupertinoColors.systemGreen),
+            SizedBox(
+              width: 10,
+            ),
+            Text('Sent for Approval  ',
+                style: TextStyle(
+                    color: CupertinoColors.systemGreen,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15)),
+          ],
         ),
       ),
     );

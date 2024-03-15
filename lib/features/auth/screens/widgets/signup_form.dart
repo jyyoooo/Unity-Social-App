@@ -32,11 +32,13 @@ class SignUpForm extends StatelessWidget {
                   size: const Size.fromHeight(60),
                 ),
                 CustomTextField(
+                  obscureText: false,
                   controller: context.read<AuthBloc>().nameController,
                   hintText: 'Name',
                   validator: isUsernameValid,
                 ),
                 CustomTextField(
+                  obscureText: false,
                   controller: context.read<AuthBloc>().emailController,
                   hintText: 'E-mail',
                   validator: isEmailValid,
@@ -57,9 +59,6 @@ class SignUpForm extends StatelessWidget {
                   hintText: 'Confirm password',
                   validator: isPasswordValid,
                   obscureText: true,
-                ),
-                SizedBox.fromSize(
-                  size: const Size.fromHeight(25),
                 ),
                 BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {

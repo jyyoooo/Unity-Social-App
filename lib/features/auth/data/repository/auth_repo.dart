@@ -57,25 +57,11 @@ class AuthRepository {
     }
   }
 
-  Future<AuthenticationStatus> verifyEmail() {
-    // TODO: implement verifyEmail
-    throw UnimplementedError();
-  }
-
-  void deleteUser() {
-    // TODO: implement deleteUser
-  }
-  Future<AuthenticationStatus> signInWithGoogle() {
-    // TODO: implement signInWithGoogle
-    throw UnimplementedError();
-  }
-
-  Future<String> passwordReset({required String email}) {
-    // TODO: implement passwordReset
-    throw UnimplementedError();
-  }
-
-  sendEmailForVerification() async {
-    throw UnimplementedError();
+  Future<bool> checkForActiveUser() async {
+    if (FirebaseAuth.instance.currentUser != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }

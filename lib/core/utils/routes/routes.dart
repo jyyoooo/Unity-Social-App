@@ -12,7 +12,8 @@ List<Widget> buildScreens() {
 
 List<PersistentBottomNavBarItem> navBarItems() {
   return [
-    PersistentBottomNavBarItem(iconSize: 25,
+    PersistentBottomNavBarItem(
+      iconSize: 25,
       inactiveIcon: const Icon(CupertinoIcons.house),
       icon: const Icon(CupertinoIcons.house_fill),
       title: ("Home"),
@@ -27,7 +28,8 @@ List<PersistentBottomNavBarItem> navBarItems() {
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
-    PersistentBottomNavBarItem(iconSize: 25,
+    PersistentBottomNavBarItem(
+      iconSize: 25,
       routeAndNavigatorSettings: RouteAndNavigatorSettings(routes: {
         '/recruitForm': (context) => const RecruitForm(),
       }),
@@ -37,7 +39,8 @@ List<PersistentBottomNavBarItem> navBarItems() {
       activeColorPrimary: CupertinoColors.activeBlue,
       inactiveColorPrimary: CupertinoColors.systemGrey,
     ),
-    PersistentBottomNavBarItem(iconSize: 25,
+    PersistentBottomNavBarItem(
+      iconSize: 25,
       inactiveIcon: const Icon(CupertinoIcons.person_crop_circle),
       icon: const Icon(CupertinoIcons.person_crop_circle_fill),
       title: ("Profile"),

@@ -11,7 +11,7 @@ class RecruitPage extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(80),
+          preferredSize: Size.fromHeight(100),
           child: UnityAppBar(
             title: 'Recruit',
           )),

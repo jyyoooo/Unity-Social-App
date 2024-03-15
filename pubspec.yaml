@@ -1,5 +1,5 @@
 name: unitysocial
-description: "A new Flutter project."
+description: "A Social project by Jyothish K A"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -47,6 +47,7 @@ dependencies:
   persistent_bottom_nav_bar: ^5.0.2
   flutter_location_search: ^1.1.4
   flutter_secure_storage: ^9.0.0
+  top_snackbar_flutter:
 
 dev_dependencies:
   flutter_test:

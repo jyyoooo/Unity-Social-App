@@ -28,3 +28,7 @@ class EmailVerifiedState extends AuthState {}
 class PasswordResetSuccessState extends AuthState {}
 
 class LogoutSuccessState extends AuthState {}
+
+class UserFoundState extends AuthState {}
+
+class NoUserState extends AuthState {}

@@ -49,9 +49,7 @@ class LoginForm extends StatelessWidget {
                   suffixIcon: true,
                 ),
               ),
-              SizedBox.fromSize(
-                size: const Size.fromHeight(25),
-              ),
+            
               BlocListener<AuthBloc, AuthState>(
                 listenWhen: (previous, current) => current is LoginSuccesState,
                 listener: (context, state) {

@@ -8,7 +8,7 @@ class CommunityPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
         appBar: PreferredSize(
-            preferredSize: Size.fromHeight(80),
+            preferredSize: Size.fromHeight(100),
             child: UnityAppBar(
               title: 'Community',
             )),

@@ -1,6 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:unitysocial/features/home/screens/widgets/cause_category_widget.dart';
 import 'widgets/cause_card.dart';
+import 'widgets/home_app_bar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,39 +15,7 @@ class HomePage extends StatelessWidget {
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: <Widget>[
-          SliverAppBar(
-            titleSpacing: 20,
-            floating: true,
-            toolbarHeight: 60,
-            title: Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: Row(
-                children: [
-                  const Text(
-                    'Pick a Cause',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      IconButton(
-                          iconSize: 20,
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.location)),
-                      IconButton(
-                          iconSize: 20,
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.search)),
-                      IconButton(
-                          iconSize: 20,
-                          onPressed: () {},
-                          icon: const Icon(CupertinoIcons.bell))
-                    ],
-                  )
-                ],
-              ),
-            ),
-          ),
+          const HomeAppBar(),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -55,21 +26,55 @@ class HomePage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CauseCard(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CauseCategoryPage(
+                                    categoryName: 'Animals', query: 'Animals'),
+                              ));
+                        },
                         color: const Color.fromARGB(255, 255, 214, 98),
                         sizer: size,
                         image: 'assets/paw.png',
                         title: 'Animals'),
                     CauseCard(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CauseCategoryPage(
+                                    categoryName: 'Humanitarian',
+                                    query: 'Humanitarian'),
+                              ));
+                        },
                         color: const Color.fromARGB(255, 255, 176, 57),
                         sizer: size,
                         image: 'assets/humans.png',
                         title: 'Humanity'),
                     CauseCard(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CauseCategoryPage(
+                                    categoryName: 'Water', query: 'Water'),
+                              ));
+                        },
                         color: const Color.fromARGB(255, 109, 196, 255),
                         sizer: size,
                         image: 'assets/water.png',
                         title: 'Water'),
                     CauseCard(
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const CauseCategoryPage(
+                                    categoryName: 'Environment',
+                                    query: 'Environment'),
+                              ));
+                        },
                         scale: 2.4,
                         color: const Color.fromRGBO(37, 204, 140, .77),
                         sizer: size,

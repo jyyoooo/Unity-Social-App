@@ -12,12 +12,14 @@ class DateRangeUpdatedState extends RecruitState {
   DateRangeUpdatedState({required this.updatedDateTimeRange});
 }
 
-class LocationUpdatedState extends RecruitState{
-  final LocationData selectedLocation ;
+class LocationUpdatedState extends RecruitState {
+  final LocationData selectedLocation;
   LocationUpdatedState({required this.selectedLocation});
 }
 
-class BadgeFetchSuccessState extends RecruitState{
+class BadgeFetchSuccessState extends RecruitState {
   final List<AchievementBadge> allbadges;
   BadgeFetchSuccessState({required this.allbadges});
 }
+
+class SentForApproval extends RecruitState {}

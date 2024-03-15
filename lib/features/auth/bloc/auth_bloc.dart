@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:unitysocial/core/enums/auth_status.dart';
@@ -24,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<GoogleSignUpEvent>(googleSignUpEvent);
     on<PasswordResetEvent>(passwordResetEvent);
     on<LogoutEvent>(logoutEvent);
+    on<AppStartEvent>(appStartEvent);
   }
   FutureOr<void> signUpEvent(SignUpEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
@@ -53,4 +55,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       PasswordResetEvent event, Emitter<AuthState> emit) {}
 
   FutureOr<void> logoutEvent(LogoutEvent event, Emitter<AuthState> emit) {}
+
+  FutureOr<void> appStartEvent(
+      AppStartEvent event, Emitter<AuthState> emit) async {
+    emit(AuthInitialState());
+    log('in app start');
+    final isUserLoggedIn = await AuthRepository().checkForActiveUser();
+    if (isUserLoggedIn) {
+      emit(UserFoundState());
+    } else {
+      emit(NoUserState());
+    }
+  }
 }

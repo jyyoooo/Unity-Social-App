@@ -14,23 +14,25 @@ class UnityAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      leading: showBackBtn
-          ? Padding(
-              padding: const EdgeInsets.only(top: 25.0),
-              child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: const Icon(CupertinoIcons.back)),
-            )
-          : const SizedBox.shrink(),
-      toolbarHeight: 100,
-      title: Padding(
-        padding: const EdgeInsets.only(top: 25.0),
-        child: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+    return SafeArea(
+      child: AppBar(forceMaterialTransparency: true,
+        leading: showBackBtn
+            ? Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    icon: const Icon(CupertinoIcons.back)),
+              )
+            : const SizedBox.shrink(),
+        toolbarHeight: 120,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 10.0),
+          child: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+          ),
         ),
       ),
     );

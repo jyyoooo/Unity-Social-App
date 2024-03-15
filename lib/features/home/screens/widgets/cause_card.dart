@@ -8,7 +8,7 @@ class CauseCard extends StatelessWidget {
     required this.image,
     required this.title,
     required this.color,
-    this.scale = 2.3,
+    this.scale = 2.3, required this.onTap,
   }) : super(key: key);
 
   final Size sizer;
@@ -16,6 +16,7 @@ class CauseCard extends StatelessWidget {
   final String title;
   final Color color;
   final double scale;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class CauseCard extends StatelessWidget {
           child: InkWell(
             customBorder:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            onTap: () {},
+            onTap: onTap,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
