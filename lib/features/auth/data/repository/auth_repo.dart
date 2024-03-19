@@ -45,7 +45,7 @@ class AuthRepository {
           email: login.email, password: login.password);
       return AuthenticationStatus.signUpSuccess;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
+      if (e.code == 'user-not-found') {
         return AuthenticationStatus.userNotFound;
       } else if (e.code == 'wrong-password') {
         return AuthenticationStatus.wrongPassword;

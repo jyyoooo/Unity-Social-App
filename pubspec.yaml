@@ -48,6 +48,7 @@ dependencies:
   flutter_location_search: ^1.1.4
   flutter_secure_storage: ^9.0.0
   top_snackbar_flutter:
+  intl:
 
 dev_dependencies:
   flutter_test:

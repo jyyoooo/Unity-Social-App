@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-
-
 
 // reactive height
 double screenHeight = 0;
@@ -32,16 +28,3 @@ const divider = Divider(color: Colors.grey);
 
 final radius10 = BorderRadius.circular(10);
 final radius20 = BorderRadius.circular(20);
-
-ValueNotifier<bool> isValid = ValueNotifier(false);
-ValueNotifier<bool> isObscure = ValueNotifier(true);
-ValueNotifier<bool> isAvailable = ValueNotifier(false);
-ValueNotifier<bool> isEditMode = ValueNotifier(false);
-ValueNotifier<bool> loadingNotifier = ValueNotifier(false);
-ValueNotifier<bool> isReadMore = ValueNotifier(false);
-
-
-
-final TextEditingController nameController = TextEditingController();
-final TextEditingController usernameController = TextEditingController();
-final TextEditingController bioController = TextEditingController();

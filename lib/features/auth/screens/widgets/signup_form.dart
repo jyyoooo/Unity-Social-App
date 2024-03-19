@@ -1,21 +1,21 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/core/utils/constants/constants.dart';
-import 'package:unitysocial/core/utils/validators.dart';
+import 'package:unitysocial/core/utils/validators/validators.dart';
 import 'package:unitysocial/core/widgets/snack_bar.dart';
 import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 import 'package:unitysocial/features/auth/data/models/sign_up_model.dart';
 import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/unity_text_field.dart';
+import 'package:unitysocial/core/widgets/unity_text_field/unity_text_field.dart';
 
 class SignUpForm extends StatelessWidget {
-  const SignUpForm({
-    super.key,
-    required this.blocProvider,
-  });
+  SignUpForm({super.key, required this.blocProvider});
 
   final AuthBloc blocProvider;
+  final signUpformKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,40 +25,36 @@ class SignUpForm extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: Form(
-            key: blocProvider.signUpformKey,
+            key: signUpformKey,
             child: Column(
               children: [
                 SizedBox.fromSize(
                   size: const Size.fromHeight(60),
                 ),
-                CustomTextField(
-                  obscureText: false,
-                  controller: context.read<AuthBloc>().nameController,
+                UnityTextField(
+                  controller: nameController,
                   hintText: 'Name',
-                  validator: isUsernameValid,
+                  validator: nameValidation,
                 ),
-                CustomTextField(
-                  obscureText: false,
-                  controller: context.read<AuthBloc>().emailController,
+                UnityTextField(
+                  controller: blocProvider.emailController,
                   hintText: 'E-mail',
-                  validator: isEmailValid,
+                  validator: emailValidation,
                 ),
-                ValueListenableBuilder(
-                  valueListenable: isObscure,
-                  builder: (context, value, _) => CustomTextField(
-                    controller: context.read<AuthBloc>().passwordController,
-                    hintText: 'Password',
-                    validator: isPasswordValid,
-                    obscureText: true,
-                    suffixIcon: true,
-                  ),
+                UnityTextField(
+                  obscure: true,
+                  controller: passwordController,
+                  hintText: 'Password',
+                  validator: passwordValidation,
                 ),
-                CustomTextField(
-                  controller:
-                      context.read<AuthBloc>().confirmPasswordController,
+                UnityTextField(
+                  obscure: true,
+                  controller: confirmPasswordController,
                   hintText: 'Confirm password',
-                  validator: isPasswordValid,
-                  obscureText: true,
+                  validator: (value) {
+                    return confirmPassValidation(
+                        value, passwordController.text);
+                  },
                 ),
                 BlocListener<AuthBloc, AuthState>(
                   listener: (context, state) {
@@ -67,12 +63,12 @@ class SignUpForm extends StatelessWidget {
                     } else if (state is AuthSuccessState) {
                       log('auth suxs');
                       showSnackbar(context,
-                          'Account created for ${blocProvider.nameController.text}, Login to Continue');
+                          'Account created for ${nameController.text}, Login to Continue');
                       DefaultTabController.of(context).animateTo(1);
-                      blocProvider.nameController.clear();
+                      nameController.clear();
                       blocProvider.emailController.clear();
-                      blocProvider.passwordController.clear();
-                      blocProvider.confirmPasswordController.clear();
+                      passwordController.clear();
+                      confirmPasswordController.clear();
                     } else if (state is AuthErrorState) {
                       log('auth error');
                       showSnackbar(context, 'email already exists');
@@ -84,15 +80,13 @@ class SignUpForm extends StatelessWidget {
                           label: 'Sign Up',
                           onPressed: () {
                             log('signup working');
-                            if (blocProvider.signUpformKey.currentState!
-                                    .validate() &&
-                                blocProvider.confirmPasswordController.text ==
-                                    blocProvider.passwordController.text) {
+                            if (signUpformKey.currentState!.validate() &&
+                                confirmPasswordController.text ==
+                                    passwordController.text) {
                               final signUp = SignUpModel(
-                                  name: blocProvider.nameController.text.trim(),
+                                  name: nameController.text.trim(),
                                   email: blocProvider.emailController.text,
-                                  password:
-                                      blocProvider.passwordController.text);
+                                  password: passwordController.text);
 
                               blocProvider.add(SignUpEvent(user: signUp));
                             }

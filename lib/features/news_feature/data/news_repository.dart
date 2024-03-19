@@ -1,4 +1,6 @@
 
+import 'dart:developer';
+
 import 'package:http/http.dart' as http;
 
 class NewsRepository{
@@ -9,6 +11,6 @@ class NewsRepository{
 
   getNews()async{
     var response = await httpClient.get(Uri.parse(newsBaseUrl));
-    print(response.statusCode);
+    log(response.statusCode.toString());
   }
 }

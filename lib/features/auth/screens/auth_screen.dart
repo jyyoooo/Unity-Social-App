@@ -1,3 +1,5 @@
+import 'package:flutter/gestures.dart';
+
 import '../bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'widgets/login_form.dart';
@@ -22,14 +24,15 @@ class AuthPage extends StatelessWidget {
             const BrandingSection(),
             const TabProperties(),
             Expanded(
-                child: TabBarView(children: [
-              SignUpForm(blocProvider: blocProvider),
-              LoginForm(blocProvider: blocProvider)
-            ])),
+                child: TabBarView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                  SignUpForm(blocProvider: blocProvider),
+                  LoginForm(blocProvider: blocProvider)
+                ])),
           ],
         ),
       ),
     );
   }
 }
-

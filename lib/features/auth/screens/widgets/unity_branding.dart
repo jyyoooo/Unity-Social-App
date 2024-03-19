@@ -10,7 +10,7 @@ class BrandingSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
+      margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
       child: Column(
         children: [
           SizedBox(

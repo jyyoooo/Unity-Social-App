@@ -12,12 +12,7 @@ part 'auth_events.dart';
 part 'auth_states.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final signUpformKey = GlobalKey<FormState>();
-  final loginFormKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
   AuthBloc() : super(AuthInitialState()) {
     on<SignUpEvent>(signUpEvent);
     on<LoginEvent>(loginEvent);
@@ -40,6 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoadingState());
     AuthenticationStatus authStatus =
         await AuthRepository().signInWithEmail(login: event.login);
+        log(authStatus.toString());
     authStatus == AuthenticationStatus.signUpSuccess
         ? emit(LoginSuccesState(authStatus: authStatus))
         : emit(AuthErrorState(authStatus: authStatus));

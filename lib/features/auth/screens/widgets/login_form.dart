@@ -2,21 +2,23 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
-import 'package:unitysocial/core/utils/constants/constants.dart';
-import 'package:unitysocial/core/utils/validators.dart';
+import 'package:unitysocial/core/utils/validators/validators.dart';
+import 'package:unitysocial/core/widgets/snack_bar.dart';
 import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 import 'package:unitysocial/features/auth/data/models/login_model.dart';
 import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/unity_text_field.dart';
+import 'package:unitysocial/core/widgets/unity_text_field/unity_text_field.dart';
 import 'package:unitysocial/features/home/screens/widgets/navigation_bar.dart';
 
 class LoginForm extends StatelessWidget {
-  const LoginForm({
+  LoginForm({
     super.key,
     required this.blocProvider,
   });
 
   final AuthBloc blocProvider;
+  final loginFormKey = GlobalKey<FormState>();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,60 +28,51 @@ class LoginForm extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Form(
-          key: blocProvider.loginFormKey,
+          key: loginFormKey,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               SizedBox.fromSize(
                 size: const Size.fromHeight(60),
               ),
-              CustomTextField(
-                obscureText: false,
-                controller: context.read<AuthBloc>().emailController,
-                hintText: 'E-mail',
-                validator: isEmailValid,
-              ),
-              ValueListenableBuilder(
-                valueListenable: isObscure,
-                builder: (context, value, _) => CustomTextField(
-                  controller: context.read<AuthBloc>().passwordController,
+              UnityTextField(
+                  controller: blocProvider.emailController,
+                  hintText: 'E-mail',
+                  validator: emailValidation),
+              UnityTextField(
+                  obscure: true,
+                  controller: passwordController,
                   hintText: 'Password',
-                  validator: isPasswordValid,
-                  obscureText: true,
-                  suffixIcon: true,
-                ),
-              ),
-            
+                  validator: passwordValidation),
               BlocListener<AuthBloc, AuthState>(
-                listenWhen: (previous, current) => current is LoginSuccesState,
+                // listenWhen: (previous, current) => current is LoginSuccesState,
                 listener: (context, state) {
                   if (state is AuthLoadingState) {
                     log('loading');
                   } else if (state is LoginSuccesState) {
+                    log('login suxs');
                     FocusScope.of(context).unfocus();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => const UnityNavigator()));
-                  } else if (state is AuthErrorState) {
+                  }
+                  if (state is AuthErrorState) {
                     log('login error');
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text(state.authStatus.name),
-                      duration: const Duration(seconds: 3),
-                    ));
+                    showErrorSnackBar(context, 'Invalid login credentials');
                   }
                 },
                 child: context.watch<AuthBloc>().state is AuthLoadingState
-                    ? CircularProgressIndicator(
-                        color: buttonGreen,
-                      )
+                    ? Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: CircularProgressIndicator(
+                          color: buttonGreen, strokeWidth: 1.5),
+                    )
                     : CustomButton(
                         label: 'Log In',
                         onPressed: () {
-                          if (blocProvider.loginFormKey.currentState!
-                              .validate()) {
+                          if (loginFormKey.currentState!.validate()) {
                             context.read<AuthBloc>().add(LoginEvent(Login(
                                 email: blocProvider.emailController.text.trim(),
-                                password:
-                                    blocProvider.passwordController.text)));
+                                password: passwordController.text.trim())));
                           }
                         },
                       ),

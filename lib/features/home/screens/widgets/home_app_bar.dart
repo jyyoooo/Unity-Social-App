@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:unitysocial/features/search/screens/search_page.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
@@ -8,11 +9,14 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appBarKey = GlobalKey();
+
     return SliverAppBar(
+      forceMaterialTransparency: true,
       floating: true,
-      toolbarHeight: 100,
+      toolbarHeight: 80,
       title: Padding(
-        padding: const EdgeInsets.only(top: 30.0),
+        padding: const EdgeInsets.only(top: 50.0, left: 20),
         child: Row(
           children: [
             const Text(
@@ -28,7 +32,14 @@ class HomeAppBar extends StatelessWidget {
                     icon: const Icon(CupertinoIcons.location)),
                 IconButton(
                     iconSize: 20,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SearchPage(),
+                        ),
+                      );
+                    },
                     icon: const Icon(CupertinoIcons.search)),
                 IconButton(
                     iconSize: 20,

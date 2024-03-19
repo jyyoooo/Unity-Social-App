@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
-import 'package:unitysocial/features/home/screens/widgets/cause_category_widget.dart';
-import 'widgets/cause_card.dart';
+import 'package:unitysocial/features/home/screens/widgets/category_distribution_widget.dart';
+import 'widgets/cause_category_card.dart';
 import 'widgets/home_app_bar.dart';
 
 class HomePage extends StatelessWidget {
@@ -30,7 +28,7 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const CauseCategoryPage(
+                                builder: (context) => CauseCategoryPage(
                                     categoryName: 'Animals', query: 'Animals'),
                               ));
                         },
@@ -43,7 +41,7 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const CauseCategoryPage(
+                                builder: (context) => CauseCategoryPage(
                                     categoryName: 'Humanitarian',
                                     query: 'Humanitarian'),
                               ));
@@ -57,7 +55,7 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const CauseCategoryPage(
+                                builder: (context) => CauseCategoryPage(
                                     categoryName: 'Water', query: 'Water'),
                               ));
                         },
@@ -70,7 +68,7 @@ class HomePage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const CauseCategoryPage(
+                                builder: (context) => CauseCategoryPage(
                                     categoryName: 'Environment',
                                     query: 'Environment'),
                               ));

@@ -42,7 +42,7 @@ class RecruitBloc extends Bloc<RecruitEvent, RecruitState> {
       FetchBadgesEvent event, Emitter<RecruitState> emit) async {
     log('in fetch');
     emit(LoadingState());
-    final allbadges = await RecruitRepository().fetchAllBadges();
+    final allbadges = await RecruitRepository().fetchAllBadges('');
     emit(BadgeFetchSuccessState(allbadges: allbadges));
   }
 

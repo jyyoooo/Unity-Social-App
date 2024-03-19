@@ -8,7 +8,7 @@ class RecruitRepository {
   final badgeCollection = FirebaseFirestore.instance.collection('badges');
   final postsCollection = FirebaseFirestore.instance.collection('posts');
 
-  Future<List<AchievementBadge>> fetchAllBadges() async {
+  Future<List<AchievementBadge>> fetchAllBadges(String? filter) async {
     try {
       final allBadges = await badgeCollection.get();
       return allBadges.docs

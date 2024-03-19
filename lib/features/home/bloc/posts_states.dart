@@ -1,6 +1,7 @@
 part of 'posts_bloc.dart';
 
-abstract class PostsState {}
+
+sealed class PostsState {}
 
 class PostsInitial extends PostsState {}
 

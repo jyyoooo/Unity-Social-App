@@ -6,14 +6,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_search/flutter_location_search.dart';
-import 'package:top_snackbar_flutter/custom_snack_bar.dart';
-
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:unitysocial/core/utils/validators/validators.dart';
 
 import 'package:unitysocial/core/widgets/custom_button.dart';
 import 'package:unitysocial/core/widgets/snack_bar.dart';
 import 'package:unitysocial/core/widgets/unity_appbar.dart';
-import 'package:unitysocial/core/widgets/unity_text_field.dart';
+import 'package:unitysocial/core/widgets/unity_text_field/unity_text_field.dart';
 import 'package:unitysocial/features/recruit/bloc/recruit_bloc.dart';
 import 'package:unitysocial/features/recruit/data/models/badge_model.dart';
 import 'package:unitysocial/features/recruit/data/models/location_model.dart';
@@ -62,8 +60,8 @@ class _RecruitFormState extends State<RecruitForm> {
   Widget build(BuildContext context) {
     final recruitProvider = BlocProvider.of<RecruitBloc>(context);
     return Scaffold(
-      appBar: const PreferredSize(
-          preferredSize: Size.fromHeight(100),
+      appBar:  PreferredSize(
+          preferredSize:const Size.fromHeight(100),
           child: UnityAppBar(
             showBackBtn: true,
             title: 'Recruitment Form',
@@ -80,18 +78,16 @@ class _RecruitFormState extends State<RecruitForm> {
                 const TextFieldHeader(
                   title: 'Name',
                 ),
-                CustomTextField(
-                    obscureText: false,
+                UnityTextField(
                     controller: recruitProvider.titleController,
                     hintText: 'Title  of the cause',
-                    validator: () {}),
+                    validator: titlevalidation),
                 const TextFieldHeader(title: 'Description'),
-                CustomTextField(
-                    obscureText: false,
+                UnityTextField(
                     maxLines: 4,
                     controller: recruitProvider.descriptionController,
                     hintText: 'Description  of the cause',
-                    validator: () {}),
+                    validator: descriptionValidation),
 
                 // CATEGORY SELECTOR
                 const TextFieldHeader(title: 'Select category'),
@@ -101,10 +97,10 @@ class _RecruitFormState extends State<RecruitForm> {
                 ),
                 // MAXIMUM MEMBERS
                 const TextFieldHeader(title: 'Maximum members'),
-                CustomTextField(
+                UnityTextField(
                   controller: recruitProvider.membersController,
                   hintText: 'How many members do you need?',
-                  validator: () {},
+                  validator: maximumMembersValidation,
                   onlyNumbers: true,
                 ),
 
@@ -190,7 +186,7 @@ class _RecruitFormState extends State<RecruitForm> {
                       }
                       if (errorMsg.isNotEmpty) {
                         // showSnackbar(context, errorMsg);
-                        showTopSnackBar(Overlay.of(context), CustomSnackBar.info(message: errorMsg));
+                        showErrorSnackBar(context, errorMsg);
                         return;
                       }
 
@@ -214,9 +210,15 @@ class _RecruitFormState extends State<RecruitForm> {
                       context
                           .read<RecruitBloc>()
                           .add(CreateRecruitmentEvent(data: data));
-                          recruitProvider.descriptionController.clear();
-                          recruitProvider.titleController.clear();
-                          recruitProvider.membersController.clear();
+
+                      showSuccessSnackBar(
+                          context, 'Your post was sent for approval');
+                      recruitProvider.descriptionController.clear();
+                      recruitProvider.titleController.clear();
+                      recruitProvider.membersController.clear();
+                      selectedCategory = '';
+                      selectedDateTimeRange = null;
+                      selectedLocation = null;
                     },
                   );
                 }),

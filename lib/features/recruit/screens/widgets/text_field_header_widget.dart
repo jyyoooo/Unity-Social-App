@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 class TextFieldHeader extends StatelessWidget {
   const TextFieldHeader({
@@ -9,11 +9,12 @@ class TextFieldHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Align(
-        alignment: Alignment.centerLeft,
-        child: Text(
-          '   $title',
-          style:const TextStyle(fontWeight: FontWeight.w600),
-        ));
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        '   $title',
+        style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.grey),
+      ),
+    );
   }
 }
