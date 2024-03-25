@@ -1,0 +1,95 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
+import 'package:unitysocial/features/your_projects/bloc/projects_bloc.dart';
+
+import 'widgets/project_card.dart';
+
+class YourProjects extends StatefulWidget {
+  const YourProjects({super.key});
+
+  @override
+  State<YourProjects> createState() => _YourProjectsState();
+}
+
+class _YourProjectsState extends State<YourProjects> {
+  final userId = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProjectsBloc>().add(FetchUserProjects(hostId: userId));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List cachedPosts = [];
+
+    return Scaffold(
+      appBar: _appBar(),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: BlocBuilder<ProjectsBloc, ProjectState>(
+          builder: (context, state) {
+            if (state is LoadingProjects) {
+              return const Center(
+                child: CircularProgressIndicator(strokeWidth: 1.5),
+              );
+            } else if (state is FetchSuccess) {
+              List<RecruitmentPost> cachedPosts = state.posts;
+              log(cachedPosts.toString());
+              return state.posts.isEmpty
+                  ? _noProjectsMessage()
+                  : ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final post = state.posts[index];
+                        return ProjectCard(post: post);
+                      },
+                      itemCount: state.posts.length,
+                    );
+            }
+            return cachedPosts.isEmpty
+                ? _errorMessage()
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      return ProjectCard(post: cachedPosts[index]);
+                    },
+                    itemCount: cachedPosts.length,
+                  );
+          },
+        ),
+      ),
+    );
+  }
+
+  PreferredSize _appBar() {
+    return const PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: UnityAppBar(
+          title: 'Your Projects',
+          showBackBtn: true,
+        ));
+  }
+
+  Center _errorMessage() {
+    return const Center(
+      child: Text('Something went wrong'),
+    );
+  }
+
+  Center _noProjectsMessage() {
+    return const Center(
+      child: Text(
+        'You havent started any projects',
+        style: TextStyle(color: CupertinoColors.inactiveGray),
+      ),
+    );
+  }
+}

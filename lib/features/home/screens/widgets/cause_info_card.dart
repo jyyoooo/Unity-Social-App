@@ -87,14 +87,18 @@ class CauseInfoCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const Icon(CupertinoIcons.location_fill, size: 12),
+        const Icon(
+          CupertinoIcons.location_fill,
+          size: 12,
+          color: Colors.black54,
+        ),
         const SizedBox(
           width: 2,
         ),
         Text(
           post.location.address.split(',').first,
           overflow: TextOverflow.fade,
-          style: const TextStyle(fontSize: 12),
+          style: const TextStyle(fontSize: 12, color: Colors.black54),
         ),
       ],
     );

@@ -51,7 +51,8 @@ class LoginForm extends StatelessWidget {
                     log('loading');
                   } else if (state is LoginSuccesState) {
                     log('login suxs');
-                    showSuccessSnackBar(context, 'Logged in as ${state.userName}');
+                    // showSuccessSnackBar(context, 'Logged in as ${state.userName}');
+                    showSnackbar(context, 'Logged in as ${state.userName}');
                     FocusScope.of(context).unfocus();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => const UnityNavigator()));

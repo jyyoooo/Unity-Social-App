@@ -11,6 +11,9 @@ import 'package:unitysocial/features/recruit/bloc/recruit_bloc.dart';
 import 'package:unitysocial/features/search/bloc/search_bloc.dart';
 import 'package:unitysocial/features/volunteer/bloc/volunteer_bloc.dart';
 import 'package:unitysocial/features/volunteer/screens/join_success_page.dart';
+import 'package:unitysocial/features/your_projects/bloc/projects_bloc.dart';
+import 'package:unitysocial/features/your_projects/bloc/update_cubits/date_range_cubit.dart';
+import 'package:unitysocial/features/your_projects/bloc/update_cubits/location_cubit.dart';
 import 'package:unitysocial/firebase_options.dart';
 import 'features/auth/screens/splash_page.dart';
 
@@ -34,12 +37,17 @@ class UnitySocialApp extends StatelessWidget {
         BlocProvider(create: (context) => Obscurity()),
         BlocProvider(create: (context) => SearchBloc()),
         BlocProvider(create: (context) => VolunteerBloc()),
+        BlocProvider(create: (context) => ProjectsBloc()),
+        BlocProvider(create: (context) => LocationCubit('')),
+        BlocProvider(
+            create: (context) => DateRangeCubit(
+                DateTimeRange(start: DateTime.now(), end: DateTime.now()))),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Unity Social',
         theme: ThemeData(
-          textTheme: GoogleFonts.ralewayTextTheme(
+          textTheme: GoogleFonts.interTextTheme(
             Theme.of(context).textTheme,
           ),
           colorScheme: ColorScheme.fromSeed(

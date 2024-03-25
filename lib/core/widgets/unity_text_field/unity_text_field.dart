@@ -45,7 +45,6 @@ class UnityTextField extends StatelessWidget {
         validator: validator,
         style: const TextStyle(fontSize: 15),
         onChanged: onChanged,
-        obscureText: obscure ? obscurity.state : false,
         decoration: InputDecoration(
           focusedBorder: _focusedBorder(),
           focusColor: Colors.black,
@@ -57,10 +56,11 @@ class UnityTextField extends StatelessWidget {
           contentPadding: _symmetricPadding(),
           labelText: labelText,
           errorMaxLines: 2,
-          errorStyle: const TextStyle(color: CupertinoColors.activeOrange),
-          prefixIcon: const SizedBox(width: 15),
+          errorStyle: const TextStyle(
+              color: CupertinoColors.systemRed, fontWeight: FontWeight.w500),
           suffixIcon: obscure ? _suffixIcon(obscurity, context) : null,
         ),
+        obscureText: obscure ? obscurity.state : false,
       ),
     );
   }

@@ -20,7 +20,7 @@ class ProfilePage extends StatelessWidget {
                   const Icon(CupertinoIcons.rectangle_stack_badge_person_crop),
               title: const Text('Your Projects'),
               onTap: () {
-                Navigator.pushNamed(context, '/');
+                Navigator.pushNamed(context, '/yourProjects');
               },
             ),
             const Spacer(),

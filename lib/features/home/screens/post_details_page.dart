@@ -63,9 +63,10 @@ class PostDetailsWidget extends StatelessWidget {
                   labelColor: Colors.blue,
                   onPressed: () {
                     Navigator.push(
-                      context,
-                     MaterialPageRoute(builder: (context) => DonationPage(post: post),)
-                    );
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DonationPage(post: post),
+                        ));
                   },
                   color: Colors.white,
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),

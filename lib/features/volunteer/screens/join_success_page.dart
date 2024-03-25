@@ -13,7 +13,7 @@ class JoinSuccessPage extends StatelessWidget {
     return Scaffold(
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(100),
-          child: UnityAppBar(title: 'Congrats')),
+          child: UnityAppBar(title: 'Congrats',showBackBtn: true,)),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Column(

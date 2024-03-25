@@ -44,7 +44,7 @@ class LocationWidget extends StatelessWidget {
                   searchBarTextColor: CupertinoColors.activeBlue,
                   context: context,
                   lightAdress: true,
-                  mode: Mode.overlay);
+                  mode: Mode.fullscreen);
               if (currentLocation != null) {
                 recruitBloc.add(
                     LocationSelectEvent(selectedLocation: currentLocation));

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unitysocial/features/search/screens/search_page.dart';
@@ -11,20 +13,22 @@ class HomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     // final appBarKey = GlobalKey();
 
-    return SliverAppBar(
-      forceMaterialTransparency: true,
-      floating: true,
-      toolbarHeight: 80,
-      title: Padding(
-        padding: const EdgeInsets.only(top: 20, left: 0),
-        child: Row(
-          children: [
-            _title(),
-            const Spacer(),
-            Row(
-              children: [_location(), _search(context), _notifications()],
-            )
-          ],
+    return BackdropFilter(filter: ImageFilter.blur(sigmaX: 30,sigmaY: 30),
+      child: SliverAppBar(
+        forceMaterialTransparency: true,
+        floating: true,
+        toolbarHeight: 80,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 20, left: 0),
+          child: Row(
+            children: [
+              _title(),
+              const Spacer(),
+              Row(
+                children: [_location(), _search(context), _notifications()],
+              )
+            ],
+          ),
         ),
       ),
     );

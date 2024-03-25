@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,13 +28,20 @@ class UnityAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      forceMaterialTransparency: true,
-      leading: showBackBtn ? _backButton(context) : null,
-      toolbarHeight: 80,
-      title: _pageTitle(),
-      bottom: search ? _showSearchField() : null,
-    );
+    return 
+    // ClipPath(
+      // child: BackdropFilter(
+        // filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+        // child:
+         AppBar(
+          forceMaterialTransparency: true,
+          leading: showBackBtn ? _backButton(context) : null,
+          toolbarHeight: 80,
+          title: _pageTitle(),
+          bottom: search ? _showSearchField() : null,
+        );
+      // ),
+    // );
   }
 
   PreferredSize _showSearchField() {

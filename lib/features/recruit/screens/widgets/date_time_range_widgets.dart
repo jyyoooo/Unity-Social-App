@@ -45,7 +45,7 @@ class DateTimeRangeWidget extends StatelessWidget {
             ),
             onPressed: () async {
               final selectedDateTimeRange =
-                  await getUpdatedDateTimeRange(recruitProvider, context);
+                  await getUpdatedDateTimeRange(context);
               if (selectedDateTimeRange != null) {
                 if (selectedDateTimeRange.start.isBefore(today) ||
                     selectedDateTimeRange.end.day == today.day) {
@@ -63,8 +63,7 @@ class DateTimeRangeWidget extends StatelessWidget {
   }
 }
 
-Future<DateTimeRange?> getUpdatedDateTimeRange(
-    RecruitBloc recruitProvider, BuildContext context) async {
+Future<DateTimeRange?> getUpdatedDateTimeRange(BuildContext context) async {
   return await showDateRangePicker(
     // initialDateRange: recruitProvider.dateRange,
     confirmText: 'done',

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldHeader extends StatelessWidget {
@@ -13,7 +14,7 @@ class TextFieldHeader extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Text(
         ' $title',
-        style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.grey),
+        style: const TextStyle(fontWeight: FontWeight.normal, color: CupertinoColors.systemGrey),
       ),
     );
   }
