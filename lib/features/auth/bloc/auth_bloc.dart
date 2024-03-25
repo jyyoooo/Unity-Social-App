@@ -35,10 +35,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthLoadingState());
     AuthenticationStatus authStatus =
         await AuthRepository().signInWithEmail(login: event.login);
-        log(authStatus.toString());
-    authStatus == AuthenticationStatus.signUpSuccess
-        ? emit(LoginSuccesState(authStatus: authStatus))
-        : emit(AuthErrorState(authStatus: authStatus));
+    if (authStatus == AuthenticationStatus.signUpSuccess) {
+      final userName = await AuthRepository().getUserName();
+      emit(LoginSuccesState(authStatus: authStatus, userName: userName));
+    } else {
+      emit(AuthErrorState(authStatus: authStatus));
+    }
+  }
+
+  FutureOr<void> appStartEvent(
+      AppStartEvent event, Emitter<AuthState> emit) async {
+    emit(AuthInitialState());
+    log('in app start');
+    final isUserLoggedIn = await AuthRepository().checkForActiveUser();
+    if (isUserLoggedIn) {
+      final userName = await AuthRepository().getUserName();
+      emit(UserFoundState(userName: userName));
+    } else {
+      emit(NoUserState());
+    }
   }
 
   FutureOr<void> verifyEmailEvent(
@@ -51,16 +66,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       PasswordResetEvent event, Emitter<AuthState> emit) {}
 
   FutureOr<void> logoutEvent(LogoutEvent event, Emitter<AuthState> emit) {}
-
-  FutureOr<void> appStartEvent(
-      AppStartEvent event, Emitter<AuthState> emit) async {
-    emit(AuthInitialState());
-    log('in app start');
-    final isUserLoggedIn = await AuthRepository().checkForActiveUser();
-    if (isUserLoggedIn) {
-      emit(UserFoundState());
-    } else {
-      emit(NoUserState());
-    }
-  }
 }

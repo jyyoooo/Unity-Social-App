@@ -60,8 +60,8 @@ class _RecruitFormState extends State<RecruitForm> {
   Widget build(BuildContext context) {
     final recruitProvider = BlocProvider.of<RecruitBloc>(context);
     return Scaffold(
-      appBar:  PreferredSize(
-          preferredSize:const Size.fromHeight(100),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(80),
           child: UnityAppBar(
             showBackBtn: true,
             title: 'Recruitment Form',

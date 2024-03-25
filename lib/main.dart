@@ -5,15 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unitysocial/core/widgets/unity_text_field/obscurity_cubit.dart';
 import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
-import 'package:unitysocial/features/auth/screens/auth_screen.dart';
 import 'package:unitysocial/features/home/bloc/posts_bloc.dart';
 import 'package:unitysocial/features/home/bloc/navigation_bloc/navigation_bloc.dart';
 import 'package:unitysocial/features/recruit/bloc/recruit_bloc.dart';
 import 'package:unitysocial/features/search/bloc/search_bloc.dart';
+import 'package:unitysocial/features/volunteer/bloc/volunteer_bloc.dart';
+import 'package:unitysocial/features/volunteer/screens/join_success_page.dart';
 import 'package:unitysocial/firebase_options.dart';
-
 import 'features/auth/screens/splash_page.dart';
-import 'features/home/screens/root_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +32,8 @@ class UnitySocialApp extends StatelessWidget {
         BlocProvider(create: (context) => RecruitBloc()),
         BlocProvider(create: (context) => PostsBloc()),
         BlocProvider(create: (context) => Obscurity()),
-        BlocProvider(create: (context) => SearchBloc())
+        BlocProvider(create: (context) => SearchBloc()),
+        BlocProvider(create: (context) => VolunteerBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

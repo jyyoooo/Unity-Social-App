@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'auth_bloc.dart';
 
 abstract class AuthState {}
@@ -18,7 +19,11 @@ class AuthSuccessState extends AuthState {
 
 class LoginSuccesState extends AuthState {
   final AuthenticationStatus authStatus;
-  LoginSuccesState({required this.authStatus});
+  final String userName;
+  LoginSuccesState({
+    required this.authStatus,
+    required this.userName,
+  });
 }
 
 class UserState extends AuthState {}
@@ -29,6 +34,9 @@ class PasswordResetSuccessState extends AuthState {}
 
 class LogoutSuccessState extends AuthState {}
 
-class UserFoundState extends AuthState {}
+class UserFoundState extends AuthState {
+  final String userName;
+  UserFoundState({required this.userName});
+}
 
 class NoUserState extends AuthState {}

@@ -1,0 +1,27 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+class AmountButton extends StatelessWidget {
+  const AmountButton({
+    super.key,
+    required TextEditingController amountController,
+    required this.amount,
+  }) : _amountController = amountController;
+
+  final TextEditingController _amountController;
+  final String amount;
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      style: ButtonStyle(
+          shape: MaterialStatePropertyAll(
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
+      onPressed: () => _amountController.text = amount,
+      child: Text(
+        '₹$amount',
+        style: GoogleFonts.inter(),
+      ),
+    );
+  }
+}

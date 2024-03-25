@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:unitysocial/core/widgets/custom_button.dart';
 import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/features/donation/screens/donation_page.dart';
 import 'package:unitysocial/features/home/data/source/posts_repo.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/text_field_header_widget.dart';
+import 'package:unitysocial/features/volunteer/screens/volunteer_confirm_page.dart';
 
 class PostDetailsWidget extends StatelessWidget {
   const PostDetailsWidget({
@@ -48,15 +49,26 @@ class PostDetailsWidget extends StatelessWidget {
                 Center(
                     child: CustomButton(
                   label: 'Volunteer',
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => VolunteerJoin(post: post),
+                        ));
+                  },
                 )),
                 Center(
                     child: CustomButton(
                   label: 'Donate',
                   labelColor: Colors.blue,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                     MaterialPageRoute(builder: (context) => DonationPage(post: post),)
+                    );
+                  },
                   color: Colors.white,
-                  padding: const EdgeInsets.fromLTRB(0,0,0,10),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                 ))
               ],
             )),
@@ -114,7 +126,8 @@ class PostDetailsWidget extends StatelessWidget {
           const Icon(CupertinoIcons.location_fill, size: 20),
           const SizedBox(width: 10),
           Expanded(
-            child: InkWell(borderRadius: BorderRadius.circular(12),
+            child: InkWell(
+              borderRadius: BorderRadius.circular(12),
               onTap: () {},
               child: Text(
                 post.location.address,

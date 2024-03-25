@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unitysocial/core/enums/auth_status.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unitysocial/features/auth/data/models/login_model.dart';
@@ -62,6 +63,24 @@ class AuthRepository {
       return true;
     } else {
       return false;
+    }
+  }
+
+  Future<String> getUserName() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('uid', isEqualTo: user!.uid)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final userData = querySnapshot.docs.first.data();
+      final userName = userData['userName'] ?? 'Unknown';
+      log(userName);
+      return userName;
+    } else {
+      log('User document not found');
+      return 'Unknown';
     }
   }
 }

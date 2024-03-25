@@ -20,7 +20,7 @@ class CauseCategoryPage extends StatelessWidget {
     context.read<PostsBloc>().add(FetchAllPosts(category: query));
     return Scaffold(
       appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(100),
+          preferredSize: const Size.fromHeight(80),
           child: UnityAppBar(
             title: categoryName,
             showBackBtn: true,
@@ -36,20 +36,25 @@ class CauseCategoryPage extends StatelessWidget {
           } else if (state is AnimalsPosts) {
             log(state.allPosts.toString());
             return ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: state.allPosts.length,
                 itemBuilder: (context, index) {
                   final post = state.allPosts[index];
+
                   return CauseInfoCard(post: post);
                 });
           } else if (state is HumanitarianPosts) {
             return ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: state.allPosts.length,
                 itemBuilder: (context, index) {
                   final post = state.allPosts[index];
+
                   return CauseInfoCard(post: post);
                 });
           } else if (state is WaterPosts) {
             return ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: state.allPosts.length,
                 itemBuilder: (context, index) {
                   final post = state.allPosts[index];
@@ -57,13 +62,15 @@ class CauseCategoryPage extends StatelessWidget {
                 });
           } else if (state is EnvironmentPosts) {
             return ListView.builder(
+                physics: const BouncingScrollPhysics(),
                 itemCount: state.allPosts.length,
                 itemBuilder: (context, index) {
                   final post = state.allPosts[index];
+
                   return CauseInfoCard(post: post);
                 });
           }
-          return Text(state.toString());
+          return const Center(child: Text('Something went wrong!'));
         },
       ),
     );

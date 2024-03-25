@@ -2,6 +2,8 @@ const emailRegex = r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$';
 
 const usernameRegex = r'^[a-zA-Z0-9_]{3,20}$';
 
+const amoutnRegex = r'^[0-9]+$';
+
 String? maximumMembersValidation(value) {
   if (value!.isEmpty) {
     return 'Maximun members is required';
@@ -61,6 +63,15 @@ String? nameValidation(value) {
     return 'Name is required';
   } else if (value.length < 4) {
     return 'Name is too short';
+  }
+  return null;
+}
+
+String? amountValidator(value) {
+  if (value!.isEmpty) {
+    return 'Enter a donation amount';
+  } else if (!RegExp(amoutnRegex).hasMatch(value)) {
+    return 'Enter a valid amount';
   }
   return null;
 }

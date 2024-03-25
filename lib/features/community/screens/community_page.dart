@@ -6,14 +6,16 @@ class CommunityPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: PreferredSize(
-            preferredSize: Size.fromHeight(100),
-            child: UnityAppBar(
-              title: 'Community',
-            )),
-        body: Center(
-          child: Text('Unity Community'),
-        ));
+    return const Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: UnityAppBar(
+          title: 'Community',
+        ),
+      ),
+      body: Center(
+        child: Text('Unity Community'),
+      ),
+    );
   }
 }

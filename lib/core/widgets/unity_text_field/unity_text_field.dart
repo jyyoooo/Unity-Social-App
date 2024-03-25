@@ -35,6 +35,7 @@ class UnityTextField extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 3),
       child: TextFormField(
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         maxLines: maxLines,
         keyboardType: onlyNumbers ? TextInputType.number : null,
         readOnly: readOnly ?? false,
@@ -44,45 +45,56 @@ class UnityTextField extends StatelessWidget {
         validator: validator,
         style: const TextStyle(fontSize: 15),
         onChanged: onChanged,
+        obscureText: obscure ? obscurity.state : false,
         decoration: InputDecoration(
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                  color: buttonGreen.withOpacity(.1),
-                  width: 3,
-                  strokeAlign: BorderSide.strokeAlignInside)),
+          focusedBorder: _focusedBorder(),
           focusColor: Colors.black,
           hintStyle: const TextStyle(fontSize: 15),
           hintText: hintText,
           filled: true,
           fillColor: Colors.grey[200],
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+          border: _borderRadius(),
+          contentPadding: _symmetricPadding(),
           labelText: labelText,
           errorMaxLines: 2,
-          errorStyle: const TextStyle(),
-          prefixIconConstraints:
-              const BoxConstraints(minWidth: 0, minHeight: 0),
+          errorStyle: const TextStyle(color: CupertinoColors.activeOrange),
           prefixIcon: const SizedBox(width: 15),
-          suffixIcon: obscure
-              ? IconButton(
-                  onPressed: () => obscurity.toggleObscure(),
-                  icon: Icon(
-                    context.watch<Obscurity>().state
-                        ? CupertinoIcons.eye
-                        : CupertinoIcons.eye_slash,
-                    size: 20,
-                    color: Colors.black54,
-                  ),
-                )
-              : null,
+          suffixIcon: obscure ? _suffixIcon(obscurity, context) : null,
         ),
-        obscureText: obscure ? obscurity.state : false,
       ),
+    );
+  }
+
+  IconButton _suffixIcon(Obscurity obscurity, BuildContext context) {
+    return IconButton(
+      onPressed: () => obscurity.toggleObscure(),
+      icon: Icon(
+        context.watch<Obscurity>().state
+            ? CupertinoIcons.eye
+            : CupertinoIcons.eye_slash,
+        size: 20,
+        color: Colors.black54,
+      ),
+    );
+  }
+
+  EdgeInsets _symmetricPadding() =>
+      const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0);
+
+  OutlineInputBorder _borderRadius() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12.0),
+      borderSide: BorderSide.none,
+    );
+  }
+
+  OutlineInputBorder _focusedBorder() {
+    return OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(
+          color: CupertinoColors.activeBlue.withOpacity(.5),
+          width: 1.85,
+          strokeAlign: BorderSide.strokeAlignInside),
     );
   }
 }

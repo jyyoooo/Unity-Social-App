@@ -10,17 +10,17 @@ class PostsRepository {
   Future<List<RecruitmentPost>> fetchAllPostsFromCategory(
       String category) async {
     try {
-      log('searching $category');
       final QuerySnapshot<Map<String, dynamic>> allPosts = await postsCollection
           .where('category', isEqualTo: category)
           .where('isApproved', isEqualTo: true)
           .get();
 
-      final List<RecruitmentPost> postsFromCategory =
-          allPosts.docs.map((post) => RecruitmentPost.fromMap(post)).toList();
+      final List<RecruitmentPost> postsFromCategory = allPosts.docs.map((post) {
+        return RecruitmentPost.fromMap(post);
+      }).toList();
       return postsFromCategory;
     } catch (e) {
-      log(e.toString());
+      log('fetchAllPostsFromCat error: $e');
       return <RecruitmentPost>[];
     }
   }
