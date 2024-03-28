@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/enums/search_filters.dart';
@@ -43,6 +44,9 @@ class _SearchPageState extends State<SearchPage> {
           preferredSize: const Size.fromHeight(100),
           child: UnityAppBar(
             title: 'Search',
+            titleSize: 17,
+            titleColor: CupertinoColors.activeBlue,
+            boldTitle: false,
             showBackBtn: true,
             search: true,
             focusNode: searchFocusNode,
@@ -86,7 +90,12 @@ class _SearchPageState extends State<SearchPage> {
               child: BlocBuilder<SearchBloc, SearchState>(
                 builder: (context, state) {
                   if (state is LoadingSearch) {
-                    return const CircularProgressIndicator(strokeWidth: 1.5);
+                    return const Center(
+                        child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child:
+                                CircularProgressIndicator(strokeWidth: 1.5)));
                   } else if (state is SuccessSearch) {
                     return state.queryResults.isEmpty
                         ? const Center(child: Text('No Results'))

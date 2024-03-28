@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -35,7 +36,7 @@ class _SplashPageState extends State<SplashPage> {
             ));
           } else if (state is UserFoundState) {
             log(FirebaseAuth.instance.currentUser!.uid);
-            showSuccessSnackBar(context, 'Logged in as ${state.userName}');
+            showSnackbar (context, 'Logged in as ${state.userName}');
             Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => const UnityNavigator(),
             ));

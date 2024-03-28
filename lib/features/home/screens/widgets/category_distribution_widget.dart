@@ -35,43 +35,62 @@ class CauseCategoryPage extends StatelessWidget {
             );
           } else if (state is AnimalsPosts) {
             log(state.allPosts.toString());
-            return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: state.allPosts.length,
-                itemBuilder: (context, index) {
-                  final post = state.allPosts[index];
+            return state.allPosts.isEmpty
+                ? _emptyMessage()
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: state.allPosts.length,
+                    itemBuilder: (context, index) {
+                      final post = state.allPosts[index];
 
-                  return CauseInfoCard(post: post);
-                });
+                      return CauseInfoCard(post: post);
+                    });
           } else if (state is HumanitarianPosts) {
-            return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: state.allPosts.length,
-                itemBuilder: (context, index) {
-                  final post = state.allPosts[index];
+            return state.allPosts.isEmpty
+                ? _emptyMessage()
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: state.allPosts.length,
+                    itemBuilder: (context, index) {
+                      final post = state.allPosts[index];
 
-                  return CauseInfoCard(post: post);
-                });
+                      return CauseInfoCard(post: post);
+                    });
           } else if (state is WaterPosts) {
-            return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: state.allPosts.length,
-                itemBuilder: (context, index) {
-                  final post = state.allPosts[index];
-                  return CauseInfoCard(post: post);
-                });
+            return state.allPosts.isEmpty
+                ? _emptyMessage()
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: state.allPosts.length,
+                    itemBuilder: (context, index) {
+                      final post = state.allPosts[index];
+                      return CauseInfoCard(post: post);
+                    });
           } else if (state is EnvironmentPosts) {
-            return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: state.allPosts.length,
-                itemBuilder: (context, index) {
-                  final post = state.allPosts[index];
+            return state.allPosts.isEmpty
+                ? _emptyMessage()
+                : ListView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: state.allPosts.length,
+                    itemBuilder: (context, index) {
+                      final post = state.allPosts[index];
 
-                  return CauseInfoCard(post: post);
-                });
+                      return CauseInfoCard(post: post);
+                    });
           }
           return const Center(child: Text('Something went wrong!'));
         },
+      ),
+    );
+  }
+
+  Center _emptyMessage() {
+    return const Center(
+      child: Expanded(
+        child: Text(
+          'No posts available',
+          style: TextStyle(color: Colors.grey),
+        ),
       ),
     );
   }

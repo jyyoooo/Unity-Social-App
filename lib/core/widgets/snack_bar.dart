@@ -1,12 +1,15 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
+import 'package:unitysocial/core/utils/colors/colors.dart';
 
-showSnackbar(BuildContext context, String message) {
+showSnackbar(BuildContext context, String message,
+    [Color color = const Color.fromARGB(255, 37, 204, 140)]) {
   return ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     showCloseIcon: true,
     elevation: 12,
-    backgroundColor: Colors.black54,
+    backgroundColor: color,
     behavior: SnackBarBehavior.floating,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12))),
@@ -19,7 +22,7 @@ showSnackbar(BuildContext context, String message) {
 showErrorSnackBar(BuildContext context, String message) {
   return showTopSnackBar(
     dismissType: DismissType.onSwipe,
-    animationDuration: Durations.long4,
+    animationDuration: Durations.long1,
     padding: const EdgeInsets.fromLTRB(16, 30, 16, 16),
     Overlay.of(context),
     CustomSnackBar.error(

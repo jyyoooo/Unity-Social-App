@@ -20,9 +20,9 @@ class VolunteerJoin extends StatelessWidget {
     return BlocListener<VolunteerBloc, VolunteerState>(
       listener: (context, state) {
         if (state is JoinError) {
-          showErrorSnackBar(context, state.message);
+          showSnackbar(context, state.message);
         } else if (state is JoinSuccess) {
-          showSuccessSnackBar(context, state.message);
+          showSnackbar(context, state.message);
           Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(

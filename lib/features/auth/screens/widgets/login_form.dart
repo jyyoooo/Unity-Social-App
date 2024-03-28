@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
@@ -51,7 +52,6 @@ class LoginForm extends StatelessWidget {
                     log('loading');
                   } else if (state is LoginSuccesState) {
                     log('login suxs');
-                    // showSuccessSnackBar(context, 'Logged in as ${state.userName}');
                     showSnackbar(context, 'Logged in as ${state.userName}');
                     FocusScope.of(context).unfocus();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
@@ -59,15 +59,15 @@ class LoginForm extends StatelessWidget {
                   }
                   if (state is AuthErrorState) {
                     log('login error');
-                    showErrorSnackBar(context, 'Invalid login credentials');
+                    showSnackbar(context, 'Invalid login credentials',CupertinoColors.systemRed);
                   }
                 },
                 child: context.watch<AuthBloc>().state is AuthLoadingState
                     ? Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: CircularProgressIndicator(
-                          color: buttonGreen, strokeWidth: 1.5),
-                    )
+                        padding: const EdgeInsets.all(20.0),
+                        child: CircularProgressIndicator(
+                            color: buttonGreen, strokeWidth: 1.5),
+                      )
                     : CustomButton(
                         label: 'Log In',
                         onPressed: () {

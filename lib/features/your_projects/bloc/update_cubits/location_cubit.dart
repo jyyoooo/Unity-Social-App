@@ -7,4 +7,5 @@ class LocationCubit extends Cubit<String> {
     emit(newLocation);
   }
 }
-class InitialLocation{}
+
+class InitialLocation {}

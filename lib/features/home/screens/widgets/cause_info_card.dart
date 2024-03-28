@@ -65,7 +65,8 @@ class CauseInfoCard extends StatelessWidget {
   Text _description() {
     return Text(
       post.description,
-      style: const TextStyle(color: Colors.black54),
+      style: const TextStyle(
+          color: Colors.black54, overflow: TextOverflow.ellipsis),
     );
   }
 

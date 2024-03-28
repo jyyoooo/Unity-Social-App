@@ -3,8 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
-
-import 'project_details.dart';
+import 'project_cubit_injection.dart';
 import 'project_status_widgets.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -40,7 +39,11 @@ class ProjectCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _joinedCount(),
-                        post.isApproved ? approvedMessage() : pendingMessage(),
+                        post.duration.end.isBefore(DateTime.now())
+                            ? expiredMessage()
+                            : post.isApproved
+                                ? approvedMessage()
+                                : pendingMessage()
                       ],
                     )
                   ])),
@@ -63,7 +66,7 @@ class ProjectCard extends StatelessWidget {
 
   PageRouteBuilder<dynamic> _routeBuilder() {
     return PageRouteBuilder(
-      pageBuilder: (context, _, __) => ProjectDetails(post: post),
+      pageBuilder: (context, _, __) => ProjectDetailsScreen(post: post),
       transitionDuration: const Duration(milliseconds: 180),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return SlideTransition(
@@ -87,7 +90,8 @@ class ProjectCard extends StatelessWidget {
   Text _projectDescription() {
     return Text(
       post.description,
-      style: const TextStyle(color: Colors.black54),
+      style: const TextStyle(
+          color: Colors.black54, overflow: TextOverflow.ellipsis),
     );
   }
 }

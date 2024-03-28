@@ -26,46 +26,42 @@ class SearchRepository {
     }
   }
 
-  Future<List<RecruitmentPost>> filterByDuration(DurationFilter durationFilter) async {
-  try {
-    // Define the filters based on the enum
-    DateTime now = DateTime.now();
-    DateTime startDate;
-    DateTime endDate;
+  Future<List<RecruitmentPost>> filterByDuration(
+      DurationFilter durationFilter) async {
+    try {
+      DateTime startDate;
+      DateTime endDate;
 
-    switch (durationFilter) {
-      case DurationFilter.oneDay:
-        startDate = now.subtract(const Duration(days: 1));
-        endDate = now;
-        break;
-      case DurationFilter.lessThanWeek:
-        startDate = now.subtract(const Duration(days: 7));
-        endDate = now;
-        break;
-      case DurationFilter.moreThanWeek:
-        startDate = now.subtract(const Duration(days: 7));
-        endDate = now.add(const Duration(days: 7));
-        break;
+      QuerySnapshot querySnapshot =
+          await allPosts.where('isApproved', isEqualTo: true).get();
+      List<RecruitmentPost> filteredPosts = [];
+
+      for (final snapshot in querySnapshot.docs) {
+        RecruitmentPost post = RecruitmentPost.fromMap(snapshot);
+        startDate = post.duration.start;
+        endDate = post.duration.end;
+
+        if (durationFilter == DurationFilter.oneDay) {
+          if (endDate.difference(startDate).inDays <= 1) {
+            filteredPosts.add(post);
+          }
+        } else if (durationFilter == DurationFilter.lessThanWeek) {
+          if (endDate.difference(startDate).inDays <= 7 &&
+              endDate.difference(startDate).inDays > 1) {
+            filteredPosts.add(post);
+          }
+        } else if (durationFilter == DurationFilter.moreThanWeek) {
+          if (endDate.difference(startDate).inDays <= 30 &&
+              endDate.difference(startDate).inDays > 7) {
+            filteredPosts.add(post);
+          }
+        }
+      }
+
+      return filteredPosts;
+    } catch (e) {
+      log(e.toString());
+      return [];
     }
-
-    // Query Firestore for posts that intersect with the date range
-    QuerySnapshot querySnapshot = await allPosts
-        .where('duration.dateRange.start', isLessThan: endDate)
-        .where('duration.dateRange.end', isGreaterThan: startDate)
-        .get();
-
-    // Process the query results and return the list of RecruitmentPost objects
-    List<RecruitmentPost> posts = querySnapshot.docs
-        .map((doc) => RecruitmentPost.fromMap(doc))
-        .toList();
-
-    return posts;
-  } catch (e) {
-    log(e.toString());
-    // Return an empty list or handle the error as needed
-    return [];
   }
-}
-
-
 }

@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -77,7 +75,7 @@ class UnityAppBar extends StatelessWidget {
   Padding _backButton(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(
-        top: 13.0,
+        top: 15.0,
       ),
       child: IconButton(
         onPressed: () => Navigator.of(context).pop(),

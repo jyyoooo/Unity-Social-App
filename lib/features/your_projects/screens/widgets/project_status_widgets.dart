@@ -28,3 +28,17 @@ approvedMessage() {
     ),
   );
 }
+
+expiredMessage() {
+  return const Card(
+    color: Colors.white,
+    elevation: 0,
+    child: Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 10),
+      child: Text(
+        ' Expired ',
+        style: TextStyle(color: CupertinoColors.systemRed, fontSize: 13),
+      ),
+    ),
+  );
+}

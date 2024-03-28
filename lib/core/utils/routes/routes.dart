@@ -8,7 +8,7 @@ import 'package:unitysocial/features/recruit/screens/recruit_form.dart';
 import 'package:unitysocial/features/recruit/screens/recruit_page.dart';
 
 List<Widget> buildScreens() {
-  return const [HomePage(), CommunityPage(), RecruitPage(), ProfilePage()];
+  return  [HomePage(),const CommunityPage(),const RecruitPage(),const ProfilePage()];
 }
 
 List<PersistentBottomNavBarItem> navBarItems() {

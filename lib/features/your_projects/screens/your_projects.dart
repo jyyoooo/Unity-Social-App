@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/widgets/unity_appbar.dart';
-import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/your_projects/bloc/projects_bloc.dart';
 
 import 'widgets/project_card.dart';
@@ -41,8 +40,7 @@ class _YourProjectsState extends State<YourProjects> {
                 child: CircularProgressIndicator(strokeWidth: 1.5),
               );
             } else if (state is FetchSuccess) {
-              List<RecruitmentPost> cachedPosts = state.posts;
-              log(cachedPosts.toString());
+              // List<RecruitmentPost> cachedPosts = state.posts;
               return state.posts.isEmpty
                   ? _noProjectsMessage()
                   : ListView.builder(

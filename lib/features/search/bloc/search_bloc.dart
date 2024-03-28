@@ -25,7 +25,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       emit(SuccessSearch(queryResults: fetchedPostsFromCategory));
     });
     on<FilterByDuration>((event, emit) async {
-      await SearchRepository().filterByDuration(event.duration);
+      final queryResults = await SearchRepository().filterByDuration(event.duration);
+      emit(SuccessSearch(queryResults: queryResults));
     });
   }
 }

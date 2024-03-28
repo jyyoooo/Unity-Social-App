@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 // reactive height
@@ -28,3 +29,4 @@ const divider = Divider(color: Colors.grey);
 
 final radius10 = BorderRadius.circular(10);
 final radius20 = BorderRadius.circular(20);
+final currentUser = FirebaseAuth.instance.currentUser!;

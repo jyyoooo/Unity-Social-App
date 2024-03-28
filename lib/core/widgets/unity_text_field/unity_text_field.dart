@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/core/utils/colors/colors.dart';
 import 'package:unitysocial/core/widgets/unity_text_field/obscurity_cubit.dart'; // Assuming your obscurity_cubit.dart file is here
 
 class UnityTextField extends StatelessWidget {
