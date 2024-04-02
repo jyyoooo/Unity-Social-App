@@ -20,7 +20,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 700), () {
+    Future.delayed(const Duration(milliseconds: 950), () {
       context.read<AuthBloc>().add(AppStartEvent());
     });
     super.initState();
@@ -42,9 +42,9 @@ class _SplashPageState extends State<SplashPage> {
             ));
           }
         },
-        child: Scaffold(
-          body: SafeArea(
-            child: Center(
+        child: SafeArea(
+          child: Scaffold(
+            body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

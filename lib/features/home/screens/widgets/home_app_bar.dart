@@ -13,12 +13,9 @@ class HomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverAppBar(forceMaterialTransparency: true,
       excludeHeaderSemantics: true,
-      // forceElevated: true,
       snap: true,
       stretch: true,
       foregroundColor: Colors.transparent,
-      // shadowColor: Colors.grey.withOpacity(.1),
-      // backgroundColor: Colors.grey.withOpacity(.0001),
       floating: true,
       toolbarHeight: 80,
       flexibleSpace: Stack(
@@ -83,7 +80,7 @@ class HomeAppBar extends StatelessWidget {
   Text _title() {
     return const Text(
       'Pick a Cause',
-      style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
     );
   }
 }

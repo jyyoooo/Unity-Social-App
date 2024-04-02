@@ -18,7 +18,6 @@ class CreateUserEvent extends AuthEvent {
 
 class LoginEvent extends AuthEvent {
   final Login login;
-
   LoginEvent(this.login);
 }
 

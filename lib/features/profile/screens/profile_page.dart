@@ -20,46 +20,16 @@ class ProfilePage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
             children: [
-              BlocConsumer<AuthBloc, AuthState>(
-                  listener: (context, state) =>
-                      state is LoginSuccesState || state is UserFoundState,
+              BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (context, state) =>
+                      state is LoginSuccesState,
                   builder: (context, state) {
+                    
                     if (state is UserFoundState) {
-                      return SizedBox(
-                        height: 150,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: CupertinoColors.lightBackgroundGray
-                                .withOpacity(.6),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    const CircleAvatar(
-                                        backgroundColor: Colors.white,
-                                        maxRadius: 30,
-                                        child: Icon(
-                                          CupertinoIcons.person_crop_circle,
-                                          size: 35,
-                                        )),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      state.userName,
-                                      style: const TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
+                      log('logging username from profile ${state.userName}');
+                      return _showProfileStats(state);
+                    }else if(state is LoginSuccesState){
+                      return _showProfileStats(state);
                     }
                     return const Center(
                       child: Text('Error fetching user profile'),
@@ -86,9 +56,47 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  SizedBox _showProfileStats( state) {
+    return SizedBox(
+                      height: 150,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: CupertinoColors.lightBackgroundGray
+                              .withOpacity(.6),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  const CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      maxRadius: 30,
+                                      child: Icon(
+                                        CupertinoIcons.person_crop_circle,
+                                        size: 35,
+                                      )),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    state.userName,
+                                    style: const TextStyle(
+                                        fontSize: 17,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+  }
+
   PreferredSize _showProfileAppbar() {
-    return const PreferredSize(
-        preferredSize: Size.fromHeight(80),
+    return  PreferredSize(
+        preferredSize:const Size.fromHeight(80),
         child: UnityAppBar(title: 'Profile'));
   }
 

@@ -24,8 +24,8 @@ class DonationPageState extends State<DonationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(80),
+      appBar:  PreferredSize(
+        preferredSize:const Size.fromHeight(80),
         child: UnityAppBar(
           title: 'Donate to',
           titleColor: CupertinoColors.activeBlue,

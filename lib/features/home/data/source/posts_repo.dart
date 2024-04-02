@@ -15,12 +15,17 @@ class PostsRepository {
           .where('isApproved', isEqualTo: true)
           .get();
 
-      final List<RecruitmentPost> postsFromCategory = allPosts.docs.map((post) {
-        return RecruitmentPost.fromMap(post);
-      }).toList();
+      // if the end date of the cause is today, they are not returned
+      final List<RecruitmentPost> postsFromCategory = allPosts.docs
+          .map((post) {
+            return RecruitmentPost.fromMap(post);
+          })
+          .where((post) => post.duration.end.isAfter(DateTime.now()))
+          .toList();
+
       return postsFromCategory;
     } catch (e) {
-      log('fetchAllPostsFromCat error: $e');
+      log('fetchAllPostsFromCategory error: $e');
       return <RecruitmentPost>[];
     }
   }

@@ -8,7 +8,12 @@ import 'package:unitysocial/features/recruit/screens/recruit_form.dart';
 import 'package:unitysocial/features/recruit/screens/recruit_page.dart';
 
 List<Widget> buildScreens() {
-  return  [HomePage(),const CommunityPage(),const RecruitPage(),const ProfilePage()];
+  return [
+    const HomePage(),
+    const CommunityPage(),
+    const RecruitPage(),
+    const ProfilePage()
+  ];
 }
 
 List<PersistentBottomNavBarItem> navBarItems() {
@@ -42,7 +47,7 @@ List<PersistentBottomNavBarItem> navBarItems() {
     ),
     PersistentBottomNavBarItem(
       routeAndNavigatorSettings: RouteAndNavigatorSettings(
-          routes: {'/yourProjects': (context) => YourProjects()}),
+          routes: {'/yourProjects': (context) => const YourProjects()}),
       iconSize: 25,
       inactiveIcon: const Icon(CupertinoIcons.person_crop_circle),
       icon: const Icon(CupertinoIcons.person_crop_circle_fill),

@@ -55,7 +55,7 @@ class LoginForm extends StatelessWidget {
                     showSnackbar(context, 'Logged in as ${state.userName}');
                     FocusScope.of(context).unfocus();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => const UnityNavigator()));
+                        builder: (context) =>  UnityNavigator()));
                   }
                   if (state is AuthErrorState) {
                     log('login error');

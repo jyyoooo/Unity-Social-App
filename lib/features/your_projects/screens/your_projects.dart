@@ -68,8 +68,8 @@ class _YourProjectsState extends State<YourProjects> {
   }
 
   PreferredSize _appBar() {
-    return const PreferredSize(
-        preferredSize: Size.fromHeight(80),
+    return PreferredSize(
+        preferredSize: const Size.fromHeight(80),
         child: UnityAppBar(
           title: 'Your Projects',
           showBackBtn: true,

@@ -13,7 +13,6 @@ import 'join_success_page.dart';
 class VolunteerJoin extends StatelessWidget {
   const VolunteerJoin({Key? key, required this.post}) : super(key: key);
   final RecruitmentPost post;
-  
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +48,10 @@ class VolunteerJoin extends StatelessWidget {
                   onPressed: () {
                     log('current userid ${FirebaseAuth.instance.currentUser!.uid}');
                     if (FirebaseAuth.instance.currentUser!.uid == post.host) {
-                      showErrorSnackBar(
-                          context, 'You cannot join your own recruitment');
+                      showSnackbar(
+                          context,
+                          'You cannot join your own recruitment',
+                          CupertinoColors.systemBlue);
                     } else {
                       context.read<VolunteerBloc>().add(
                             JoinEvent(
@@ -91,12 +92,12 @@ class VolunteerJoin extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _showTitle(),
-            Text('Are you sure you want to join ${post.title}',
-                style: const TextStyle(fontSize: 16)),
+            Text('Are you sure you want to join ${post.title} team?',
+                style: const TextStyle(fontSize: 15)),
             const SizedBox(height: 10),
             // const Spacer(),
             Text(
-                style: const TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 15),
                 'After you join, you will be added to the group chat of ${post.title} in the community section and you can discuss regarding the cause')
           ],
         ));

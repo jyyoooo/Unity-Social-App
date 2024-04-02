@@ -16,7 +16,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       log('in search event');
       final List<RecruitmentPost> queryResults =
           await SearchRepository().searchThisQuery(event.query);
-      // log('searchREs : ${queryResults}');
       emit(SuccessSearch(queryResults: queryResults));
     });
     on<FilterByCategory>((event, emit) async {

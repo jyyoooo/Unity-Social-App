@@ -38,7 +38,7 @@ class ProjectCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _joinedCount(),
+                        post.isApproved ? _joinedCount() : const SizedBox(),
                         post.duration.end.isBefore(DateTime.now())
                             ? expiredMessage()
                             : post.isApproved

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:unitysocial/features/community/repository/chat_room_repo.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 
 class VolunteerRepository {
@@ -19,6 +20,7 @@ class VolunteerRepository {
         await docRef.update({
           'members': FieldValue.arrayUnion([volunteerId])
         });
+        ChatRoomRepo().addMemberToChatRoom(post.id!, volunteerId);
         return 'Successfully joined ${post.title} team';
       } else {
         return 'Maximum members reached';
