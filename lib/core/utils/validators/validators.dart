@@ -7,6 +7,8 @@ const amoutnRegex = r'^[0-9]+$';
 String? maximumMembersValidation(value) {
   if (value!.isEmpty) {
     return 'Maximun members is required';
+  } else if (value == 0) {
+    return 'Enter a valid number';
   } else if (int.parse(value) > 500) {
     return 'Should be below 500';
   }
@@ -16,6 +18,8 @@ String? maximumMembersValidation(value) {
 String? descriptionValidation(value) {
   if (value!.isEmpty) {
     return 'Description is required';
+  } else if (value.toString().trim().isEmpty) {
+    return 'Enter a valid description';
   } else if (value.split('').length < 24) {
     return 'Description is too short';
   }
@@ -25,6 +29,8 @@ String? descriptionValidation(value) {
 String? titlevalidation(value) {
   if (value!.isEmpty) {
     return 'Title is required';
+  } else if (value.toString().trim().isEmpty) {
+    return 'Enter a valid title';
   } else if (value.length < 8) {
     return 'Title is too short';
   }

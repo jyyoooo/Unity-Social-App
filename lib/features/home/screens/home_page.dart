@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unitysocial/features/home/screens/widgets/category_distribution_widget.dart';
@@ -17,9 +16,18 @@ class HomePage extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         slivers: <Widget>[
           const HomeAppBar(),
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(15, 5, 0, 0),
+              child: Text(
+                'Categories',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(),
               child: SizedBox(
                 width: size.width / 2,
                 height: size.height / 9,

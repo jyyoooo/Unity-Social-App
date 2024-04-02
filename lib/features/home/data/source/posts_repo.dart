@@ -38,4 +38,6 @@ class PostsRepository {
     }
     return postBadges;
   }
+
+ 
 }

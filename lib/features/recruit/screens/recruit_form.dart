@@ -60,8 +60,8 @@ class _RecruitFormState extends State<RecruitForm> {
   Widget build(BuildContext context) {
     final recruitProvider = BlocProvider.of<RecruitBloc>(context);
     return Scaffold(
-      appBar:  PreferredSize(
-          preferredSize:const Size.fromHeight(80),
+      appBar: const PreferredSize(
+          preferredSize:  Size.fromHeight(80),
           child: UnityAppBar(
             showBackBtn: true,
             title: 'Recruitment Form',
@@ -185,7 +185,8 @@ class _RecruitFormState extends State<RecruitForm> {
                         errorMsg = 'No badges selected';
                       }
                       if (errorMsg.isNotEmpty) {
-                        showSnackbar(context, errorMsg,CupertinoColors.systemRed);
+                        showSnackbar(
+                            context, errorMsg, CupertinoColors.systemRed);
                         // showErrorSnackBar(context, errorMsg);
                         return;
                       }

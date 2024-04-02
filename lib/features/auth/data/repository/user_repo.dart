@@ -26,4 +26,14 @@ class UserRepository {
 
     await firestore.collection('users').doc().set(newUser.toMap());
   }
+
+  Future<List<UserProfile>> showMembers(List<String?> members) async {
+    final List<UserProfile> allMembers = [];
+    for (final memberId in members) {
+      final memberData =
+          await usersCollection.where('uid', isEqualTo: memberId).get();
+      allMembers.add(UserProfile.fromMap(memberData.docs.first.data()));
+    }
+    return allMembers;
+  }
 }

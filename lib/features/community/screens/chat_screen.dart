@@ -161,16 +161,14 @@ class _ChatScreenState extends State<ChatScreen> {
       future: ChatRepo().getSenderUsername(chat.senderId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('...');
+          return const Text('...', style: TextStyle(color: Colors.grey));
         } else if (snapshot.hasError) {
-          return const Text('Volunteer');
+          return const Text('Volunteer', style: TextStyle(color: Colors.grey));
         } else if (snapshot.hasData) {
-          return Text(
-            snapshot.data!,
-            style: const TextStyle(color: Colors.grey),
-          );
+          return Text(snapshot.data!,
+              style: const TextStyle(color: Colors.grey));
         }
-        return const Text('Volunteer');
+        return const Text('Volunteer', style: TextStyle(color: Colors.grey));
       },
     );
   }

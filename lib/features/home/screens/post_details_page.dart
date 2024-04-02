@@ -9,6 +9,8 @@ import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart'
 import 'package:unitysocial/features/recruit/screens/widgets/text_field_header_widget.dart';
 import 'package:unitysocial/features/volunteer/screens/volunteer_confirm_page.dart';
 
+import 'widgets/post_details_components.dart';
+
 class PostDetailsWidget extends StatelessWidget {
   const PostDetailsWidget({
     Key? key,
@@ -44,7 +46,7 @@ class PostDetailsWidget extends StatelessWidget {
                 _showLocation(width),
                 const Spacer(),
                 const TextFieldHeader(title: 'Accreditations'),
-                _showBadges(),
+                showBadges(post),
                 const SizedBox(height: 10),
                 Center(
                     child: CustomButton(
@@ -88,32 +90,6 @@ class PostDetailsWidget extends StatelessWidget {
             color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
         child: Text(post.description,
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)));
-  }
-
-  _showBadges() {
-    return SizedBox(
-      height: 50,
-      child: FutureBuilder(
-          future: PostsRepository().fetchPostBadges(post.badges),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Text('Loading...',
-                  style: TextStyle(fontSize: 12, color: Colors.grey));
-            } else if (snapshot.hasData) {
-              final badges = snapshot.data;
-              return ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                  child: CircleAvatar(child: Icon(badges![index].icon)),
-                ),
-                itemCount: post.badges.length,
-              );
-            }
-            return const Text('Error fetching badges',
-                style: TextStyle(fontSize: 12, color: Colors.grey));
-          }),
-    );
   }
 
   _showLocation(width) {

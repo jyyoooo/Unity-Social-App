@@ -32,7 +32,6 @@ class CommunityPage extends StatelessWidget {
                     const Divider(thickness: .2, height: .1),
                 itemBuilder: (context, index) {
                   final ChatRoom room = snapshot.data![index];
-                  log('members in ${room.name}: ${room.members}');
 
                   return InkWell(
                     onTap: () {
@@ -82,7 +81,7 @@ class CommunityPage extends StatelessWidget {
             style: const TextStyle(color: Colors.grey),
           );
         }
-        return const Text('last mesge');
+        return const Text('...', style: TextStyle(color: Colors.grey));
       },
     );
   }
