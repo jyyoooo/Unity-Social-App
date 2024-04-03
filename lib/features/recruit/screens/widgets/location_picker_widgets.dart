@@ -14,45 +14,59 @@ class LocationWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Card(
+      elevation: .2,
+      color: Colors.grey[200],
       margin: const EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
+      child: InkWell(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey[200],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          selectedLocation != null
-              ? Expanded(
-                  child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(selectedLocation!.address),
-                ))
-              : const Expanded(
-                  child: Padding(
-                  padding: EdgeInsets.all(15.0),
-                  child: Text('Select location'),
-                )),
-          IconButton(
-            icon: const Icon(
-              CupertinoIcons.location,
-              color: CupertinoColors.activeBlue,
+        onTap: () async {
+          final currentLocation = await LocationSearch.show(
+              searchBarTextColor: CupertinoColors.activeBlue,
+              context: context,
+              lightAdress: true,
+              mode: Mode.fullscreen);
+          if (currentLocation != null) {
+            recruitBloc
+                .add(LocationSelectEvent(selectedLocation: currentLocation));
+          }
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            selectedLocation != null ? _showAddress() : _selectAddress(),
+            const Padding(
+              padding: EdgeInsets.only(right: 15.0),
+              child: Icon(
+                CupertinoIcons.location,
+                color: CupertinoColors.activeBlue,
+              ),
             ),
-            onPressed: () async {
-              final currentLocation = await LocationSearch.show(
-                  searchBarTextColor: CupertinoColors.activeBlue,
-                  context: context,
-                  lightAdress: true,
-                  mode: Mode.fullscreen);
-              if (currentLocation != null) {
-                recruitBloc.add(
-                    LocationSelectEvent(selectedLocation: currentLocation));
-              }
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
+  }
+
+  Expanded _selectAddress() {
+    return Expanded(
+        child: Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Text(
+        'Select location',
+        style: TextStyle(
+            color: Colors.black87.withOpacity(.7),
+            fontSize: 15,
+            fontWeight: FontWeight.w500),
+      ),
+    ));
+  }
+
+  Expanded _showAddress() {
+    return Expanded(
+        child: Padding(
+      padding: const EdgeInsets.all(15.0),
+      child: Text(selectedLocation!.address),
+    ));
   }
 }

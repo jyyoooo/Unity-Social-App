@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:unitysocial/core/widgets/unity_appbar.dart';
 import 'package:unitysocial/features/community/models/chat_room_model.dart';

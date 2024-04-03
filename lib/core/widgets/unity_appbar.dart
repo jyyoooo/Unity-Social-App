@@ -38,7 +38,10 @@ class UnityAppBar extends StatelessWidget {
     return ClipPath(
       child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-          child: AppBar(
+          child: AppBar(titleSpacing: 0,
+            scrolledUnderElevation: 1,
+            leadingWidth: showBackBtn ? 50 : 0,
+            automaticallyImplyLeading: false,
             forceMaterialTransparency: true,
             leading: showBackBtn ? _backButton(context) : null,
             toolbarHeight: 80,
@@ -74,8 +77,9 @@ class UnityAppBar extends StatelessWidget {
     return Padding(
       padding:
           EdgeInsets.only(top: 27.0, left: showBackBtn ? 0 : 20, bottom: 15),
-      child: Text(overflow: TextOverflow.fade,
-        title,
+      child: Text(
+        overflow: TextOverflow.fade,
+        ' $title',
         style: TextStyle(
             fontWeight: boldTitle ? FontWeight.bold : FontWeight.normal,
             fontSize: titleSize,
@@ -95,7 +99,7 @@ class UnityAppBar extends StatelessWidget {
           log('popping');
           Navigator.of(context).pop();
         },
-        icon: const Icon(CupertinoIcons.back),
+        icon: const Icon(CupertinoIcons.back,color: CupertinoColors.activeBlue,),
       ),
     );
   }

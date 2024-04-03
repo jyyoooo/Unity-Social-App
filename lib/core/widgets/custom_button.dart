@@ -36,9 +36,10 @@ class CustomButton extends StatelessWidget {
                 borderRadius: BorderRadius.circular(borderRadius)))),
         onPressed: onPressed,
         child: loading
-            ? CircularProgressIndicator(color: buttonGreen, strokeWidth: 1.5)
+            ? const CircularProgressIndicator(
+                color: Colors.white, strokeWidth: 1.5)
             : Text(
-                label??'',
+                label ?? '',
                 style: TextStyle(color: labelColor ?? Colors.white),
               ),
       ),

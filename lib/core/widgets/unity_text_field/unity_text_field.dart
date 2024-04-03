@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/widgets/unity_text_field/obscurity_cubit.dart'; // Assuming your obscurity_cubit.dart file is here
 
 class UnityTextField extends StatelessWidget {
-  UnityTextField(
+  const UnityTextField(
       {Key? key,
       required this.hintText,
       this.labelText,
@@ -23,9 +23,9 @@ class UnityTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
   final TextEditingController? controller;
-  bool onlyNumbers;
-  bool obscure;
-  int maxLines;
+  final bool onlyNumbers;
+  final bool obscure;
+  final int maxLines;
 
   @override
   Widget build(BuildContext context) {

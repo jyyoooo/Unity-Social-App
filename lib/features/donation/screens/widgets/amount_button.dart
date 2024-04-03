@@ -4,9 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 class AmountButton extends StatelessWidget {
   const AmountButton({
     super.key,
-    required TextEditingController amountController,
+    required TextEditingController controller,
     required this.amount,
-  }) : _amountController = amountController;
+  }) : _amountController = controller;
 
   final TextEditingController _amountController;
   final String amount;

@@ -61,7 +61,7 @@ class _RecruitFormState extends State<RecruitForm> {
     final recruitProvider = BlocProvider.of<RecruitBloc>(context);
     return Scaffold(
       appBar: const PreferredSize(
-          preferredSize:  Size.fromHeight(80),
+          preferredSize: Size.fromHeight(80),
           child: UnityAppBar(
             showBackBtn: true,
             title: 'Recruitment Form',
@@ -75,9 +75,7 @@ class _RecruitFormState extends State<RecruitForm> {
             child: Column(
               children: [
                 const SizedBox(height: 10),
-                const TextFieldHeader(
-                  title: 'Name',
-                ),
+                const TextFieldHeader(title: 'Name'),
                 UnityTextField(
                     controller: recruitProvider.titleController,
                     hintText: 'Title  of the cause',

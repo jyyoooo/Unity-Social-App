@@ -4,14 +4,21 @@ const usernameRegex = r'^[a-zA-Z0-9_]{3,20}$';
 
 const amoutnRegex = r'^[0-9]+$';
 
-String? maximumMembersValidation(value) {
-  if (value!.isEmpty) {
-    return 'Maximun members is required';
-  } else if (value == 0) {
-    return 'Enter a valid number';
-  } else if (int.parse(value) > 500) {
-    return 'Should be below 500';
+String? maximumMembersValidation(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Maximum members is required';
   }
+  try {
+    int parsedValue = int.parse(value);
+    if (parsedValue <= 0) {
+      return 'Enter a valid number';
+    } else if (parsedValue > 500) {
+      return 'Should be below 500';
+    }
+  } catch (e) {
+    return 'Enter a valid number';
+  }
+
   return null;
 }
 

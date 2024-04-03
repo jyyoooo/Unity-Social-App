@@ -1,11 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:unitysocial/core/enums/message_type.dart';
 
 class Message {
   final String? roomId;
   final String? messageId;
-  final String text;
   final String senderId;
+  final String text;
   final DateTime sentAt;
   final MessageType? type;
   Message({

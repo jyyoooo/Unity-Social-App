@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +16,7 @@ class YourProjects extends StatefulWidget {
 
 class _YourProjectsState extends State<YourProjects> {
   final userId = FirebaseAuth.instance.currentUser!.uid;
+  List cachedPosts = [];
 
   @override
   void initState() {
@@ -27,8 +26,6 @@ class _YourProjectsState extends State<YourProjects> {
 
   @override
   Widget build(BuildContext context) {
-    List cachedPosts = [];
-
     return Scaffold(
       appBar: _appBar(),
       body: Padding(
@@ -40,7 +37,6 @@ class _YourProjectsState extends State<YourProjects> {
                 child: CircularProgressIndicator(strokeWidth: 1.5),
               );
             } else if (state is FetchSuccess) {
-              // List<RecruitmentPost> cachedPosts = state.posts;
               return state.posts.isEmpty
                   ? _noProjectsMessage()
                   : ListView.builder(
@@ -68,12 +64,13 @@ class _YourProjectsState extends State<YourProjects> {
   }
 
   PreferredSize _appBar() {
-    return PreferredSize(
-        preferredSize: const Size.fromHeight(80),
-        child: UnityAppBar(
-          title: 'Your Projects',
-          showBackBtn: true,
-        ));
+    return const PreferredSize(
+      preferredSize: Size.fromHeight(80),
+      child: UnityAppBar(
+        title: 'Your Projects',
+        showBackBtn: true,
+      ),
+    );
   }
 
   Center _errorMessage() {

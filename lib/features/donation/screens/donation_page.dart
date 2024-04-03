@@ -1,13 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:unitysocial/core/utils/validators/validators.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 import 'package:unitysocial/core/widgets/custom_button.dart';
 import 'package:unitysocial/core/widgets/snack_bar.dart';
 import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/features/donation/data/razor_pay_service.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
+import 'package:razorpay_web/razorpay_web.dart';
 
 import 'widgets/amount_button.dart';
+import 'widgets/amount_text_field.dart';
 
 class DonationPage extends StatefulWidget {
   const DonationPage({super.key, required this.post});
@@ -18,14 +20,30 @@ class DonationPage extends StatefulWidget {
 }
 
 class DonationPageState extends State<DonationPage> {
+  final razorService = RazorPayService();
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController amountController = TextEditingController();
+  late final Razorpay razorpay;
+  @override
+  void initState() {
+    razorpay = Razorpay();
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, (response) {
+      razorService.handlePaymentSuccess(context, response, widget.post);
+    });
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (response) {
+      razorService.handlePaymentError(context, response);
+    });
+    razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, (response) {
+      razorService.handleExternalWallet(context, response);
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  PreferredSize(
-        preferredSize:const Size.fromHeight(80),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(80),
         child: UnityAppBar(
           title: 'Donate to',
           titleColor: CupertinoColors.activeBlue,
@@ -45,29 +63,36 @@ class DonationPageState extends State<DonationPage> {
               const SizedBox(height: 20),
               _hint(),
               const SizedBox(height: 10),
-              _amountTextField(),
+              amountTextField(amountController),
               const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  AmountButton(
-                      amountController: _amountController, amount: '100'),
-                  AmountButton(
-                      amountController: _amountController, amount: '500'),
-                  AmountButton(
-                      amountController: _amountController, amount: '1000'),
+                  AmountButton(controller: amountController, amount: '100'),
+                  AmountButton(controller: amountController, amount: '500'),
+                  AmountButton(controller: amountController, amount: '1000'),
                 ],
               ),
               const Spacer(),
               CustomButton(
                 label: 'Continue',
-                onPressed: () {
+                onPressed: () async {
                   if (!_formKey.currentState!.validate()) {
-                    showInfoSnackBar(
-                        context, 'Choose the donation amount to continue');
+                    showSnackbar(
+                        context,
+                        'Choose the donation amount to continue',
+                        CupertinoColors.systemTeal.highContrastElevatedColor);
+                  } else {
+                    razorService.openCheckout(razorpay, amountController.text);
                   }
                 },
               ),
+              CustomButton(
+                  color: Colors.white,
+                  label: 'Cancel',
+                  labelColor: CupertinoColors.destructiveRed,
+                  onPressed: () => Navigator.pop(context),
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 15))
             ],
           ),
         ),
@@ -89,32 +114,6 @@ class DonationPageState extends State<DonationPage> {
         widget.post.title,
         style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
       ),
-    );
-  }
-
-  TextFormField _amountTextField() {
-    return TextFormField(
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      controller: _amountController,
-      validator: amountValidator,
-      textAlign: TextAlign.center,
-      style: GoogleFonts.inter(
-          color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
-      decoration: const InputDecoration(
-          hintStyle: TextStyle(fontSize: 30, color: Colors.white),
-          counter: SizedBox(),
-          hintText: '₹',
-          filled: true,
-          fillColor: Colors.black,
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(14.5)),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding: EdgeInsets.symmetric(vertical: 8),
-          constraints: BoxConstraints(maxWidth: 160)),
-      cursorColor: Colors.blue,
-      maxLength: 5,
-      maxLines: 1,
     );
   }
 

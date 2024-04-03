@@ -7,10 +7,7 @@ import 'project_cubit_injection.dart';
 import 'project_status_widgets.dart';
 
 class ProjectCard extends StatelessWidget {
-  const ProjectCard({
-    super.key,
-    required this.post,
-  });
+  const ProjectCard({super.key, required this.post});
 
   final RecruitmentPost post;
 

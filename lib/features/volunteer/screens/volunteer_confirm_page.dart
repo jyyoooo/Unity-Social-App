@@ -63,6 +63,13 @@ class VolunteerJoin extends StatelessWidget {
                   },
                 );
               },
+            ),
+            CustomButton(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+              color: Colors.white,
+              label: 'Cancel',
+              labelColor: CupertinoColors.destructiveRed,
+              onPressed: () => Navigator.pop(context),
             )
           ],
         ),
