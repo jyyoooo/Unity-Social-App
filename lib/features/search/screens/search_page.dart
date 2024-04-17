@@ -1,9 +1,12 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/enums/search_filters.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/features/home/screens/widgets/cause_info_card.dart';
+import 'package:unitysocial/features/home/screens/widgets/navigation_bloc.dart';
 import 'package:unitysocial/features/search/bloc/search_bloc.dart';
 import 'package:unitysocial/features/search/screens/widgets/filter_widget.dart';
 
@@ -22,6 +25,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
+    context.read<NavigationCubit>().hideNavBar();
     Future.microtask(
         () => searchFocusNode.requestFocus()); // Request focus on next frame
   }
@@ -38,19 +42,20 @@ class _SearchPageState extends State<SearchPage> {
     return PopScope(
       onPopInvoked: (didPop) {
         searchFocusNode.unfocus();
+        context.read<NavigationCubit>().showNavBar();
       },
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(100),
           child: UnityAppBar(
             title: 'Search',
-            titleSize: 17,
-            titleColor: CupertinoColors.activeBlue,
-            boldTitle: false,
-            showBackBtn: true,
+            smallTitle: true,
+            // showBackBtn: true,
+            enableCloseAction: true,
             search: true,
             focusNode: searchFocusNode,
             onChanged: (query) {
+              log('searching for $query');
               context.read<SearchBloc>().add(SearchQuery(query: query));
             },
           ),
@@ -108,7 +113,10 @@ class _SearchPageState extends State<SearchPage> {
                           );
                   }
                   return const Center(
-                    child: Text('Try searching for a cause'),
+                    child: Text(
+                      'Try searching for a cause',
+                      style: TextStyle(color: Colors.grey),
+                    ),
                   );
                 },
               ),

@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:unitysocial/features/community/models/chat_room_model.dart';
-import 'package:unitysocial/features/community/models/message_model.dart';
-import 'package:unitysocial/features/community/repository/chat_repo.dart';
+import 'package:unitysocial/features/community/data/models/chat_room_model.dart';
+import 'package:unitysocial/features/community/data/models/message_model.dart';
+import 'package:unitysocial/features/community/data/repository/chat_repo.dart';
 
 class ChatTextField extends StatelessWidget {
   const ChatTextField({Key? key, required this.room}) : super(key: key);

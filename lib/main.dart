@@ -2,7 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'core/widgets/unity_text_field/obscurity_cubit.dart';
+import 'package:unitysocial/features/community/bloc/chat_bloc.dart';
+import 'package:unitysocial/features/community/data/repository/chat_repo.dart';
+import 'package:unitysocial/features/notifications/data/notification_repo.dart';
+import 'core/constants/unity_text_field/obscurity_cubit.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/screens/splash_page.dart';
 import 'features/home/bloc/navigation_bloc/navigation_bloc.dart';
@@ -17,7 +20,8 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  
+  // NotificationRepository().initNotification();
+
   runApp(const UnitySocialApp());
 }
 
@@ -36,7 +40,8 @@ class UnitySocialApp extends StatelessWidget {
         BlocProvider(create: (context) => SearchBloc()),
         BlocProvider(create: (context) => VolunteerBloc()),
         BlocProvider(create: (context) => ProjectsBloc()),
-        BlocProvider(create: (context) => NavigationCubit())
+        BlocProvider(create: (context) => NavigationCubit()),
+        BlocProvider(create: (context) => ChatBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

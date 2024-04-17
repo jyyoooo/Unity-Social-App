@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
 
 class RecruitPage extends StatelessWidget {
   const RecruitPage({super.key});
@@ -10,8 +10,8 @@ class RecruitPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(100),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(100),
           child: UnityAppBar(
             title: 'Recruit',
           )),
@@ -35,6 +35,8 @@ class RecruitPage extends StatelessWidget {
                     height: 270,
                     width: 300,
                     child: Lottie.network(
+                        errorBuilder: (context, error, stackTrace) =>
+                            const SizedBox(),
                         'https://lottie.host/b4fe37da-eff3-4d41-97aa-643be528ef0a/jxEih32wVl.json')),
               ),
               CustomButton(

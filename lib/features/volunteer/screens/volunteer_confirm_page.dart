@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/snack_bar.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/snack_bar.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/volunteer/bloc/volunteer_bloc.dart';
 import 'join_success_page.dart';
@@ -19,7 +19,8 @@ class VolunteerJoin extends StatelessWidget {
     return BlocListener<VolunteerBloc, VolunteerState>(
       listener: (context, state) {
         if (state is JoinError) {
-          showSnackbar(context, state.message);
+          showSnackbar(context, state.message,
+              CupertinoColors.systemTeal.highContrastColor);
         } else if (state is JoinSuccess) {
           showSnackbar(context, state.message);
           Navigator.pushAndRemoveUntil(
@@ -41,7 +42,7 @@ class VolunteerJoin extends StatelessWidget {
             BlocBuilder<VolunteerBloc, VolunteerState>(
               builder: (context, state) {
                 if (state is Loading) {
-                  const CircularProgressIndicator();
+                 return const LinearProgressIndicator();
                 }
                 return CustomButton(
                   label: 'Confirm Join',
@@ -51,7 +52,7 @@ class VolunteerJoin extends StatelessWidget {
                       showSnackbar(
                           context,
                           'You cannot join your own recruitment',
-                          CupertinoColors.systemBlue);
+                          CupertinoColors.systemTeal.highContrastColor);
                     } else {
                       context.read<VolunteerBloc>().add(
                             JoinEvent(
@@ -65,7 +66,7 @@ class VolunteerJoin extends StatelessWidget {
               },
             ),
             CustomButton(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 15),
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 25),
               color: Colors.white,
               label: 'Cancel',
               labelColor: CupertinoColors.destructiveRed,
@@ -83,9 +84,7 @@ class VolunteerJoin extends StatelessWidget {
     return const PreferredSize(
         preferredSize: Size.fromHeight(80),
         child: UnityAppBar(
-          boldTitle: false,
-          titleColor: CupertinoColors.activeBlue,
-          titleSize: 17,
+          smallTitle: true,
           title: 'Volunteer for',
           showBackBtn: true,
         ));

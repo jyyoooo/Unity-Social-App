@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:unitysocial/features/auth/data/models/user_model.dart';
+import 'package:unitysocial/features/auth/data/models/user_profile.dart';
 import 'package:unitysocial/features/auth/data/repository/user_repo.dart';
 import 'package:unitysocial/features/home/data/source/posts_repo.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
@@ -12,7 +12,7 @@ showBadges(RecruitmentPost post) {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Text('Loading...',
-                style: TextStyle(fontSize: 12, color: Colors.grey));
+                style: TextStyle(color: Colors.grey));
           } else if (snapshot.hasData) {
             final badges = snapshot.data;
             return ListView.builder(
@@ -40,17 +40,26 @@ FutureBuilder<List<UserProfile>> showVolunteers(RecruitmentPost post) {
         return const Text('Error fetching members details');
       } else if (snapshot.hasData) {
         final List<UserProfile>? members = snapshot.data;
-        return ListView.builder(
-          itemBuilder: (context, index) => Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
-              elevation: .5,
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(members![index].userName),
-              )),
-          itemCount: post.members.length,
-        );
+        return members!.isEmpty
+            ? const Center(
+                child: Text(
+                'No volunteers',
+                style: TextStyle(color: Colors.grey),
+              ))
+            : ListView.builder(
+                cacheExtent: 5,
+                physics: const BouncingScrollPhysics(),
+                itemExtent: 50,
+                itemBuilder: (context, index) => Card(
+                    shape: ContinuousRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    elevation: .5,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(members[index].userName),
+                    )),
+                itemCount: post.members.length,
+              );
       }
       return const Center(child: Text('Something went wrong'));
     },

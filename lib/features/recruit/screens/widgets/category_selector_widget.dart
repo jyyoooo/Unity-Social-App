@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class CategorySelector extends StatefulWidget {
-  CategorySelector({super.key, required this.onChanged});
-  Function(String? selectedCategory) onChanged;
+  const CategorySelector({super.key, required this.onChanged});
+  final Function(String? selectedCategory) onChanged;
 
   @override
-  _CategorySelectorState createState() => _CategorySelectorState();
+  CategorySelectorState createState() => CategorySelectorState();
 }
 
-class _CategorySelectorState extends State<CategorySelector> {
+class CategorySelectorState extends State<CategorySelector> {
   String? _selectedCategory;
+  bool isPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -27,33 +28,46 @@ class _CategorySelectorState extends State<CategorySelector> {
   }
 
   Widget _buildCategoryItem(String category, String imagePath) {
-    bool isSelected = category == _selectedCategory;
+  bool isSelected = category == _selectedCategory;
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedCategory = isSelected ? null : category;
-        });
-        widget.onChanged(_selectedCategory);
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        child: Column(
-          children: [
-            SvgPicture.asset(imagePath,
-                height: 30,
-                width: 30,
-                color: isSelected ? CupertinoColors.activeBlue : Colors.black87),
-            Text(
-              category,
-              style: TextStyle(
-                  fontSize: 13,
-                  color:
-                      isSelected ? CupertinoColors.activeBlue : Colors.black),
+  return GestureDetector(
+    onTapDown: (_) {
+      setState(() {
+        _selectedCategory = isSelected ? null : category;
+      });
+      widget.onChanged(_selectedCategory);
+    },
+    onLongPress: () {
+      setState(() {
+        _selectedCategory = category;
+      });
+      widget.onChanged(_selectedCategory);
+    },
+    child: Container(
+      padding: const EdgeInsets.symmetric(vertical: 15),
+      child: Column(
+        children: [
+          AnimatedContainer(transformAlignment: Alignment.center,
+            duration: const Duration(milliseconds: 200),
+            transform: isSelected ? Matrix4.identity().scaled(1.2, 1.2) : Matrix4.identity(),
+            child: SvgPicture.asset(
+              imagePath,
+              height: 30,
+              width: 30,
+              color: isSelected ? CupertinoColors.activeBlue : Colors.black87,
             ),
-          ],
-        ),
+          ),
+          Text(
+            category,
+            style: TextStyle(
+              fontSize: 13,
+              color: isSelected ? CupertinoColors.activeBlue : Colors.black,
+            ),
+          ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 }

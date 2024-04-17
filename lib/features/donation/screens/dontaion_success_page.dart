@@ -1,13 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
+import 'package:unitysocial/features/volunteer/screens/volunteer_confirm_page.dart';
 import 'package:unitysocial/features/volunteer/screens/widgets/wish_yellow_card_widget.dart';
 
 class DonationSuccessPage extends StatelessWidget {
-  const DonationSuccessPage({super.key, required this.postTitle});
+  const DonationSuccessPage({super.key, required this.post});
 
-  final String postTitle;
+  final RecruitmentPost post;
 
   @override
   Widget build(BuildContext context) {
@@ -16,23 +17,32 @@ class DonationSuccessPage extends StatelessWidget {
           preferredSize: Size.fromHeight(100),
           child: UnityAppBar(
             title: 'Home',
-            titleSize: 17,
-            titleColor: CupertinoColors.systemBlue,
-            boldTitle: false,
-            showBackBtn: true,
+            smallTitle: true,
+            enableCloseAction: true,
           )),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text('Thank you for your kind act.',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Text(
-              'Your donation to join the $postTitle  team was successful.',
+              'Your donation to the ${post.title} team was successful.',
               style: const TextStyle(fontSize: 15),
             ),
             const WishYellowCard(showVolunteer: false),
-            CustomButton(label: 'Volunteer', onPressed: () {})
+            Align(
+                alignment: Alignment.center,
+                child: CustomButton(
+                    label: 'Volunteer',
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => VolunteerJoin(post: post),
+                          ));
+                    }))
           ],
         ),
       ),

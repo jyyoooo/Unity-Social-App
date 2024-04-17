@@ -26,7 +26,7 @@ class BrandingSection extends StatelessWidget {
             ),
           ),
           const Text(
-            'Social volunteering app',
+            'Social Volunteering',
             style: TextStyle(fontSize: 18),
           ),
         ],

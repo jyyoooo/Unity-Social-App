@@ -25,15 +25,16 @@ class UnityNavigator extends StatelessWidget {
           hideNavBar = false;
         }
         return Material(
-          color: CupertinoColors.systemGrey6.withOpacity(.6),
+          color: CupertinoColors.white.withOpacity(.8),
           child: SafeArea(
             child: ClipPath(
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
                 child: PersistentTabView(
+                  backgroundColor: CupertinoColors.white.withOpacity(.8),
                   context,
-                  hideNavigationBar: false,
-                  navBarHeight: hideNavBar ? 0 : 70,
+                  hideNavigationBar: hideNavBar,
+                  navBarHeight: 70,
                   controller: controller,
                   screens: buildScreens(),
                   items: navBarItems(),
@@ -44,6 +45,12 @@ class UnityNavigator extends StatelessWidget {
                   hideNavigationBarWhenKeyboardShows: true,
                   popAllScreensOnTapOfSelectedTab: true,
                   navBarStyle: NavBarStyle.simple,
+                  bottomScreenMargin: 70,
+                  decoration: const NavBarDecoration(
+                    boxShadow: [],
+                    colorBehindNavBar: Colors.transparent,
+                  ),
+                  padding: const NavBarPadding.all(10),
                 ),
               ),
             ),

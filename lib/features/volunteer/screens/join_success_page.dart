@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'widgets/wish_yellow_card_widget.dart';
 
 class JoinSuccessPage extends StatelessWidget {
@@ -13,10 +13,7 @@ class JoinSuccessPage extends StatelessWidget {
     return Scaffold(
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(100),
-          child: UnityAppBar(
-            title: 'Congrats',
-            showBackBtn: true,
-          )),
+          child: UnityAppBar(title: 'Congrats', enableCloseAction: true)),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Column(

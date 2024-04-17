@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class UserProfile {
@@ -7,9 +8,10 @@ class UserProfile {
   String gender;
   String profilePhoto;
   String mobile;
-  List badges;
+  List<String> badges;
   String location;
   String token;
+  Map<String, List<Map<String, dynamic>>> donations;
   UserProfile({
     this.uid,
     required this.userName,
@@ -20,6 +22,7 @@ class UserProfile {
     required this.badges,
     required this.location,
     required this.token,
+    this.donations = const {},
   });
 
   Map<String, dynamic> toMap() {
@@ -52,5 +55,6 @@ class UserProfile {
 
   String toJson() => json.encode(toMap());
 
-  factory UserProfile.fromJson(String source) => UserProfile.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserProfile.fromJson(String source) =>
+      UserProfile.fromMap(json.decode(source) as Map<String, dynamic>);
 }

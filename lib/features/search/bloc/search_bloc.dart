@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:bloc/bloc.dart';
 import 'package:unitysocial/core/enums/search_filters.dart';
 import 'package:unitysocial/features/home/data/source/posts_repo.dart';
@@ -11,6 +10,7 @@ part 'search_states.dart';
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(InitialSearch()) {
+
     on<SearchQuery>((event, emit) async {
       emit(LoadingSearch());
       log('in search event');
@@ -18,13 +18,16 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           await SearchRepository().searchThisQuery(event.query);
       emit(SuccessSearch(queryResults: queryResults));
     });
+
     on<FilterByCategory>((event, emit) async {
       final fetchedPostsFromCategory =
           await PostsRepository().fetchAllPostsFromCategory(event.category);
       emit(SuccessSearch(queryResults: fetchedPostsFromCategory));
     });
+
     on<FilterByDuration>((event, emit) async {
-      final queryResults = await SearchRepository().filterByDuration(event.duration);
+      final queryResults =
+          await SearchRepository().filterByDuration(event.duration);
       emit(SuccessSearch(queryResults: queryResults));
     });
   }

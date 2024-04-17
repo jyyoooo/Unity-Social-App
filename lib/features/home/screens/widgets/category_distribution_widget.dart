@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/features/home/bloc/posts_bloc.dart';
 import 'package:unitysocial/features/home/screens/widgets/cause_info_card.dart';
 

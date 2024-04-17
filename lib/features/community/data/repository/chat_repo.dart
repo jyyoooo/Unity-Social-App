@@ -1,9 +1,9 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:unitysocial/features/auth/data/models/user_model.dart';
-import 'package:unitysocial/features/community/models/message_model.dart';
-import 'package:unitysocial/features/community/repository/chat_room_repo.dart';
+import 'package:unitysocial/features/auth/data/models/user_profile.dart';
+import 'package:unitysocial/features/community/data/models/message_model.dart';
+import 'package:unitysocial/features/community/data/repository/chat_room_repo.dart';
 
 class ChatRepo {
   final chatRooms = ChatRoomRepo().chatroomsRef;
@@ -19,17 +19,22 @@ class ChatRepo {
     }
   }
 
-  Stream<List<Message>> fetchMessages(String roomId) async* {
-    try {
-      final messagesCollection = chatRooms.doc(roomId).collection('messages');
-      yield* messagesCollection.orderBy('sentAt').snapshots().map((data) {
-        return data.docs
-            .map((message) => Message.fromMap(message.data()))
-            .toList();
-      });
-    } catch (e) {
-      log('fetch messages error: $e');
-    }
+  Stream<List<Message>> fetchMessages(String roomId) {
+    final messagesCollection = chatRooms.doc(roomId).collection('messages');
+
+    return messagesCollection
+        .orderBy('sentAt')
+        .snapshots()
+        .map((querySnapshot) {
+      List<Message> messages = [];
+
+      for (var doc in querySnapshot.docs) {
+        final message = Message.fromMap(doc.data());
+        messages.add(message);
+      }
+      // log('logging msgs from repo: ${messages.toString()}');
+      return messages;
+    });
   }
 
   Future<Message> fetchLastMessage(String roomId) async {
@@ -52,5 +57,4 @@ class ChatRepo {
     final sender = UserProfile.fromMap(senderDoc.docs.first.data());
     return sender.userName;
   }
-
 }

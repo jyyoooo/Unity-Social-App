@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/features/your_projects/bloc/projects_bloc.dart';
 
 import 'widgets/project_card.dart';
@@ -39,23 +40,43 @@ class _YourProjectsState extends State<YourProjects> {
             } else if (state is FetchSuccess) {
               return state.posts.isEmpty
                   ? _noProjectsMessage()
-                  : ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        final post = state.posts[index];
-                        return ProjectCard(post: post);
-                      },
-                      itemCount: state.posts.length,
+                  : Column(
+                      children: [
+                        Expanded(
+                          child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final post = state.posts[index];
+                              return ProjectCard(post: post);
+                            },
+                            itemCount: state.posts.length,
+                          ),
+                        ),
+                        Container(
+                          height: 75,
+                          color: Colors.transparent,
+                        )
+                      ],
                     );
             }
             return cachedPosts.isEmpty
                 ? _errorMessage()
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return ProjectCard(post: cachedPosts[index]);
-                    },
-                    itemCount: cachedPosts.length,
+                : Column(
+                    children: [
+                      Expanded(
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return ProjectCard(post: cachedPosts[index]);
+                          },
+                          itemCount: cachedPosts.length,
+                        ),
+                      ),
+                      Container(
+                        height: 75,
+                        color: Colors.transparent,
+                      )
+                    ],
                   );
           },
         ),

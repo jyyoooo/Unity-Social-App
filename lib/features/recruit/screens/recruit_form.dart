@@ -1,24 +1,22 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_search/flutter_location_search.dart';
 import 'package:unitysocial/core/utils/validators/validators.dart';
-
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/snack_bar.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
-import 'package:unitysocial/core/widgets/unity_text_field/unity_text_field.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/snack_bar.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/core/constants/unity_text_field/unity_text_field.dart';
+import 'package:unitysocial/features/home/screens/widgets/navigation_bloc.dart';
 import 'package:unitysocial/features/recruit/bloc/recruit_bloc.dart';
 import 'package:unitysocial/features/recruit/data/models/badge_model.dart';
 import 'package:unitysocial/features/recruit/data/models/location_model.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/date_time_range_widgets.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/location_picker_widgets.dart';
-
 import 'widgets/badge_grid_widget.dart';
 import 'widgets/category_selector_widget.dart';
 import 'widgets/text_field_header_widget.dart';
@@ -54,6 +52,7 @@ class _RecruitFormState extends State<RecruitForm> {
   void initState() {
     super.initState();
     context.read<RecruitBloc>().add(FetchBadgesEvent());
+    context.read<NavigationCubit>().hideNavBar();
   }
 
   @override
@@ -165,6 +164,7 @@ class _RecruitFormState extends State<RecruitForm> {
                     return sentForApprovalWidget();
                   }
                   return CustomButton(
+                    padding: const EdgeInsets.only(bottom: 25,top: 15),
                     label: 'Submit for approval',
                     onPressed: () {
                       String errorMsg = '';

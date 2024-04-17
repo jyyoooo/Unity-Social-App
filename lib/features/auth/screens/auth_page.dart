@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 
 import '../bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';

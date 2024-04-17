@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -21,11 +22,12 @@ class WishYellowCard extends StatelessWidget {
                   offset: const Offset(0, 1),
                   color: Colors.grey[200]!)
             ],
-            gradient: const RadialGradient(colors: [
-              Color(0XFFFFf2cd),
-              Color(0XFFFFEaa7),
-              Color(0XFFFFEd7F),
-              Color(0xFFFFF57F),
+            gradient: RadialGradient(colors: [
+              CupertinoColors.systemYellow.withOpacity(.2208),
+              CupertinoColors.systemYellow.withOpacity(.3208),
+              CupertinoColors.systemYellow.withOpacity(.4208),
+              CupertinoColors.systemYellow.withOpacity(.5208),
+              CupertinoColors.systemYellow.withOpacity(.6208),
             ]),
             borderRadius: BorderRadius.circular(28)),
         child: Padding(

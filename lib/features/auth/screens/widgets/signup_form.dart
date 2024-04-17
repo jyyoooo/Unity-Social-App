@@ -2,11 +2,11 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/utils/validators/validators.dart';
-import 'package:unitysocial/core/widgets/snack_bar.dart';
+import 'package:unitysocial/core/constants/snack_bar.dart';
 import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 import 'package:unitysocial/features/auth/data/models/sign_up_model.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/unity_text_field/unity_text_field.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/unity_text_field/unity_text_field.dart';
 
 class SignUpForm extends StatelessWidget {
   SignUpForm({super.key, required this.blocProvider});
@@ -76,22 +76,25 @@ class SignUpForm extends StatelessWidget {
                   },
                   child: context.watch<AuthBloc>().state is AuthLoadingState
                       ? const CircularProgressIndicator()
-                      : CustomButton(
-                          label: 'Sign Up',
-                          onPressed: () {
-                            log('signup working');
-                            if (signUpformKey.currentState!.validate() &&
-                                confirmPasswordController.text ==
-                                    passwordController.text) {
-                              final signUp = SignUpModel(
-                                  name: nameController.text.trim(),
-                                  email: blocProvider.emailController.text,
-                                  password: passwordController.text);
-
-                              blocProvider.add(SignUpEvent(user: signUp));
-                            }
-                          },
-                        ),
+                      : Padding(
+                        padding: const EdgeInsets.only(top: 35),
+                        child: CustomButton(
+                            label: 'Sign Up',
+                            onPressed: () {
+                              log('signup working');
+                              if (signUpformKey.currentState!.validate() &&
+                                  confirmPasswordController.text ==
+                                      passwordController.text) {
+                                final signUp = SignUpModel(
+                                    name: nameController.text.trim(),
+                                    email: blocProvider.emailController.text,
+                                    password: passwordController.text);
+                        
+                                blocProvider.add(SignUpEvent(user: signUp));
+                              }
+                            },
+                          ),
+                      ),
                 )
               ],
             ),

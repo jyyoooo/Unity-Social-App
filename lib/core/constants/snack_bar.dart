@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:unitysocial/core/utils/colors/colors.dart';
 
 showSnackbar(BuildContext context, String message,
     [Color color = const Color.fromARGB(255, 37, 204, 140)]) {
@@ -13,9 +11,9 @@ showSnackbar(BuildContext context, String message,
     behavior: SnackBarBehavior.floating,
     shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12))),
-    margin: const EdgeInsets.all(10),
+    margin: const EdgeInsets.fromLTRB(10,10,10,75),
     content: Text(message),
-    duration: const Duration(seconds: 3),
+    duration: const Duration(seconds: 2),
   ));
 }
 

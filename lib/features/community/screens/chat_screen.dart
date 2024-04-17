@@ -1,36 +1,44 @@
+import 'dart:developer';
+
 import 'package:chat_bubbles/chat_bubbles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
-import 'package:unitysocial/features/community/models/chat_room_model.dart';
-import 'package:unitysocial/features/community/models/message_model.dart';
-import 'package:unitysocial/features/community/repository/chat_repo.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/features/community/bloc/chat_bloc.dart';
+import 'package:unitysocial/features/community/data/models/chat_room_model.dart';
+import 'package:unitysocial/features/community/data/models/message_model.dart';
+import 'package:unitysocial/features/community/data/repository/chat_repo.dart';
 import 'package:unitysocial/features/community/screens/room_details.dart';
 import 'package:unitysocial/features/home/screens/widgets/navigation_bloc.dart';
 import 'widgets/chat_text_field.dart';
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({
+  final ChatRoom room;
+
+  const ChatScreen({
     Key? key,
     required this.room,
   }) : super(key: key);
-  final ChatRoom room;
-  final senderId = FirebaseAuth.instance.currentUser!.uid;
-  late final ScrollController scrollController = ScrollController();
 
   @override
-  State<ChatScreen> createState() => _ChatScreenState();
+  ChatScreenState createState() => ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class ChatScreenState extends State<ChatScreen> {
+  late final ScrollController _scrollController;
+  late final ChatBloc _chatBloc;
+  final senderId = FirebaseAuth.instance.currentUser!.uid;
+
   @override
   void initState() {
-    context.read<NavigationCubit>().hideNavBar();
-
     super.initState();
+    context.read<NavigationCubit>().hideNavBar();
+    _scrollController = ScrollController();
+    _chatBloc = BlocProvider.of<ChatBloc>(context);
+    _chatBloc.add(FetchMessages(widget.room.roomId!));
   }
 
   @override
@@ -46,44 +54,49 @@ class _ChatScreenState extends State<ChatScreen> {
       canPop: true,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80),
-          child: UnityAppBar(
-              title: widget.room.name,
-              showBackBtn: true,
-              activateOntap: true,
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => RoomDetails(room: widget.room),
-                    ));
-              }),
-        ),
+        appBar: _appbar(context),
         body: GestureDetector(
           child: Column(
             children: [
               Expanded(
-                child: StreamBuilder(
-                    stream: ChatRepo().fetchMessages(widget.room.roomId!),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return _loadingWidget();
-                      } else if (snapshot.hasError) {
-                        return _errorFetchingMessage();
-                      } else if (snapshot.hasData) {
-                        return snapshot.data!.isEmpty
-                            ? _noMessages()
-                            : _showMessages(snapshot, widget.scrollController);
-                      }
-                      return _undefinedErrorMsg();
-                    }),
+                child: BlocBuilder<ChatBloc, ChatState>(
+                  builder: (context, state) {
+                    if (state is ChatLoading) {
+                      log('chat loading');
+                      return _loadingWidget();
+                    } else if (state is ChatError) {
+                      return _errorFetchingMessage();
+                    } else if (state is ChatLoaded) {
+                      log('chat loaded');
+                      return _showMessages(state.messages, _scrollController);
+                    }
+                    return _undefinedErrorMsg();
+                  },
+                ),
               ),
               ChatTextField(room: widget.room),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  PreferredSize _appbar(BuildContext context) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(80),
+      child: UnityAppBar(
+          title: widget.room.name,
+          showBackBtn: true,
+          activateOntap: true,
+          showInfoIcon: true,
+          onInfoTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => RoomDetails(room: widget.room),
+                ));
+          }),
     );
   }
 
@@ -100,17 +113,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return const Center(child: CircularProgressIndicator(strokeWidth: 1.5));
   }
 
-  Center _noMessages() {
-    return const Center(
-      child: Text(
-        'Send a message',
-        style: TextStyle(color: Colors.grey),
-      ),
-    );
-  }
-
-  ListView _showMessages(
-      AsyncSnapshot<List<Message>> snapshot, ScrollController controller) {
+  Widget _showMessages(List<Message> messages, ScrollController controller) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.jumpTo(controller.position.maxScrollExtent);
     });
@@ -123,11 +126,11 @@ class _ChatScreenState extends State<ChatScreen> {
         reverse: false,
         padding: const EdgeInsets.fromLTRB(20, 10, 0, 5),
         separatorBuilder: (_, __) => const SizedBox(height: 5),
-        itemCount: snapshot.data!.length,
+        itemCount: messages.length,
         itemBuilder: (context, index) {
-          final chat = snapshot.data![index];
+          final chat = messages[index];
 
-          final isSender = chat.senderId == widget.senderId;
+          final isSender = chat.senderId == senderId;
           final showUsername = previousChat?.senderId != chat.senderId;
           previousChat = chat;
 
@@ -149,7 +152,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   BubbleSpecialThree _chatBubble(bool isSender, Message chat) {
     return BubbleSpecialThree(
-        textStyle: TextStyle(color: isSender ? Colors.white : Colors.black),
+        textStyle: TextStyle(
+            color: isSender ? Colors.white : Colors.black, fontSize: 15),
         color:
             isSender ? buttonGreen : CupertinoColors.extraLightBackgroundGray,
         isSender: isSender,
@@ -171,5 +175,11 @@ class _ChatScreenState extends State<ChatScreen> {
         return const Text('Volunteer', style: TextStyle(color: Colors.grey));
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 }

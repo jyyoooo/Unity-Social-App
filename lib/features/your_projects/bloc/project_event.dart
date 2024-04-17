@@ -11,7 +11,7 @@ class FetchUserProjects extends ProjectEvent {
 class UpdateUserProject extends ProjectEvent {
   final String postID;
   final DateTimeRange? updatedDateRange;
-  final String? updatedLocation;
+  final Location? updatedLocation;
 
   UpdateUserProject({
     required this.postID,

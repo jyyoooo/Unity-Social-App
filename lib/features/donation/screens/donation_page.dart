@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:top_snackbar_flutter/top_snack_bar.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/snack_bar.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/snack_bar.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/features/donation/data/razor_pay_service.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:razorpay_web/razorpay_web.dart';
@@ -28,7 +27,7 @@ class DonationPageState extends State<DonationPage> {
   void initState() {
     razorpay = Razorpay();
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, (response) {
-      razorService.handlePaymentSuccess(context, response, widget.post);
+      razorService.handlePaymentSuccess(context, response, widget.post,amountController.text);
     });
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (response) {
       razorService.handlePaymentError(context, response);
@@ -46,57 +45,64 @@ class DonationPageState extends State<DonationPage> {
         preferredSize: Size.fromHeight(80),
         child: UnityAppBar(
           title: 'Donate to',
-          titleColor: CupertinoColors.activeBlue,
-          titleSize: 17,
+          smallTitle: true,
           showBackBtn: true,
-          boldTitle: false,
         ),
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(25, 0, 25, 10),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: <Widget>[
-              _showPostTitle(),
-              _iconAndLocation(),
-              const SizedBox(height: 20),
-              _hint(),
-              const SizedBox(height: 10),
-              amountTextField(amountController),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  AmountButton(controller: amountController, amount: '100'),
-                  AmountButton(controller: amountController, amount: '500'),
-                  AmountButton(controller: amountController, amount: '1000'),
-                ],
-              ),
-              const Spacer(),
-              CustomButton(
-                label: 'Continue',
-                onPressed: () async {
-                  if (!_formKey.currentState!.validate()) {
-                    showSnackbar(
-                        context,
-                        'Choose the donation amount to continue',
-                        CupertinoColors.systemTeal.highContrastElevatedColor);
-                  } else {
-                    razorService.openCheckout(razorpay, amountController.text);
-                  }
-                },
-              ),
-              CustomButton(
-                  color: Colors.white,
-                  label: 'Cancel',
-                  labelColor: CupertinoColors.destructiveRed,
-                  onPressed: () => Navigator.pop(context),
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 15))
-            ],
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                _showPostTitle(),
+                _iconAndLocation(),
+                const SizedBox(height: 20),
+                _hint(),
+                const SizedBox(height: 10),
+                amountTextField(amountController),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    AmountButton(controller: amountController, amount: '100'),
+                    AmountButton(controller: amountController, amount: '500'),
+                    AmountButton(controller: amountController, amount: '1000'),
+                  ],
+                ),
+                SizedBox(height: MediaQuery.of(context).size.height / 3.111),
+                _continueButton(context),
+                _cancelButton(context)
+              ],
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  // Refactored items
+
+  Widget _cancelButton(BuildContext context) => CustomButton(
+      color: Colors.white,
+      label: 'Cancel',
+      labelColor: CupertinoColors.destructiveRed,
+      onPressed: () => Navigator.pop(context),
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 15));
+
+  CustomButton _continueButton(BuildContext context) {
+    return CustomButton(
+      label: 'Continue',
+      onPressed: () async {
+        if (!_formKey.currentState!.validate()) {
+          showSnackbar(context, 'Choose the donation amount to continue',
+              CupertinoColors.systemMint.highContrastColor);
+        } else {
+          razorService.openCheckout(razorpay, amountController.text);
+        }
+      },
     );
   }
 
@@ -117,21 +123,19 @@ class DonationPageState extends State<DonationPage> {
     );
   }
 
-  Row _iconAndLocation() {
-    return Row(
-      children: [
-        const Icon(
-          CupertinoIcons.location_fill,
-          size: 12,
-          color: Colors.black54,
-        ),
-        const SizedBox(width: 2),
-        Text(
-          widget.post.location.address.split(',').first,
-          overflow: TextOverflow.fade,
-          style: const TextStyle(fontSize: 14, color: Colors.black54),
-        ),
-      ],
-    );
-  }
+  Widget _iconAndLocation() => Row(
+        children: [
+          const Icon(
+            CupertinoIcons.location_fill,
+            size: 12,
+            color: Colors.black54,
+          ),
+          const SizedBox(width: 2),
+          Text(
+            widget.post.location.address.split(',').first,
+            overflow: TextOverflow.fade,
+            style: const TextStyle(fontSize: 14, color: Colors.black54),
+          ),
+        ],
+      );
 }

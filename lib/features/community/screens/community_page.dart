@@ -1,10 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
-import 'package:unitysocial/features/community/models/chat_room_model.dart';
-import 'package:unitysocial/features/community/models/message_model.dart';
-import 'package:unitysocial/features/community/repository/chat_repo.dart';
-import 'package:unitysocial/features/community/repository/chat_room_repo.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/features/community/data/models/chat_room_model.dart';
+import 'package:unitysocial/features/community/data/models/message_model.dart';
+import 'package:unitysocial/features/community/data/repository/chat_repo.dart';
+import 'package:unitysocial/features/community/data/repository/chat_room_repo.dart';
 import 'package:unitysocial/features/community/screens/chat_screen.dart';
+import 'package:unitysocial/features/community/screens/widgets/formatter.dart';
 
 class CommunityPage extends StatelessWidget {
   const CommunityPage({Key? key}) : super(key: key);
@@ -24,46 +26,61 @@ class CommunityPage extends StatelessWidget {
                 child: Text('Something went wrong'),
               );
             } else if (snapshot.hasData) {
-              return ListView.separated(
-                physics: const BouncingScrollPhysics(),
-                itemCount: snapshot.data?.length ?? 0,
-                separatorBuilder: (context, index) =>
-                    const Divider(thickness: .2, height: .1),
-                itemBuilder: (context, index) {
-                  final ChatRoom room = snapshot.data![index];
+              return snapshot.data!.isEmpty
+                  ? const Center(
+                      child: Text('You are not in any active communities'))
+                  : ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: snapshot.data?.length ?? 0,
+                      separatorBuilder: (context, index) =>
+                          const Divider(thickness: .2, height: .1),
+                      itemBuilder: (context, index) {
+                        final ChatRoom room = snapshot.data![index];
 
-                  return InkWell(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        _pushRouteWithAnimation(room),
-                      );
-                    },
-                    child: SizedBox(
-                      height: 100,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(room.name,
-                                style: const TextStyle(fontSize: 17)),
-                            const SizedBox(height: 5),
-                            _showLastMessage(room)
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              );
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              _pushRouteWithAnimation(room),
+                            );
+                          },
+                          child: SizedBox(
+                            height: 85,
+                            width: MediaQuery.of(context).size.width,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(19,10,12.5,10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _roomTitle(room),
+                                  const SizedBox(height: 5),
+                                  _showLastMessage(room)
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
             }
-            return const Center(
-              child: Text('You are not in any active communities'),
-            );
+            return const Center(child: Text('Something went wrong'));
           },
         ),
       ),
+    );
+  }
+
+  Widget _roomTitle(ChatRoom room) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(room.name, style: const TextStyle(fontSize: 18)),
+        const Icon(
+          Icons.keyboard_arrow_right_rounded,
+          size: 20,
+          color: CupertinoColors.activeBlue,
+        )
+      ],
     );
   }
 
@@ -72,12 +89,27 @@ class CommunityPage extends StatelessWidget {
       future: ChatRepo().fetchLastMessage(room.roomId!),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Text(room.roomId!);
+          return const Text(
+            'No messages',
+            style: TextStyle(color: Colors.grey, fontSize: 15),
+          );
         } else if (snapshot.hasData) {
           final Message lastMessage = snapshot.data!;
-          return Text(
-            lastMessage.text,
-            style: const TextStyle(color: Colors.grey),
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  lastMessage.text,
+                  style: const TextStyle(color: Colors.grey, fontSize: 15),
+                ),
+              ),
+              Text(
+                Formatter.formatDateTime(lastMessage.sentAt),
+                style: const TextStyle(color: Colors.grey, fontSize: 14),
+              )
+            ],
           );
         }
         return const Text('...', style: TextStyle(color: Colors.grey));
@@ -87,9 +119,7 @@ class CommunityPage extends StatelessWidget {
 
   PageRouteBuilder<dynamic> _pushRouteWithAnimation(ChatRoom room) {
     return PageRouteBuilder(
-      pageBuilder: (context, _, __) => ChatScreen(
-        room: room,
-      ),
+      pageBuilder: (context, _, __) => ChatScreen(room: room),
       transitionDuration: const Duration(milliseconds: 250),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         const begin = Offset(1.0, 0.0);
@@ -98,7 +128,6 @@ class CommunityPage extends StatelessWidget {
         var tween =
             Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
         var offsetAnimation = animation.drive(tween);
-
         return SlideTransition(
           position: offsetAnimation,
           child: child,

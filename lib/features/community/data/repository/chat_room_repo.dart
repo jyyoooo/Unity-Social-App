@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:unitysocial/features/community/models/chat_room_model.dart';
+import 'package:unitysocial/features/community/data/models/chat_room_model.dart';
 import 'package:unitysocial/features/home/data/source/posts_repo.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 
@@ -50,7 +50,6 @@ class ChatRoomRepo {
     return RecruitmentPost.fromMap(post);
   }
 
-  getMemberDetails() async {}
 }
 
 // stream updates only work when were using the snapshot

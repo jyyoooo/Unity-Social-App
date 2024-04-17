@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/core/widgets/unity_text_field/obscurity_cubit.dart'; // Assuming your obscurity_cubit.dart file is here
+import 'package:unitysocial/core/constants/unity_text_field/obscurity_cubit.dart'; // Assuming your obscurity_cubit.dart file is here
 
 class UnityTextField extends StatelessWidget {
   const UnityTextField(
@@ -69,10 +69,10 @@ class UnityTextField extends StatelessWidget {
       onPressed: () => obscurity.toggleObscure(),
       icon: Icon(
         context.watch<Obscurity>().state
-            ? CupertinoIcons.eye
-            : CupertinoIcons.eye_slash,
+            ? Icons.visibility_outlined
+            : Icons.visibility_off_outlined,
         size: 20,
-        color: Colors.black54,
+        color: CupertinoColors.systemBlue.withOpacity(.78),
       ),
     );
   }

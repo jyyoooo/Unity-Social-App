@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:unitysocial/core/widgets/snack_bar.dart';
+import 'package:unitysocial/core/constants/snack_bar.dart';
 import 'package:unitysocial/features/recruit/bloc/recruit_bloc.dart';
 
 class DateTimeRangeWidget extends StatelessWidget {
@@ -73,7 +73,7 @@ class DateTimeRangeWidget extends StatelessWidget {
               padding: EdgeInsets.only(right: 15.0),
               child: Icon(
                 CupertinoIcons.calendar,
-                color: CupertinoColors.activeBlue,
+                color: CupertinoColors.activeBlue,size: 20,
               ),
             ),
           ],

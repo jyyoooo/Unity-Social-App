@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/features/donation/screens/donation_page.dart';
-import 'package:unitysocial/features/home/data/source/posts_repo.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/text_field_header_widget.dart';
 import 'package:unitysocial/features/volunteer/screens/volunteer_confirm_page.dart';
-
 import 'widgets/post_details_components.dart';
 
 class PostDetailsWidget extends StatelessWidget {
@@ -44,9 +42,10 @@ class PostDetailsWidget extends StatelessWidget {
                 const SizedBox(height: 10),
                 const TextFieldHeader(title: 'Location'),
                 _showLocation(width),
-                const Spacer(),
+                const SizedBox(height: 10),
                 const TextFieldHeader(title: 'Accreditations'),
                 showBadges(post),
+                const Spacer(),
                 const SizedBox(height: 10),
                 Center(
                     child: CustomButton(
@@ -71,8 +70,9 @@ class PostDetailsWidget extends StatelessWidget {
                         ));
                   },
                   color: Colors.white,
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                ))
+                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 8),
+                )),
+                const SizedBox(height: 75)
               ],
             )),
           ],
@@ -83,18 +83,15 @@ class PostDetailsWidget extends StatelessWidget {
 
   _showDescription(double width) {
     return Container(
-        constraints: BoxConstraints(
-            maxHeight: 600, maxWidth: 400, minHeight: 120, minWidth: width),
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: Colors.grey[100], borderRadius: BorderRadius.circular(12)),
+        padding: const EdgeInsets.all(5),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
         child: Text(post.description,
             style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500)));
   }
 
   _showLocation(width) {
     return Container(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,

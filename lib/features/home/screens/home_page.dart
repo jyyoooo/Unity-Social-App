@@ -1,9 +1,11 @@
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unitysocial/features/home/screens/widgets/category_distribution_widget.dart';
+import 'package:unitysocial/features/news/data/model/news_model.dart';
+import 'package:unitysocial/features/news/data/source/news_repository.dart';
 import 'widgets/cause_category_card.dart';
 import 'widgets/home_app_bar.dart';
+import 'widgets/news_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -16,174 +18,146 @@ class HomePage extends StatelessWidget {
         physics: const BouncingScrollPhysics(),
         slivers: <Widget>[
           const HomeAppBar(),
-          const SliverToBoxAdapter(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(15, 5, 0, 0),
-              child: Text(
-                'Categories',
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(),
-              child: SizedBox(
-                width: size.width / 2,
-                height: size.height / 9,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: _showCategoryRow(context, size),
-                ),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: ClipPath(
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-                child: const SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-                    child: Text(
-                      'News',
-                      style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return AnimatedContainer(
-                  duration: Durations.long1,
-                  padding: const EdgeInsets.only(left: 8),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          blurRadius: 2,
-                          offset: const Offset(0, 2.5),
-                          color: CupertinoColors.systemGrey6.highContrastColor,
-                          blurStyle: BlurStyle.normal,
-                          spreadRadius: .5)
-                    ],
-                    borderRadius: BorderRadius.circular(12),
-                    color: CupertinoColors.white,
-                  ),
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: 14,
-                    vertical: 3,
-                  ),
-                  height: 140,
-                  child: const Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        child: SizedBox(
-                          height: 125,
-                          width: 125,
-                          child: Placeholder(
-                            strokeWidth: .5,
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                              child: Text(
-                                'Title goes here',
-                                style: TextStyle(
-                                    fontSize: 17, fontWeight: FontWeight.w700),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(10, 0, 10, 5),
-                              child: Text(
-                                'Description lorem ipsum sit dolor amet asd fsadgadfhsdgh sgg',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    color: CupertinoColors.systemGrey),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              childCount: 30,
-            ),
-          ),
+          _pickACauseTitle(),
+          _showCategorySliver(size, context),
+          _newsTitle(),
+          _showNewsList(),
+          const SliverToBoxAdapter(child: SizedBox(height: 75))
         ],
       ),
     );
   }
 
-  List<Widget> _showCategoryRow(BuildContext context, Size size) {
-    return [
-      CauseCard(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CauseCategoryPage(
-                    categoryName: 'Animals', query: 'Animals'),
+  FutureBuilder<List<News>> _showNewsList() {
+    return FutureBuilder<List<News>>(
+      future: NewsRepository().fetchLatestNews(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const SliverToBoxAdapter(child: CupertinoActivityIndicator());
+        } else if (snapshot.hasError) {
+          return SliverToBoxAdapter(
+            child: Center(
+              child: Text(
+                snapshot.error.toString(),
+                style: const TextStyle(color: Colors.grey),
               ),
-            );
-          },
-          color: const Color.fromARGB(255, 255, 214, 98),
-          sizer: size,
-          image: 'assets/paw.png',
-          title: 'Animals'),
-      CauseCard(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CauseCategoryPage(
-                      categoryName: 'Humanitarian', query: 'Humanitarian'),
-                ));
-          },
-          color: const Color.fromARGB(255, 255, 176, 57),
-          sizer: size,
-          image: 'assets/humans.png',
-          title: 'Humanity'),
-      CauseCard(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) =>
-                      CauseCategoryPage(categoryName: 'Water', query: 'Water'),
-                ));
-          },
-          color: const Color.fromARGB(255, 109, 196, 255),
-          sizer: size,
-          image: 'assets/water.png',
-          title: 'Water'),
-      CauseCard(
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CauseCategoryPage(
-                      categoryName: 'Environment', query: 'Environment'),
-                ));
-          },
-          scale: 2.4,
-          color: const Color.fromRGBO(37, 204, 140, .77),
-          sizer: size,
-          image: 'assets/globe.png',
-          title: 'Environment'),
-    ];
+            ),
+          );
+        } else {
+          return SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return NewsCard(
+                  title: snapshot.data?[index].title ?? 'title null',
+                  description:
+                      snapshot.data?[index].description ?? 'description null',
+                  imageUrl: snapshot.data![index].urlToImage,
+                );
+              },
+              childCount: snapshot.data!.length,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  SliverToBoxAdapter _newsTitle() {
+    return const SliverToBoxAdapter(
+      child: SizedBox(
+        height: 40,
+        width: 50,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
+          child: Text('News',
+              style: TextStyle(
+                  color: CupertinoColors.systemGrey,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold)),
+        ),
+      ),
+    );
+  }
+
+  SliverToBoxAdapter _pickACauseTitle() {
+    return const SliverToBoxAdapter(
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(20, 3, 20, 0),
+        child: Text('Pick a Cause',
+            style: TextStyle(
+                color: CupertinoColors.systemGrey,
+                fontSize: 20,
+                fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  SliverToBoxAdapter _showCategorySliver(Size size, BuildContext context) {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        width: size.width / 2,
+        height: size.height / 9,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CauseCard(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CauseCategoryPage(
+                          categoryName: 'Animals', query: 'Animals'),
+                    ),
+                  );
+                },
+                color: const Color.fromARGB(255, 255, 214, 98),
+                sizer: size,
+                image: 'assets/paw.png',
+                title: 'Animals'),
+            CauseCard(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CauseCategoryPage(
+                            categoryName: 'Humanitarian',
+                            query: 'Humanitarian'),
+                      ));
+                },
+                color: const Color.fromARGB(255, 255, 176, 57),
+                sizer: size,
+                image: 'assets/humans.png',
+                title: 'Humanity'),
+            CauseCard(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CauseCategoryPage(
+                            categoryName: 'Water', query: 'Water'),
+                      ));
+                },
+                color: const Color.fromARGB(255, 109, 196, 255),
+                sizer: size,
+                image: 'assets/water.png',
+                title: 'Water'),
+            CauseCard(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => CauseCategoryPage(
+                            categoryName: 'Environment', query: 'Environment'),
+                      ));
+                },
+                scale: 2.4,
+                color: const Color.fromRGBO(37, 204, 140, .77),
+                sizer: size,
+                image: 'assets/globe.png',
+                title: 'Environment'),
+          ],
+        ),
+      ),
+    );
   }
 }

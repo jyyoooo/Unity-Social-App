@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_search/flutter_location_search.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:unitysocial/features/recruit/data/models/location_model.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/date_time_range_widgets.dart';
 import 'package:unitysocial/features/your_projects/bloc/update_cubits/date_range_cubit.dart';
@@ -42,10 +43,10 @@ Card showProjectStatus(RecruitmentPost post) {
 }
 
 Padding showLocation(
-    context, Function(String) onLocationUpdated, RecruitmentPost post) {
+    context, Function(Location) onLocationUpdated, RecruitmentPost post) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 15.0),
-    child: BlocBuilder<LocationCubit, String>(
+    child: BlocBuilder<LocationCubit, Location>(
       builder: (context, stateLocation) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -55,7 +56,11 @@ Padding showLocation(
               children: [
                 const Icon(CupertinoIcons.location, size: 20),
                 const SizedBox(width: 10),
-                Expanded(child: Text(stateLocation,),),
+                Expanded(
+                  child: Text(
+                    stateLocation.address,
+                  ),
+                ),
               ],
             ),
           ),
@@ -68,10 +73,14 @@ Padding showLocation(
                         lightAdress: true,
                         mode: Mode.fullscreen);
                     if (updatedLocation != null) {
-                      context
-                          .read<LocationCubit>()
-                          .updateLocation(updatedLocation.address.toString());
-                      onLocationUpdated(updatedLocation.address.toString());
+                      context.read<LocationCubit>().updateLocation(Location(
+                          address: updatedLocation.address,
+                          latitude: updatedLocation.latitude,
+                          longitude: updatedLocation.longitude));
+                      onLocationUpdated(Location(
+                          address: updatedLocation.address,
+                          latitude: updatedLocation.latitude,
+                          longitude: updatedLocation.longitude));
                     }
                   },
                   icon: const Icon(

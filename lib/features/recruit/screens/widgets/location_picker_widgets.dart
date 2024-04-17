@@ -22,7 +22,7 @@ class LocationWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         onTap: () async {
           final currentLocation = await LocationSearch.show(
-              searchBarTextColor: CupertinoColors.activeBlue,
+              searchBarTextColor: CupertinoColors.black,
               context: context,
               lightAdress: true,
               mode: Mode.fullscreen);
@@ -40,6 +40,7 @@ class LocationWidget extends StatelessWidget {
               child: Icon(
                 CupertinoIcons.location,
                 color: CupertinoColors.activeBlue,
+                size: 20,
               ),
             ),
           ],

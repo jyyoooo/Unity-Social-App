@@ -2,14 +2,14 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
-import 'package:unitysocial/core/widgets/snack_bar.dart';
-import 'package:unitysocial/core/widgets/unity_appbar.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
+import 'package:unitysocial/core/constants/snack_bar.dart';
+import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/features/recruit/data/models/location_model.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/text_field_header_widget.dart';
 import 'package:unitysocial/features/your_projects/bloc/projects_bloc.dart';
 import 'package:unitysocial/features/your_projects/bloc/update_cubits/location_cubit.dart';
-
 import '../bloc/update_cubits/date_range_cubit.dart';
 import 'widgets/details_widgets.dart';
 
@@ -28,6 +28,7 @@ class ProjectDetails extends StatelessWidget {
           child: UnityAppBar(
             title: post.title,
             showBackBtn: true,
+            smallTitle: true,
           )),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -64,11 +65,16 @@ class ProjectDetails extends StatelessWidget {
                                     'pick a later date to update',
                                     CupertinoColors.systemRed);
                               } else {
-                                context.read<ProjectsBloc>().add(
-                                    UpdateUserProject(
-                                        postID: post.id!,
-                                        updatedDateRange: updatedDateRange,
-                                        updatedLocation: updatedLocation));
+                                BlocProvider.of<ProjectsBloc>(context).add(
+                                  UpdateUserProject(
+                                    postID: post.id!,
+                                    updatedDateRange: updatedDateRange,
+                                    updatedLocation: Location(
+                                        address: updatedLocation!.address,
+                                        latitude: updatedLocation.latitude,
+                                        longitude: updatedLocation.longitude),
+                                  ),
+                                );
                               }
                             },
                           ),
@@ -76,7 +82,7 @@ class ProjectDetails extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 70)
           ],
         ),
       ),

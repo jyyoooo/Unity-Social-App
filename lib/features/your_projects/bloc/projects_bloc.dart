@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unitysocial/features/recruit/data/models/location_model.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/your_projects/data/projects_repo.dart';
 
@@ -15,12 +16,12 @@ class ProjectsBloc extends Bloc<ProjectEvent, ProjectState> {
       emit(FetchSuccess(posts: posts));
     });
 
-    // on<UpdateUserProject>((event, emit) async {
-    //   log('onEvent: ${event.updatedDateRange} ${event.updatedLocation}');
-    //   await ProjectRepo().updateProject(event.postID,
-    //       updatedDateRange: event.updatedDateRange,
-    //       updatedLocation: event.updatedLocation);
-    //   emit(UpdateSuccess(postID: event.postID));
-    // });
+    on<UpdateUserProject>((event, emit) async {
+      log('onEvent: ${event.updatedDateRange} ${event.updatedLocation}');
+      await ProjectRepo().updateProject(event.postID,
+          updatedDateRange: event.updatedDateRange,
+          updatedLocation: event.updatedLocation);
+      emit(UpdateSuccess(postID: event.postID));
+    });
   }
 }

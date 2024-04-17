@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:unitysocial/core/enums/auth_status.dart';
 import 'package:unitysocial/features/auth/data/models/login_model.dart';
 import 'package:unitysocial/features/auth/data/models/sign_up_model.dart';
-import 'package:unitysocial/features/auth/data/models/user_model.dart';
+import 'package:unitysocial/features/auth/data/models/user_profile.dart';
 import 'package:unitysocial/features/auth/data/repository/auth_repo.dart';
 
 part 'auth_events.dart';

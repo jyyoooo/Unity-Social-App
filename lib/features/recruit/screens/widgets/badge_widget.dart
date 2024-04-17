@@ -16,9 +16,9 @@ class _BadgeWidgetState extends State<BadgeWidget> {
   bool isSelected = false;
   @override
   Widget build(BuildContext context) {
-    return Card(
+    return Card(color: CupertinoColors.systemGrey6,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-      elevation: 1.5,
+      elevation: .8,
       margin: const EdgeInsets.symmetric(vertical: 1),
       child: InkWell(
         borderRadius: BorderRadius.circular(30),

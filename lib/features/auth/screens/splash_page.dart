@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
-import 'package:unitysocial/core/widgets/snack_bar.dart';
+import 'package:unitysocial/core/constants/snack_bar.dart';
 import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 import 'package:unitysocial/features/auth/screens/auth_page.dart';
 import 'package:unitysocial/features/home/screens/widgets/navigation_bar.dart';
@@ -36,7 +36,8 @@ class _SplashPageState extends State<SplashPage> {
             ));
           } else if (state is UserFoundState) {
             log(FirebaseAuth.instance.currentUser!.uid);
-            showSnackbar (context, 'Logged in as ${state.userName}');
+            showSnackbar(context, 'Logged in as ${state.userName}',
+                CupertinoColors.systemMint.highContrastColor);
             Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (context) => const UnityNavigator(),
             ));
@@ -49,12 +50,12 @@ class _SplashPageState extends State<SplashPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SvgPicture.asset('assets/UnitySocial-logo.svg'),
-                  
                   const SizedBox(height: 20),
                   SizedBox(
                       width: 80,
                       child: LinearProgressIndicator(
-                          borderRadius: BorderRadius.circular(12),color: buttonGreen))
+                          borderRadius: BorderRadius.circular(12),
+                          color: buttonGreen))
                 ],
               ),
             ),

@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:razorpay_web/razorpay_web.dart';
-import 'package:unitysocial/core/widgets/snack_bar.dart';
+import 'package:unitysocial/core/constants/snack_bar.dart';
 import 'package:unitysocial/features/donation/screens/dontaion_success_page.dart';
+import 'package:unitysocial/features/donation/screens/widgets/donation_repository.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 
 class RazorPayService {
@@ -23,17 +24,24 @@ class RazorPayService {
   }
 
   handlePaymentSuccess(BuildContext context, PaymentSuccessResponse reponse,
-      RecruitmentPost post) {
-    showSnackbar(context, 'Payment Success', CupertinoColors.systemGreen);
-    Navigator.push(
+      RecruitmentPost post, String amount) async {
+    await DonationRepository().addDonation(amount: amount, post: post);
+
+    showSnackbar(context, 'Payment Success',
+        CupertinoColors.systemTeal.highContrastColor);
+    // navigaet to succes page
+    Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (context) => DonationSuccessPage(postTitle: post.title)));
+          builder: (context) => DonationSuccessPage(post: post),
+        ),
+        (route) => route.isFirst);
   }
 
   handlePaymentError(BuildContext context, PaymentFailureResponse response) {
     if (response.code == 2) {
-      showSnackbar(context, 'Payment cancelled', CupertinoColors.systemBlue);
+      showSnackbar(context, 'Payment cancelled',
+          CupertinoColors.systemTeal.highContrastElevatedColor);
     } else {
       showSnackbar(context, 'Payment error', CupertinoColors.destructiveRed);
     }

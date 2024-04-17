@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unitysocial/features/auth/data/models/sign_up_model.dart';
-import 'package:unitysocial/features/auth/data/models/user_model.dart';
+import 'package:unitysocial/features/auth/data/models/user_profile.dart';
 
 class UserRepository {
   final usersCollection = FirebaseFirestore.instance.collection('users');

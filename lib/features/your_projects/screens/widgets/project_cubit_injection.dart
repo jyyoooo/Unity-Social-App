@@ -22,7 +22,7 @@ class ProjectDetailsScreen extends StatelessWidget {
           ),
         ),
         BlocProvider<LocationCubit>(
-          create: (_) => LocationCubit(post.location.address),
+          create: (_) => LocationCubit(post.location),
         ),
       ],
       child: ProjectDetails(

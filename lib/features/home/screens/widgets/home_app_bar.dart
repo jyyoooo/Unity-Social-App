@@ -1,7 +1,8 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:unitysocial/features/notifications/screens/notification_page.dart';
 import 'package:unitysocial/features/search/screens/search_page.dart';
 
 class HomeAppBar extends StatelessWidget {
@@ -11,9 +12,10 @@ class HomeAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SliverAppBar(forceMaterialTransparency: true,
+    return SliverAppBar(
+      forceMaterialTransparency: true,
       excludeHeaderSemantics: true,
-      snap: true,
+      snap: false,
       stretch: true,
       foregroundColor: Colors.transparent,
       floating: true,
@@ -22,12 +24,12 @@ class HomeAppBar extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Container(
-              color: Colors.white.withOpacity(.1),
+              color: Colors.white.withOpacity(.7),
               child: ClipPath(
                 child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
+                  filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
                   child: Container(
-                    color: Colors.white.withOpacity(0.1),
+                    color: Colors.white.withOpacity(0.2),
                   ),
                 ),
               ),
@@ -41,7 +43,7 @@ class HomeAppBar extends StatelessWidget {
                 _title(),
                 const Spacer(),
                 Row(
-                  children: [_location(), _search(context), _notifications()],
+                  children: [_search(context), _notifications(context)],
                 )
               ],
             ),
@@ -51,9 +53,18 @@ class HomeAppBar extends StatelessWidget {
     );
   }
 
-  IconButton _notifications() {
+  // REFACTORED WIDGETS
+
+  IconButton _notifications(context) {
     return IconButton(
-        iconSize: 20, onPressed: () {}, icon: const Icon(CupertinoIcons.bell));
+        iconSize: 20,
+        onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const NotificationPage(),
+          ));
+        },
+        icon:
+            const Icon(CupertinoIcons.bell, color: CupertinoColors.systemBlue));
   }
 
   IconButton _search(BuildContext context) {
@@ -67,20 +78,30 @@ class HomeAppBar extends StatelessWidget {
             ),
           );
         },
-        icon: const Icon(CupertinoIcons.search));
+        icon: const Icon(CupertinoIcons.search,
+            color: CupertinoColors.systemBlue));
   }
 
   IconButton _location() {
     return IconButton(
         iconSize: 20,
         onPressed: () {},
-        icon: const Icon(CupertinoIcons.location));
+        icon: const Icon(CupertinoIcons.location,
+            color: CupertinoColors.systemBlue));
   }
 
-  Text _title() {
-    return const Text(
-      'Pick a Cause',
-      style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
-    );
-  }
+  Widget _title() => Row(
+        children: [
+          SvgPicture.asset('assets/UnitySocial-logo.svg', width: 50),
+          const SizedBox(width: 8),
+          const Text(
+            'Unity Social',
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              // color: buttonGreen,
+            ),
+          )
+        ],
+      );
 }

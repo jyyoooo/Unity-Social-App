@@ -31,13 +31,14 @@ class PostsRepository {
   }
 
   Future<List<AchievementBadge>> fetchPostBadges(List<String> allBadges) async {
+    log('in fetch post badges');
     List<AchievementBadge> postBadges = [];
     for (String badgeId in allBadges) {
-      final snapshot = await badgesCollection.doc(badgeId).get();
-      postBadges.add(AchievementBadge.fromMap(snapshot));
+      log(badgeId);
+      final badgeSnapshot = await badgesCollection.doc(badgeId).get();
+      postBadges.add(AchievementBadge.fromMap(badgeSnapshot));
     }
+    log(postBadges.toString());
     return postBadges;
   }
-
- 
 }

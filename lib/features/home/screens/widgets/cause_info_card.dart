@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:unitysocial/core/widgets/custom_button.dart';
+import 'package:unitysocial/core/constants/custom_button.dart';
 import 'package:unitysocial/features/home/screens/post_details_page.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:unitysocial/features/volunteer/screens/volunteer_confirm_page.dart';

@@ -7,19 +7,17 @@ class SearchRepository {
   final allPosts = FirebaseFirestore.instance.collection('posts');
 
   Future<List<RecruitmentPost>> searchThisQuery(String queryString) async {
-    final query = queryString.toLowerCase();
-    log('querying $query');
+    log('querying $queryString');
     try {
-      return await allPosts
-          .orderBy('title')
-          .startAt([query])
-          .endAt(['$query\uf8ff'])
+      final queryResults = await allPosts
           .where('isApproved', isEqualTo: true)
-          // .where('title', isGreaterThanOrEqualTo: query)
+          .where('title', isGreaterThanOrEqualTo: queryString)
           .get()
           .then((snapshot) => snapshot.docs
               .map((post) => RecruitmentPost.fromMap(post))
               .toList());
+      log('query results: $queryResults');
+      return queryResults;
     } catch (e) {
       log(e.toString());
       return [];
