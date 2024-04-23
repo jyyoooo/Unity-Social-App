@@ -40,18 +40,24 @@ class SearchRepository {
         endDate = post.duration.end;
 
         if (durationFilter == DurationFilter.oneDay) {
-          if (endDate.difference(startDate).inDays <= 1) {
-            filteredPosts.add(post);
+          if (!endDate.isBefore(DateTime.now())) {
+            if (endDate.difference(startDate).inDays <= 1) {
+              filteredPosts.add(post);
+            }
           }
         } else if (durationFilter == DurationFilter.lessThanWeek) {
-          if (endDate.difference(startDate).inDays <= 7 &&
-              endDate.difference(startDate).inDays > 1) {
-            filteredPosts.add(post);
+          if (!endDate.isBefore(DateTime.now())) {
+            if (endDate.difference(startDate).inDays <= 7 &&
+                endDate.difference(startDate).inDays > 1) {
+              filteredPosts.add(post);
+            }
           }
         } else if (durationFilter == DurationFilter.moreThanWeek) {
-          if (endDate.difference(startDate).inDays <= 30 &&
-              endDate.difference(startDate).inDays > 7) {
-            filteredPosts.add(post);
+          if (!endDate.isBefore(DateTime.now())) {
+            if (endDate.difference(startDate).inDays <= 30 &&
+                endDate.difference(startDate).inDays > 7) {
+              filteredPosts.add(post);
+            }
           }
         }
       }

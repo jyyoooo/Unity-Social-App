@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/constants/custom_button.dart';
 import 'package:unitysocial/core/constants/snack_bar.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/features/donation/bloc/donation_button_cubit.dart';
 import 'package:unitysocial/features/donation/data/razor_pay_service.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 import 'package:razorpay_web/razorpay_web.dart';
@@ -23,11 +25,14 @@ class DonationPageState extends State<DonationPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController amountController = TextEditingController();
   late final Razorpay razorpay;
+  final buttonCubit = ButtonCubit();
+
   @override
   void initState() {
     razorpay = Razorpay();
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, (response) {
-      razorService.handlePaymentSuccess(context, response, widget.post,amountController.text);
+      razorService.handlePaymentSuccess(
+          context, response, widget.post, amountController.text);
     });
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, (response) {
       razorService.handlePaymentError(context, response);
@@ -51,32 +56,30 @@ class DonationPageState extends State<DonationPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(25, 0, 25, 10),
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                _showPostTitle(),
-                _iconAndLocation(),
-                const SizedBox(height: 20),
-                _hint(),
-                const SizedBox(height: 10),
-                amountTextField(amountController),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    AmountButton(controller: amountController, amount: '100'),
-                    AmountButton(controller: amountController, amount: '500'),
-                    AmountButton(controller: amountController, amount: '1000'),
-                  ],
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height / 3.111),
-                _continueButton(context),
-                _cancelButton(context)
-              ],
-            ),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              _showPostTitle(),
+              _iconAndLocation(),
+              const SizedBox(height: 20),
+              _hint(),
+              const SizedBox(height: 10),
+              amountTextField(amountController),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  AmountButton(controller: amountController, amount: '100'),
+                  AmountButton(controller: amountController, amount: '500'),
+                  AmountButton(controller: amountController, amount: '1000'),
+                ],
+              ),
+              const Spacer(),
+              _continueButton(context),
+              _cancelButton(context),
+              const SizedBox(height: 70)
+            ],
           ),
         ),
       ),
@@ -92,15 +95,25 @@ class DonationPageState extends State<DonationPage> {
       onPressed: () => Navigator.pop(context),
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 15));
 
-  CustomButton _continueButton(BuildContext context) {
-    return CustomButton(
-      label: 'Continue',
-      onPressed: () async {
-        if (!_formKey.currentState!.validate()) {
-          showSnackbar(context, 'Choose the donation amount to continue',
-              CupertinoColors.systemMint.highContrastColor);
+  Widget _continueButton(BuildContext context) {
+    return BlocBuilder<ButtonCubit, bool>(
+      builder: (context, state) {
+        if (state) {
+          return const CustomButton(loading: true);
         } else {
-          razorService.openCheckout(razorpay, amountController.text);
+          return CustomButton(
+            loading: false,
+            label: 'Continue',
+            onPressed: () async {
+              if (!_formKey.currentState!.validate()) {
+                showSnackbar(context, 'Choose the donation amount to continue',
+                    CupertinoColors.systemTeal.highContrastColor);
+              } else {
+                context.read<ButtonCubit>().startLoading();
+                razorService.openCheckout(razorpay, amountController.text);
+              }
+            },
+          );
         }
       },
     );

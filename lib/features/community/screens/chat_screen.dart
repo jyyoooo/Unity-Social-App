@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:chat_bubbles/chat_bubbles.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/features/community/bloc/chat_bloc.dart';
@@ -54,11 +56,15 @@ class ChatScreenState extends State<ChatScreen> {
       canPop: true,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        appBar: _appbar(context),
-        body: GestureDetector(
-          child: Column(
-            children: [
-              Expanded(
+        // appBar: _appbar(context),
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                onTap: () {
+                  // Dismiss the keyboard when tapping outside the text field
+                  FocusScope.of(context).unfocus();
+                },
                 child: BlocBuilder<ChatBloc, ChatState>(
                   builder: (context, state) {
                     if (state is ChatLoading) {
@@ -74,80 +80,103 @@ class ChatScreenState extends State<ChatScreen> {
                   },
                 ),
               ),
-              ChatTextField(room: widget.room),
-            ],
-          ),
+            ),
+            Positioned(
+              top: 0, // Place the app bar field at the top of the stack
+              left: 0,
+              right: 0,
+              child: UnityAppBar(
+                  title: widget.room.name,
+                  showBackBtn: true,
+                  smallTitle: true,
+                  activateOntap: true,
+                  showInfoIcon: true,
+                  onInfoTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RoomDetails(room: widget.room),
+                        ));
+                  }),
+            ),
+            Positioned(
+              bottom: 0, // Place the chat text field at the top of the stack
+              left: 0,
+              right: 0,
+              child: ChatTextField(room: widget.room),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  PreferredSize _appbar(BuildContext context) {
-    return PreferredSize(
-      preferredSize: const Size.fromHeight(80),
-      child: UnityAppBar(
-          title: widget.room.name,
-          showBackBtn: true,
-          activateOntap: true,
-          showInfoIcon: true,
-          onInfoTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => RoomDetails(room: widget.room),
-                ));
-          }),
-    );
-  }
-
-  Center _undefinedErrorMsg() =>
-      const Center(child: Text('Something went wrong'));
-
-  Center _errorFetchingMessage() {
-    return const Center(
-      child: Text('Error fetching messages'),
-    );
-  }
-
-  Center _loadingWidget() {
-    return const Center(child: CircularProgressIndicator(strokeWidth: 1.5));
-  }
-
   Widget _showMessages(List<Message> messages, ScrollController controller) {
+    DateTime? currentDate;
+    Message? previousChat;
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.jumpTo(controller.position.maxScrollExtent);
+      if (controller.hasClients) {
+        controller.jumpTo(controller.position.maxScrollExtent);
+      }
     });
-    {
-      Message? previousChat;
-      return ListView.separated(
-        controller: controller,
-        physics: const BouncingScrollPhysics(),
-        shrinkWrap: true,
-        reverse: false,
-        padding: const EdgeInsets.fromLTRB(20, 10, 0, 5),
-        separatorBuilder: (_, __) => const SizedBox(height: 5),
-        itemCount: messages.length,
-        itemBuilder: (context, index) {
-          final chat = messages[index];
+    return messages.isEmpty
+        ? const Center(
+            child: Text('Send a message', style: TextStyle(color: Colors.grey)))
+        : CustomScrollView(
+            controller: controller,
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.only(top: 80, bottom: 63),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final chat = messages[index];
+                      final isSender = chat.senderId == senderId;
 
-          final isSender = chat.senderId == senderId;
-          final showUsername = previousChat?.senderId != chat.senderId;
-          previousChat = chat;
+                      final messageDate = chat.sentAt;
+                      final showDate = currentDate == null ||
+                          !isSameDay(messageDate, currentDate!);
+                      currentDate = messageDate;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              showUsername
-                  ? !isSender
-                      ? _senderUsername(chat)
-                      : const SizedBox()
-                  : const SizedBox(),
-              _chatBubble(isSender, chat),
+                      final showUsername =
+                          previousChat?.senderId != chat.senderId;
+                      previousChat = chat;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (showDate) _dateSeparator(messageDate),
+                          if (showUsername) ...[
+                            if (!isSender) _senderUsername(chat),
+                            const SizedBox(height: 8),
+                          ],
+                          _chatBubble(isSender, chat),
+                        ],
+                      );
+                    },
+                    childCount: messages.length,
+                  ),
+                ),
+              ),
             ],
           );
-        },
-      );
-    }
+  }
+
+  Widget _dateSeparator(DateTime date) {
+    return Container(
+      alignment: Alignment.center,
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Text(
+        DateFormat('EEE, MMM d, yyyy').format(date),
+        style: const TextStyle(color: Colors.grey, fontSize: 11),
+      ),
+    );
   }
 
   BubbleSpecialThree _chatBubble(bool isSender, Message chat) {
@@ -160,21 +189,53 @@ class ChatScreenState extends State<ChatScreen> {
         text: chat.text);
   }
 
-  FutureBuilder<String> _senderUsername(Message chat) {
+  Widget _senderUsername(Message chat) {
     return FutureBuilder(
       future: ChatRepo().getSenderUsername(chat.senderId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('...', style: TextStyle(color: Colors.grey));
+          return const Text('      ...',
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold));
         } else if (snapshot.hasError) {
-          return const Text('Volunteer', style: TextStyle(color: Colors.grey));
+          return const Text('      Volunteer',
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold));
         } else if (snapshot.hasData) {
-          return Text(snapshot.data!,
-              style: const TextStyle(color: Colors.grey));
+          return Text('      ${snapshot.data!}',
+              style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold));
         }
-        return const Text('Volunteer', style: TextStyle(color: Colors.grey));
+        return const Text('      Volunteer',
+            style: TextStyle(
+                color: Colors.grey, fontSize: 12, fontWeight: FontWeight.bold));
       },
     );
+  }
+
+  bool isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+
+  Center _undefinedErrorMsg() =>
+      const Center(child: Text('Something went wrong'));
+
+  Center _errorFetchingMessage() {
+    return const Center(
+      child: Text('Error fetching messages'),
+    );
+  }
+
+  Center _loadingWidget() {
+    return const Center(child: CupertinoActivityIndicator());
   }
 
   @override

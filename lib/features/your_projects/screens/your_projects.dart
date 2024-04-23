@@ -40,24 +40,19 @@ class _YourProjectsState extends State<YourProjects> {
             } else if (state is FetchSuccess) {
               return state.posts.isEmpty
                   ? _noProjectsMessage()
-                  : Column(
-                      children: [
-                        Expanded(
-                          child: ListView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemBuilder: (context, index) {
+                  : CustomScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      slivers: [
+                          SliverPadding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 75),
+                            sliver: SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                    (context, index) {
                               final post = state.posts[index];
                               return ProjectCard(post: post);
-                            },
-                            itemCount: state.posts.length,
+                            }, childCount: state.posts.length)),
                           ),
-                        ),
-                        Container(
-                          height: 75,
-                          color: Colors.transparent,
-                        )
-                      ],
-                    );
+                        ]);
             }
             return cachedPosts.isEmpty
                 ? _errorMessage()

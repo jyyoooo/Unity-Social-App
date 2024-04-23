@@ -23,12 +23,14 @@ class CommunityPage extends StatelessWidget {
               return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return const Center(
-                child: Text('Something went wrong'),
+                child: Text('Something went wrong',
+                    style: TextStyle(color: Colors.grey)),
               );
             } else if (snapshot.hasData) {
               return snapshot.data!.isEmpty
                   ? const Center(
-                      child: Text('You are not in any active communities'))
+                      child: Text('You are not in any active communities',
+                          style: TextStyle(color: Colors.grey)))
                   : ListView.separated(
                       physics: const BouncingScrollPhysics(),
                       itemCount: snapshot.data?.length ?? 0,
@@ -48,7 +50,8 @@ class CommunityPage extends StatelessWidget {
                             height: 85,
                             width: MediaQuery.of(context).size.width,
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(19,10,12.5,10),
+                              padding:
+                                  const EdgeInsets.fromLTRB(19, 10, 12.5, 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -99,7 +102,8 @@ class CommunityPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(maxLines: 1,
+                child: Text(
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   lastMessage.text,
                   style: const TextStyle(color: Colors.grey, fontSize: 15),

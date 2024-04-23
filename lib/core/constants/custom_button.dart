@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
 
@@ -52,25 +53,29 @@ class _CustomButtonState extends State<CustomButton> {
         });
       },
       child: Center(
-        child: AnimatedContainer(transformAlignment: Alignment.center,
+        child: AnimatedContainer(
+          transformAlignment: Alignment.center,
           duration: const Duration(milliseconds: 100),
           curve: Curves.easeInOut,
-          transform: _isTapped ? Matrix4.identity().scaled(.98, .98) : Matrix4.identity().absolute(),
+          transform: _isTapped
+              ? Matrix4.identity().scaled(.98, .98)
+              : Matrix4.identity().absolute(),
           child: Padding(
             padding: widget.padding,
             child: ElevatedButton(
               style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all(Size(widget.width!, widget.height!)),
-                backgroundColor: MaterialStateProperty.all(widget.color ?? buttonGreen),
+                minimumSize: MaterialStateProperty.all(
+                    Size(widget.width!, widget.height!)),
+                backgroundColor:
+                    MaterialStateProperty.all(widget.color ?? buttonGreen),
                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(widget.borderRadius),
                 )),
               ),
               onPressed: widget.loading ? null : widget.onPressed,
               child: widget.loading
-                  ? const CircularProgressIndicator(
+                  ? const CupertinoActivityIndicator(
                       color: Colors.white,
-                      strokeWidth: 1.5,
                     )
                   : Text(
                       widget.label ?? '',

@@ -21,6 +21,8 @@ class _SearchPageState extends State<SearchPage> {
   final FocusNode searchFocusNode = FocusNode();
   String selectedCategory = 'Category';
   String selectedDateFilter = 'Date range';
+  bool isDateFilterSelected = false;
+  bool isCategorySelected = false;
 
   @override
   void initState() {
@@ -70,6 +72,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: Row(
                   children: [
                     FilterButton(
+                      textColor: isCategorySelected?CupertinoColors.activeBlue:Colors.black,
                       selectedFilter: selectedCategory,
                       filters: [
                         _buildCategoryMenuItem('Animals'),
@@ -80,6 +83,7 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     const SizedBox(width: 5),
                     FilterButton(
+                      textColor: isDateFilterSelected?CupertinoColors.activeBlue:Colors.black,
                         constraints: const Size(150, 120),
                         selectedFilter: selectedDateFilter,
                         filters: [
@@ -103,13 +107,14 @@ class _SearchPageState extends State<SearchPage> {
                                 CircularProgressIndicator(strokeWidth: 1.5)));
                   } else if (state is SuccessSearch) {
                     return state.queryResults.isEmpty
-                        ? const Center(child: Text('No Results'))
+                        ? const Center(
+                            child: Text('No Results',
+                                style: TextStyle(color: Colors.grey)))
                         : ListView.builder(
                             physics: const BouncingScrollPhysics(),
                             itemCount: state.queryResults.length,
-                            itemBuilder: (context, index) => CauseInfoCard(
-                              post: state.queryResults[index],
-                            ),
+                            itemBuilder: (context, index) =>
+                                CauseInfoCard(post: state.queryResults[index]),
                           );
                   }
                   return const Center(
@@ -128,10 +133,15 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   _buildDateFilterMenuItem(String title) {
+    
     return PopupMenuItem(
       height: 35,
       child: Text(title),
       onTap: () {
+        setState(() {
+          selectedDateFilter = title;
+          isDateFilterSelected  = true;
+        });
         DurationFilter durationFilter = DurationFilter.moreThanWeek;
         if (title == '1 Day') {
           durationFilter = DurationFilter.oneDay;
@@ -155,6 +165,7 @@ class _SearchPageState extends State<SearchPage> {
       onTap: () {
         setState(() {
           selectedCategory = title;
+          isCategorySelected  = true;
         });
         context
             .read<SearchBloc>()

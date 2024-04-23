@@ -2,10 +2,12 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unitysocial/features/community/data/repository/chat_room_repo.dart';
+import 'package:unitysocial/features/notifications/data/notification_model.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 
 class VolunteerRepository {
   final postsCollection = FirebaseFirestore.instance.collection('posts');
+  final notifications = FirebaseFirestore.instance.collection('notifications');
 
   Future<String> addNewVolunteer(
       String volunteerId, RecruitmentPost post) async {
@@ -19,12 +21,12 @@ class VolunteerRepository {
           (snapshot.get('members') as List<dynamic>?)?.cast<String>();
 
       if (existingList == null || !existingList.contains(volunteerId)) {
-        // Check if the number of members has not reached maxMembers
         if (existingList == null || existingList.length < post.maximumMembers) {
           await docRef.update({
             'members': FieldValue.arrayUnion([volunteerId])
           });
           ChatRoomRepo().addMemberToChatRoom(post.id!, volunteerId);
+          sendNewVolunteerNotification(post);
           return 'Successfully joined ${post.title} team';
         } else {
           return 'Maximum members reached';
@@ -38,6 +40,14 @@ class VolunteerRepository {
     }
   }
 
+  sendNewVolunteerNotification(RecruitmentPost post) {
+    final notification = UnityNotification(
+        recepientId: post.host,
+        title: post.title,
+        description: 'New volunteer has joined the team');
+    notifications.add(notification.toMap());
+  }
+
   getVolunteeredCauses(String volunteerId) async {
     try {
       QuerySnapshot<Map<String, dynamic>> querySnapshot =
@@ -49,7 +59,9 @@ class VolunteerRepository {
       final posts =
           querySnapshot.docs.map((post) => RecruitmentPost.fromMap(post));
       log(posts.map((e) => e.badges.length).toString());
-      return posts.where((post) => post.duration.end.isBefore(DateTime.now())).toList();
+      return posts
+          .where((post) => post.duration.end.isBefore(DateTime.now()))
+          .toList();
     } catch (e) {
       log('Error fetching volunteered causes: $e');
       return [];

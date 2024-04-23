@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
@@ -21,17 +22,17 @@ class CauseCategoryPage extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(80),
-          child: UnityAppBar(
-            title: categoryName,
-            showBackBtn: true,
+          child: Hero(tag: categoryName,
+            child: UnityAppBar(
+              title: categoryName,
+              showBackBtn: true,
+            ),
           )),
       body: BlocBuilder<PostsBloc, PostsState>(
         builder: (context, state) {
           if (state is LoadingPosts) {
             return const Center(
-              child: CircularProgressIndicator(
-                strokeWidth: 1.5,
-              ),
+              child: CupertinoActivityIndicator()
             );
           } else if (state is AnimalsPosts) {
             log(state.allPosts.toString());
@@ -86,11 +87,9 @@ class CauseCategoryPage extends StatelessWidget {
 
   Center _emptyMessage() {
     return const Center(
-      child: Expanded(
-        child: Text(
-          'No posts available',
-          style: TextStyle(color: Colors.grey),
-        ),
+      child: Text(
+        'No posts available',
+        style: TextStyle(color: Colors.grey),
       ),
     );
   }

@@ -38,33 +38,46 @@ class UnityAppBar extends StatelessWidget {
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-        child: AppBar(backgroundColor: Colors.transparent,
-          titleSpacing: 0,
-          scrolledUnderElevation: 1,
-          leadingWidth: showBackBtn ? 50 : 0,
-          automaticallyImplyLeading: false,
-          forceMaterialTransparency: true,
-          leading: showBackBtn ? _backButton(context) : null,
-          toolbarHeight: 80,
-          title: activateOntap
-              ? SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: _pageTitle())
-              : _pageTitle(),
-          actions: [
-            showInfoIcon ? _showInfoIcon() : const SizedBox(),
-            enableCloseAction ? _closeAction(context) : const SizedBox()
-          ],
-          bottom: search ? _showSearchField() : null,
+        child: Container(
+          decoration: const BoxDecoration(
+              border: BorderDirectional(
+                  bottom: BorderSide(
+                      color: CupertinoColors.systemGrey3, width: .2))),
+          child: PreferredSize(
+            preferredSize: const Size.fromHeight(80),
+            child: AppBar(
+              // surfaceTintColor: Colors.transparent,
+              backgroundColor: Colors.white.withOpacity(.5),
+              titleSpacing: showBackBtn ? 0 : 20,
+              scrolledUnderElevation: 1,
+              leadingWidth: showBackBtn ? 50 : 0,
+              automaticallyImplyLeading: false,
+              forceMaterialTransparency: false,
+              leading: showBackBtn ? _backButton(context) : const SizedBox(),
+              toolbarHeight: 80,
+              title: activateOntap
+                  ? SizedBox(
+                      height: 90,
+                      width: MediaQuery.of(context).size.width,
+                      child: _pageTitle())
+                  : _pageTitle(),
+              actions: [
+                showInfoIcon ? _showInfoIcon() : const SizedBox(),
+                enableCloseAction ? _closeAction(context) : const SizedBox()
+              ],
+              bottom: search ? _showSearchField() : null,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Padding _showInfoIcon() {
-    return Padding(
-      padding: const EdgeInsets.only(right: 15.0, top: 15),
+  Widget _showInfoIcon() {
+    return Align(
+      alignment: Alignment.centerRight,
       child: IconButton(
+        padding: const EdgeInsets.only(top: 2.5),
         icon: const Icon(CupertinoIcons.info, size: 23),
         color: CupertinoColors.activeBlue,
         onPressed: onInfoTap,
@@ -72,15 +85,18 @@ class UnityAppBar extends StatelessWidget {
     );
   }
 
-  Padding _closeAction(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 4, top: 15),
+  Widget _closeAction(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
       child: IconButton(
         onPressed: () {
           Navigator.pop(context);
           context.read<NavigationCubit>().showNavBar();
         },
-        icon: const Icon(CupertinoIcons.xmark),
+        icon: const Icon(
+          CupertinoIcons.xmark,
+          color: CupertinoColors.systemGrey,
+        ),
       ),
     );
   }
@@ -91,32 +107,25 @@ class UnityAppBar extends StatelessWidget {
       child: Container(
         color: Colors.transparent,
         margin: const EdgeInsets.symmetric(horizontal: 15),
-        child: ClipPath(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: CupertinoSearchTextField(
-                onChanged: onChanged,
-                focusNode: focusNode,
-              ),
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: CupertinoSearchTextField(
+            enabled: true,
+            onChanged: onChanged,
+            focusNode: focusNode,
           ),
         ),
       ),
     );
   }
 
-  Padding _pageTitle() {
-    return Padding(
-      padding: EdgeInsets.only(
-        top: 27.0,
-        left: showBackBtn ? 0 : 18,
-        bottom: 15,
-      ),
+  Widget _pageTitle() {
+    return Align(
+      alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: TextStyle(backgroundColor: Colors.transparent,
+        style: TextStyle(
+          backgroundColor: Colors.transparent,
           fontWeight: smallTitle ? FontWeight.normal : FontWeight.bold,
           fontSize: smallTitle ? 17 : 27,
           color: smallTitle ? CupertinoColors.activeBlue : Colors.black,
@@ -125,19 +134,16 @@ class UnityAppBar extends StatelessWidget {
     );
   }
 
-  Padding _backButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 15.0),
-      child: IconButton(
-        onPressed: () {
-          context.read<NavigationCubit>().showNavBar();
-          log('popping');
-          Navigator.of(context).pop();
-        },
-        icon: const Icon(
-          CupertinoIcons.back,
-          color: CupertinoColors.activeBlue,
-        ),
+  Widget _backButton(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        context.read<NavigationCubit>().showNavBar();
+        log('popping');
+        Navigator.of(context).pop();
+      },
+      icon: const Icon(
+        CupertinoIcons.back,
+        color: CupertinoColors.activeBlue,
       ),
     );
   }

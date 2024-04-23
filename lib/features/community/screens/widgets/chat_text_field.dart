@@ -20,19 +20,19 @@ class ChatTextField extends StatelessWidget {
       bottom: true,
       child: ClipPath(
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
-          child: Container(
+          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+          child: Container(color: Colors.white.withOpacity(.5),
             constraints: const BoxConstraints(maxHeight: 60),
             padding: const EdgeInsets.fromLTRB(5, 2, 5, 5),
             width: double.infinity,
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(.5),
-              border: const Border(
-                top: BorderSide(
-                  color: CupertinoColors.lightBackgroundGray,
-                ),
-              ),
-            ),
+            // decoration: BoxDecoration(
+            //   color: Colors.white.withOpacity(.5),
+            //   border: const Border(
+            //     top: BorderSide(
+            //       color: CupertinoColors.lightBackgroundGray,
+            //     ),
+            //   ),
+            // ),
             child: Stack(
               children: [
                 Padding(

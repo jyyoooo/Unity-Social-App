@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unitysocial/features/community/bloc/chat_bloc.dart';
-import 'package:unitysocial/features/community/data/repository/chat_repo.dart';
-import 'package:unitysocial/features/notifications/data/notification_repo.dart';
 import 'core/constants/unity_text_field/obscurity_cubit.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/screens/splash_page.dart';
+import 'features/donation/bloc/donation_button_cubit.dart';
 import 'features/home/bloc/navigation_bloc/navigation_bloc.dart';
 import 'features/home/bloc/posts_bloc.dart';
 import 'features/home/screens/widgets/navigation_bloc.dart';
+import 'features/profile/screens/widgets/sign_out_cubit/cubit.dart';
 import 'features/recruit/bloc/recruit_bloc.dart';
 import 'features/search/bloc/search_bloc.dart';
 import 'features/volunteer/bloc/volunteer_bloc.dart';
@@ -42,6 +42,8 @@ class UnitySocialApp extends StatelessWidget {
         BlocProvider(create: (context) => ProjectsBloc()),
         BlocProvider(create: (context) => NavigationCubit()),
         BlocProvider(create: (context) => ChatBloc()),
+        BlocProvider(create: (context) => ButtonCubit()),
+        BlocProvider(create: (context) => SignOutCubit())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

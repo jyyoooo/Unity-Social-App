@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CauseCard extends StatefulWidget {
   const CauseCard({
@@ -77,13 +76,16 @@ class _CauseCardState extends State<CauseCard> {
                     ),
                     Flexible(
                       flex: 1,
-                      child: Text(widget.title,
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: isPressed
-                                  ? FontWeight.bold
-                                  : FontWeight.normal,
-                              color: Colors.black)),
+                      child: Hero(
+                        tag: widget.title,
+                        child: Text(widget.title,
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: isPressed
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
+                                color: Colors.black)),
+                      ),
                     ),
                   ],
                 ),

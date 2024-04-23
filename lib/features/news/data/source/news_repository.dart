@@ -21,6 +21,10 @@ class NewsRepository {
             title: item['title'],
             description: item['description'],
             urlToImage: item['urlToImage'],
+            content: item['content'],
+            publishedAt: item['publishedAt'],
+            source: item['source'],
+            url: item['url']
           );
         }).toList();
       } else {

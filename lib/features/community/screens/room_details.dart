@@ -31,10 +31,7 @@ class RoomDetails extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(
-                  child: Text(
-                'Loading...',
-                style: TextStyle(color: Colors.grey),
-              ));
+                  child: CupertinoActivityIndicator());
             } else if (snapshot.hasError) {
               return const Center(
                   child: Text(
@@ -53,10 +50,10 @@ class RoomDetails extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Text('Total Donations',
                           style: TextStyle(color: Colors.grey))),
-                  _showTotalDonations(post),
+                  showTotalDonations(post),
                   const Text('Recent donations',
                       style: TextStyle(color: Colors.grey)),
-                  _showAllDonations(post),
+                  showAllDonations(post),
                   const Text('Volunteers',
                       style: TextStyle(color: Colors.grey)),
                   Expanded(child: showVolunteers(post)),
@@ -70,79 +67,5 @@ class RoomDetails extends StatelessWidget {
     );
   }
 
-  SizedBox _showAllDonations(RecruitmentPost post) {
-    return SizedBox(
-      height: 40,
-      child: FutureBuilder(
-        future: DonationRepository().fetchPostDonations(post.id!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Loading donations...',
-                style: TextStyle(color: Colors.grey));
-          } else if (snapshot.hasError) {
-            return const Text('Error fetching donations',
-                style: TextStyle(color: Colors.grey));
-          } else if (snapshot.hasData) {
-            final donations = snapshot.data;
-
-            return donations!.isEmpty
-                ? const Center(
-                    child: Text('0 Donations',
-                        style: TextStyle(color: Colors.grey)),
-                  )
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
-                    itemCount: donations.length,
-                    itemBuilder: (context, index) => Card(
-                        shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text('₹${donations[index].amount}'),
-                        )),
-                  );
-          }
-          return const Text('Something went wrong, Please try again');
-        },
-      ),
-    );
-  }
-
-  SizedBox _showTotalDonations(RecruitmentPost post) {
-    return SizedBox(
-      height: 40,
-      child: FutureBuilder(
-        future: DonationRepository().totalPostDonations(post.id!),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Text('Loading total donations...',
-                style: TextStyle(color: Colors.grey));
-          } else if (snapshot.hasError) {
-            return const Text('Error fetching total donations',
-                style: TextStyle(color: Colors.grey));
-          } else if (snapshot.hasData) {
-            final totalDonation = snapshot.data;
-
-            return totalDonation == null
-                ? const Center(
-                    child: Text('₹ 0',
-                        style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: 25,
-                            fontWeight: FontWeight.bold)),
-                  )
-                : Center(
-                    child: Text(
-                      '₹ $totalDonation',
-                      style: const TextStyle(
-                          fontSize: 25, fontWeight: FontWeight.bold),
-                    ),
-                  );
-          }
-          return const Text('Something went wrong, Please try again');
-        },
-      ),
-    );
-  }
+  
 }

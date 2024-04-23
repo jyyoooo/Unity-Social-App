@@ -9,6 +9,7 @@ import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 import 'package:unitysocial/features/auth/data/models/login_model.dart';
 import 'package:unitysocial/core/constants/custom_button.dart';
 import 'package:unitysocial/core/constants/unity_text_field/unity_text_field.dart';
+import 'package:unitysocial/features/donation/bloc/donation_button_cubit.dart';
 import 'package:unitysocial/features/home/screens/widgets/navigation_bar.dart';
 
 class LoginForm extends StatelessWidget {
@@ -53,7 +54,7 @@ class LoginForm extends StatelessWidget {
                   } else if (state is LoginSuccesState) {
                     log('login suxs');
                     showSnackbar(context, 'Logged in as ${state.userName}',
-                        CupertinoColors.systemMint.highContrastColor);
+                        CupertinoColors.systemTeal.highContrastColor);
                     FocusScope.of(context).unfocus();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => const UnityNavigator()));
@@ -64,15 +65,14 @@ class LoginForm extends StatelessWidget {
                         CupertinoColors.systemRed);
                   }
                 },
-                child: context.watch<AuthBloc>().state is AuthLoadingState
-                    ? Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: CircularProgressIndicator(
-                            color: buttonGreen, strokeWidth: 1.5),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.only(top: 35),
-                        child: CustomButton(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: context.watch<AuthBloc>().state is AuthLoadingState
+                      ? CustomButton(
+                          loading: true,
+                          onPressed: () =>
+                              context.read<ButtonCubit>().stopLoading())
+                      : CustomButton(
                           label: 'Log In',
                           onPressed: () {
                             if (loginFormKey.currentState!.validate()) {
@@ -84,7 +84,7 @@ class LoginForm extends StatelessWidget {
                             }
                           },
                         ),
-                      ),
+                ),
               ),
             ],
           ),

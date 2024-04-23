@@ -29,37 +29,38 @@ class _SplashPageState extends State<SplashPage> {
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is NoUserState) {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => const AuthPage(),
-            ));
-          } else if (state is UserFoundState) {
-            log(FirebaseAuth.instance.currentUser!.uid);
-            showSnackbar(context, 'Logged in as ${state.userName}',
-                CupertinoColors.systemMint.highContrastColor);
-            Navigator.of(context).pushReplacement(MaterialPageRoute(
-              builder: (context) => const UnityNavigator(),
-            ));
-          }
-        },
-        child: SafeArea(
-          child: Scaffold(
-            body: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SvgPicture.asset('assets/UnitySocial-logo.svg'),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                      width: 80,
-                      child: LinearProgressIndicator(
-                          borderRadius: BorderRadius.circular(12),
-                          color: buttonGreen))
-                ],
-              ),
+      listener: (context, state) {
+        if (state is NoUserState) {
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => const AuthPage(),
+          ));
+        } else if (state is UserFoundState) {
+          log(FirebaseAuth.instance.currentUser!.uid);
+          showSnackbar(context, 'Logged in as ${state.userName}',
+              CupertinoColors.systemTeal.highContrastColor);
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => const UnityNavigator(),
+          ));
+        }
+      },
+      child: SafeArea(
+        child: Scaffold(
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset('assets/UnitySocial-logo.svg'),
+                const SizedBox(height: 20),
+                SizedBox(
+                    width: 80,
+                    child: LinearProgressIndicator(
+                        borderRadius: BorderRadius.circular(12),
+                        color: buttonGreen))
+              ],
             ),
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

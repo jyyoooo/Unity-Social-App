@@ -1,1 +1,0 @@
-const fcmToken = 'eLzEm7itQIqbgo9MAmvDNY:APA91bG_StwuG-mpexNEToor2X4V1BrlGd-xMwAdmXv-zfcK1MAYGsWD5qfWhUdk-9NaRWZ5g5qMwRErNNTVAdGgtyqQ1XbGh5W259wj7bnJH1XT_VLX_X48r8-mYvHwAZvwL91DpYbc';

@@ -28,12 +28,16 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  // refactored widgets
+
   FutureBuilder<List<News>> _showNewsList() {
     return FutureBuilder<List<News>>(
       future: NewsRepository().fetchLatestNews(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const SliverToBoxAdapter(child: CupertinoActivityIndicator());
+          return const SliverToBoxAdapter(
+              child:
+                  SizedBox(height: 400, child: CupertinoActivityIndicator()));
         } else if (snapshot.hasError) {
           return SliverToBoxAdapter(
             child: Center(
@@ -48,10 +52,7 @@ class HomePage extends StatelessWidget {
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
                 return NewsCard(
-                  title: snapshot.data?[index].title ?? 'title null',
-                  description:
-                      snapshot.data?[index].description ?? 'description null',
-                  imageUrl: snapshot.data![index].urlToImage,
+                  newsData: snapshot.data![index],
                 );
               },
               childCount: snapshot.data!.length,
@@ -68,8 +69,8 @@ class HomePage extends StatelessWidget {
         height: 40,
         width: 50,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(20, 10, 20, 0),
-          child: Text('News',
+          padding: EdgeInsets.fromLTRB(20, 5, 20, 5),
+          child: Text('Latest News',
               style: TextStyle(
                   color: CupertinoColors.systemGrey,
                   fontSize: 20,
@@ -95,8 +96,8 @@ class HomePage extends StatelessWidget {
   SliverToBoxAdapter _showCategorySliver(Size size, BuildContext context) {
     return SliverToBoxAdapter(
       child: SizedBox(
-        width: size.width / 2,
-        height: size.height / 9,
+        width: 85,
+        height: 90,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

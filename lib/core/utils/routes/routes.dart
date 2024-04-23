@@ -5,7 +5,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:unitysocial/features/community/screens/community_page.dart';
 import 'package:unitysocial/features/home/screens/home_page.dart';
 import 'package:unitysocial/features/profile/screens/profile_page.dart';
-import 'package:unitysocial/features/your_accreditations/screens/accreditations_page.dart';
+import 'package:unitysocial/features/your_accreditations/screens/list_accreditations_page.dart';
 import 'package:unitysocial/features/your_projects/screens/your_projects.dart';
 import 'package:unitysocial/features/recruit/screens/recruit_form.dart';
 import 'package:unitysocial/features/recruit/screens/recruit_page.dart';

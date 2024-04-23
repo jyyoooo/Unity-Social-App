@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/utils/validators/validators.dart';
@@ -74,11 +75,11 @@ class SignUpForm extends StatelessWidget {
                       showSnackbar(context, 'email already exists');
                     }
                   },
-                  child: context.watch<AuthBloc>().state is AuthLoadingState
-                      ? const CircularProgressIndicator()
-                      : Padding(
-                        padding: const EdgeInsets.only(top: 35),
-                        child: CustomButton(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 35),
+                    child: context.watch<AuthBloc>().state is AuthLoadingState
+                        ? const CustomButton(loading: true,)
+                        : CustomButton(
                             label: 'Sign Up',
                             onPressed: () {
                               log('signup working');
@@ -89,12 +90,12 @@ class SignUpForm extends StatelessWidget {
                                     name: nameController.text.trim(),
                                     email: blocProvider.emailController.text,
                                     password: passwordController.text);
-                        
+
                                 blocProvider.add(SignUpEvent(user: signUp));
                               }
                             },
                           ),
-                      ),
+                  ),
                 )
               ],
             ),

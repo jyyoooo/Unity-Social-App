@@ -42,7 +42,6 @@ class DonationRepository {
 
   sendDonationNotification(RecruitmentPost post, num amount) {
     final notification = UnityNotification(
-      
         recepientId: post.host,
         title: 'Donation received',
         description: '$amount donation receieved to ${post.title}');

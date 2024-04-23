@@ -22,7 +22,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
         });
         await for (final messages in messageStream) {
           emit(ChatLoaded(messages));
-          // log(messages.toString());
+
         }
       } catch (e) {
         emit(ChatError('Failed to fetch messages: $e'));

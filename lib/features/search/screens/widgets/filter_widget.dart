@@ -2,15 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FilterButton extends StatelessWidget {
-  FilterButton(
+  const FilterButton(
       {super.key,
       required this.selectedFilter,
       required this.filters,
-      this.constraints = const Size(115, 150)});
+      this.constraints = const Size(115, 150),
+      this.textColor = Colors.black});
 
   final String selectedFilter;
-  List<PopupMenuEntry<dynamic>> filters;
-  Size constraints;
+  final List<PopupMenuEntry<dynamic>> filters;
+  final Size constraints;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +32,13 @@ class FilterButton extends StatelessWidget {
             padding: const EdgeInsets.all(7),
             child: Row(
               children: [
-                Text(selectedFilter),
+                Text(
+                  selectedFilter,
+                  style: TextStyle(color: textColor),
+                ),
                 const SizedBox(width: 5),
                 const Icon(CupertinoIcons.chevron_down,
-                    size: 15, color: Colors.grey)
+                    size: 15, color: CupertinoColors.systemGrey)
               ],
             )),
       ),

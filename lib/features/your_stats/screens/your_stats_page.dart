@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
@@ -22,8 +23,7 @@ class YourStats extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
-                    child: Text('Loading...',
-                        style: TextStyle(color: Colors.grey)));
+                    child: CupertinoActivityIndicator());
               } else if (snapshot.hasError) {
                 return const Text('Error fetching your donations');
               } else if (snapshot.hasData) {
