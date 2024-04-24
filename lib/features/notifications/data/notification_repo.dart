@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -9,11 +11,21 @@ class NotificationRepository {
   final userId = FirebaseAuth.instance.currentUser!.uid;
 
   Stream<List<UnityNotification>> fetchNotification() {
-    return notifications
-        .where('recepientId', isEqualTo: userId)
-        .snapshots()
-        .map((snapshot) => snapshot.docs.map((doc) {
-              return UnityNotification.fromMap(doc);
-            }).toList());
+    Stream<List<UnityNotification>> allNotifications;
+    try {
+      allNotifications = notifications
+          .where('recepientId', isEqualTo: userId)
+          // .orderBy('timeStamp',
+          //     descending: true) 
+          .snapshots()
+          .map((snapshot) => snapshot.docs.map((doc) {
+                return UnityNotification.fromMap(doc);
+              }).toList());
+      log("Fetched notifications successfully");
+      return allNotifications;
+    } catch (e) {
+      log('Error fetching notifications: $e');
+      return const Stream.empty();
+    }
   }
 }

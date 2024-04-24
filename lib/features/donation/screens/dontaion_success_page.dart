@@ -32,6 +32,7 @@ class DonationSuccessPage extends StatelessWidget {
               style: const TextStyle(fontSize: 15),
             ),
             const WishYellowCard(showVolunteer: false),
+            const Spacer(),
             Align(
                 alignment: Alignment.center,
                 child: CustomButton(
@@ -42,7 +43,8 @@ class DonationSuccessPage extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => VolunteerJoin(post: post),
                           ));
-                    }))
+                    })),
+                    const SizedBox(height:60)
           ],
         ),
       ),

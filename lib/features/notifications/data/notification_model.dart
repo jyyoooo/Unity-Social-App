@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UnityNotification {
@@ -6,13 +7,15 @@ class UnityNotification {
   String title;
   String description;
   bool isRead;
+  DateTime timeStamp;
   
   UnityNotification({
     this.id,
     required this.recepientId,
     required this.title,
     required this.description,
-     this.isRead = false,
+    this.isRead = false,
+    required this.timeStamp,
   });
 
   Map<String, dynamic> toMap() {
@@ -22,6 +25,7 @@ class UnityNotification {
       'title': title,
       'description': description,
       'isRead': isRead,
+      'timeStamp': timeStamp.millisecondsSinceEpoch, 
     };
   }
 
@@ -32,6 +36,7 @@ class UnityNotification {
       title: doc['title'] as String,
       description: doc['description'] as String,
       isRead: doc['isRead'] as bool,
+      timeStamp: DateTime.fromMillisecondsSinceEpoch(doc['timeStamp'] as int), 
     );
   }
 }

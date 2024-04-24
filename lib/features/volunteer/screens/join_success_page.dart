@@ -21,7 +21,7 @@ class JoinSuccessPage extends StatelessWidget {
             Text(
                 'Your registration to join the $postTitle  team was successful.'),
             const WishYellowCard(),
-            CustomButton(label: 'Set Reminder', onPressed: () {})
+            // CustomButton(label: 'Set Reminder', onPressed: () {})
           ],
         ),
       ),

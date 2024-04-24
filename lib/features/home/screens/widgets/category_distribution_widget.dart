@@ -22,7 +22,9 @@ class CauseCategoryPage extends StatelessWidget {
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(80),
-          child: Hero(tag: categoryName,
+          child: Hero(
+            transitionOnUserGestures: true,
+            tag: categoryName,
             child: UnityAppBar(
               title: categoryName,
               showBackBtn: true,
@@ -31,9 +33,7 @@ class CauseCategoryPage extends StatelessWidget {
       body: BlocBuilder<PostsBloc, PostsState>(
         builder: (context, state) {
           if (state is LoadingPosts) {
-            return const Center(
-              child: CupertinoActivityIndicator()
-            );
+            return const Center(child: CupertinoActivityIndicator());
           } else if (state is AnimalsPosts) {
             log(state.allPosts.toString());
             return state.allPosts.isEmpty

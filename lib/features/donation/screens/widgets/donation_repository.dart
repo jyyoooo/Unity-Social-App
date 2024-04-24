@@ -42,9 +42,11 @@ class DonationRepository {
 
   sendDonationNotification(RecruitmentPost post, num amount) {
     final notification = UnityNotification(
-        recepientId: post.host,
-        title: 'Donation received',
-        description: '$amount donation receieved to ${post.title}');
+      recepientId: post.host,
+      title: 'Donation received',
+      description: '$amount donation received for ${post.title}',
+      timeStamp: DateTime.now(),
+    );
     notifications.add(notification.toMap());
   }
 
@@ -53,7 +55,7 @@ class DonationRepository {
       final querySnapshot = await donations
           .doc(postId)
           .collection('donations')
-          .orderBy('createdAt', descending: true)
+          .orderBy('timeStamp', descending: true)
           .get();
 
       final donationsList =
@@ -71,7 +73,7 @@ class DonationRepository {
       final querySnapshot = await donations
           .doc(postId)
           .collection('donations')
-          .orderBy('createdAt', descending: true)
+          .orderBy('timeStamp', descending: true)
           .get();
 
       final donationsList =

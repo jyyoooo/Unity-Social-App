@@ -111,6 +111,7 @@ class DonationPageState extends State<DonationPage> {
               } else {
                 context.read<ButtonCubit>().startLoading();
                 razorService.openCheckout(razorpay, amountController.text);
+                
               }
             },
           );

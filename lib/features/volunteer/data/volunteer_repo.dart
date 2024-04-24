@@ -44,7 +44,8 @@ class VolunteerRepository {
     final notification = UnityNotification(
         recepientId: post.host,
         title: post.title,
-        description: 'New volunteer has joined the team');
+        description: 'New volunteer has joined the team',
+        timeStamp: DateTime.now());
     notifications.add(notification.toMap());
   }
 

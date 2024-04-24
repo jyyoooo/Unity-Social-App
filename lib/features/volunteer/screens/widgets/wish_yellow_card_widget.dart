@@ -16,12 +16,13 @@ class WishYellowCard extends StatelessWidget {
         height: 350,
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  blurRadius: 4,
-                  offset: const Offset(0, 1),
-                  color: Colors.grey[200]!)
-            ],
+            // boxShadow: const [
+            //   BoxShadow(
+            //       spreadRadius: 8,
+            //       blurRadius: 18,
+            //       offset: const Offset(0, 2),
+            //       color: CupertinoColors.extraLightBackgroundGray)
+            // ],
             gradient: RadialGradient(colors: [
               CupertinoColors.systemYellow.withOpacity(.2208),
               CupertinoColors.systemYellow.withOpacity(.3208),

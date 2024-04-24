@@ -27,17 +27,18 @@ class RazorPayService {
 
   handlePaymentSuccess(BuildContext context, PaymentSuccessResponse reponse,
       RecruitmentPost post, String amount) async {
-    await DonationRepository().addDonation(amount: amount, post: post);
-
-    showSnackbar(context, 'Payment Success',
-        CupertinoColors.systemTeal.highContrastColor);
-    // navigaet to succes page
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => DonationSuccessPage(post: post),
         ),
         (route) => route.isFirst);
+
+    await DonationRepository().addDonation(amount: amount, post: post);
+
+    // showSnackbar(context, 'Payment Success',
+    //     CupertinoColors.systemTeal.highContrastColor);
+    // navigaet to succes page
   }
 
   handlePaymentError(BuildContext context, PaymentFailureResponse response) {

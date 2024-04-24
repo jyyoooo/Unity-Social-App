@@ -17,6 +17,7 @@ class NewsRepository {
         final List<dynamic> articles = decodedData['articles'];
         log('item from article: ${articles.first['content']}');
         return articles.map((item) {
+          item.toString();
           return News(
             title: item['title'],
             description: item['description'],

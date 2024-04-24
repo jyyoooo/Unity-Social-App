@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/features/notifications/data/notification_model.dart';
 import 'package:unitysocial/features/notifications/data/notification_repo.dart';
@@ -45,9 +45,12 @@ class NotificationPage extends StatelessWidget {
     return ListView.separated(
       itemCount: snapshot.data!.length,
       itemBuilder: (context, index) => ListTile(
-        title: Text(snapshot.data![index].title),
-        subtitle: Text(snapshot.data![index].description),
-      ),
+          title: Text(snapshot.data![index].title),
+          subtitle: Text(snapshot.data![index].description),
+          trailing: Text(
+            DateFormat.MMMEd().format(snapshot.data![index].timeStamp),
+            style:const TextStyle(color: Colors.grey),
+          )),
       separatorBuilder: (context, index) =>
           const Divider(height: .2, thickness: .2, color: Colors.grey),
     );
