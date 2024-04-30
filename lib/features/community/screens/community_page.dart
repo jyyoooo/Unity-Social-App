@@ -20,20 +20,21 @@ class CommunityPage extends StatelessWidget {
           stream: ChatRoomRepo().fetchChatRooms(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: CupertinoActivityIndicator());
             } else if (snapshot.hasError) {
               return const Center(
                 child: Text('Something went wrong',
                     style: TextStyle(color: Colors.grey)),
               );
             } else if (snapshot.hasData) {
-              return snapshot.data!.isEmpty
+              final chatRooms = snapshot.data!;
+              return chatRooms.isEmpty
                   ? const Center(
                       child: Text('You are not in any active communities',
                           style: TextStyle(color: Colors.grey)))
                   : ListView.separated(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: snapshot.data?.length ?? 0,
+                      itemCount: snapshot.hasData ? snapshot.data!.length : 0,
                       separatorBuilder: (context, index) =>
                           const Divider(thickness: .2, height: .1),
                       itemBuilder: (context, index) {

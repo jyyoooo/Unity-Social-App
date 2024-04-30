@@ -26,7 +26,7 @@ class DonutChart extends StatelessWidget {
           // legend: const Legend(isVisible: true),
           series: <CircularSeries>[
             DoughnutSeries<Donation, String>(
-              legendIconType: LegendIconType.horizontalLine,
+              // legendIconType: LegendIconType.horizontalLine,
               innerRadius: '45%',
               selectionBehavior:
                   SelectionBehavior(selectedColor: CupertinoColors.activeBlue),
@@ -36,13 +36,18 @@ class DonutChart extends StatelessWidget {
               pointColorMapper: (datum, index) {
                 return buttonGreen;
               },
-              enableTooltip: true,
-              strokeColor: CupertinoColors.white,
+              sortingOrder: SortingOrder.descending, strokeWidth: .8,
+              strokeColor: Colors.white,
               xValueMapper: (Donation data, _) => data.donatedTo,
               yValueMapper: (Donation data, _) => data.amount,
               dataLabelMapper: (Donation data, _) => '${data.amount}',
               dataLabelSettings: const DataLabelSettings(
-                  useSeriesColor: false, isVisible: true),
+                  textStyle: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: CupertinoColors.systemGrey6),
+                  overflowMode: OverflowMode.hide,
+                  useSeriesColor: false,
+                  isVisible: true),
             )
           ],
         ),
