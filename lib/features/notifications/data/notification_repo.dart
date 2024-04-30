@@ -15,8 +15,7 @@ class NotificationRepository {
     try {
       allNotifications = notifications
           .where('recepientId', isEqualTo: userId)
-          // .orderBy('timeStamp',
-          //     descending: true) 
+          .orderBy('timeStamp', descending: true)
           .snapshots()
           .map((snapshot) => snapshot.docs.map((doc) {
                 return UnityNotification.fromMap(doc);

@@ -54,6 +54,14 @@ android {
 
     buildTypes {
         release {
+            signingConfigs {
+                release {
+                    storeFile file('jyyoooo/unityKeyStore.jks') // Replace with your keystore path
+                    storePassword '6282983296'
+                    keyAlias 'UnityAppKey'
+                    keyPassword '6282983296'
+                }
+            }
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug

@@ -27,6 +27,7 @@ class RazorPayService {
 
   handlePaymentSuccess(BuildContext context, PaymentSuccessResponse reponse,
       RecruitmentPost post, String amount) async {
+        context.read<ButtonCubit>().stopLoading();
     Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
@@ -35,10 +36,6 @@ class RazorPayService {
         (route) => route.isFirst);
 
     await DonationRepository().addDonation(amount: amount, post: post);
-
-    // showSnackbar(context, 'Payment Success',
-    //     CupertinoColors.systemTeal.highContrastColor);
-    // navigaet to succes page
   }
 
   handlePaymentError(BuildContext context, PaymentFailureResponse response) {

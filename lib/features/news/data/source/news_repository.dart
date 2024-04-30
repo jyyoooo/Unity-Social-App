@@ -29,6 +29,7 @@ class NewsRepository {
           );
         }).toList();
       } else {
+        log('error thrwn');
         throw Exception('Response Error');
       }
     } catch (e) {

@@ -1,4 +1,5 @@
 {
     "java.compile.nullAnalysis.mode": "automatic",
-    "cmake.sourceDirectory": "C:/Users/jyyoooo/unitysocial/linux"
+    "cmake.sourceDirectory": "C:/Users/jyyoooo/unitysocial/linux",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

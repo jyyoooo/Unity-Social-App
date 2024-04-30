@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unitysocial/features/home/screens/widgets/category_distribution_widget.dart';
@@ -21,7 +23,7 @@ class HomePage extends StatelessWidget {
           _pickACauseTitle(),
           _showCategorySliver(size, context),
           _newsTitle(),
-          _showNewsList(),
+          // _showNewsList(),
           const SliverToBoxAdapter(child: SizedBox(height: 75))
         ],
       ),
@@ -39,6 +41,7 @@ class HomePage extends StatelessWidget {
               child:
                   SizedBox(height: 400, child: CupertinoActivityIndicator()));
         } else if (snapshot.hasError) {
+          log('snap error');
           return SliverToBoxAdapter(
             child: Center(
               child: Text(
@@ -51,7 +54,7 @@ class HomePage extends StatelessWidget {
           return SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return NewsCard(
+                return  NewsCard(
                   newsData: snapshot.data![index],
                 );
               },

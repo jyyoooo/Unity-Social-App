@@ -24,8 +24,8 @@ class NotificationPage extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CupertinoActivityIndicator());
           } else if (snapshot.hasError) {
-            return const Center(
-                child: Text('Something went wrong',
+            return  Center(
+                child: Text('Something went wrong ${snapshot.error.toString()}',
                     style: TextStyle(color: Colors.grey)));
           } else if (snapshot.hasData) {
             return snapshot.data!.isEmpty
