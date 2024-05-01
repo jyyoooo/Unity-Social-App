@@ -37,7 +37,7 @@ class _SplashPageState extends State<SplashPage> {
         } else if (state is UserFoundState) {
           log(FirebaseAuth.instance.currentUser!.uid);
           showSnackbar(context, 'Logged in as ${state.userName}',
-              CupertinoColors.systemTeal.highContrastColor);
+              CupertinoColors.systemTeal.highContrastColor,Durations.extralong2);
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => const UnityNavigator(),
           ));

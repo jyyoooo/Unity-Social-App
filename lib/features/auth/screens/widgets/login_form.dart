@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
 import 'package:unitysocial/core/utils/validators/validators.dart';
@@ -46,6 +47,16 @@ class LoginForm extends StatelessWidget {
                   controller: passwordController,
                   hintText: 'Password',
                   validator: passwordValidation),
+              Align(alignment: Alignment.centerLeft,
+                child: InkWell(
+                  onTap: () {},
+                  borderRadius: BorderRadius.circular(12),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Text('Forgot Password?',style: TextStyle(color: CupertinoColors.systemGrey,fontSize: 13),),
+                  ),
+                ),
+              ),
               BlocListener<AuthBloc, AuthState>(
                 // listenWhen: (previous, current) => current is LoginSuccesState,
                 listener: (context, state) {
@@ -53,8 +64,11 @@ class LoginForm extends StatelessWidget {
                     log('loading');
                   } else if (state is LoginSuccesState) {
                     log('login suxs');
-                    showSnackbar(context, 'Logged in as ${state.userName}',
-                        CupertinoColors.systemTeal.highContrastColor);
+                    showSnackbar(
+                        context,
+                        'Logged in as ${state.userName}',
+                        CupertinoColors.systemTeal.highContrastColor,
+                        Durations.extralong2);
                     FocusScope.of(context).unfocus();
                     Navigator.of(context).pushReplacement(MaterialPageRoute(
                         builder: (context) => const UnityNavigator()));

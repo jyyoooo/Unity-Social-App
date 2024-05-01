@@ -15,8 +15,10 @@ import 'package:unitysocial/features/recruit/bloc/recruit_bloc.dart';
 import 'package:unitysocial/features/recruit/data/models/badge_model.dart';
 import 'package:unitysocial/features/recruit/data/models/location_model.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
+import 'package:unitysocial/features/recruit/screens/recruit_success_page.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/date_time_range_widgets.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/location_picker_widgets.dart';
+import 'package:unitysocial/features/your_projects/screens/your_projects.dart';
 import 'widgets/badge_grid_widget.dart';
 import 'widgets/category_selector_widget.dart';
 import 'widgets/text_field_header_widget.dart';
@@ -166,71 +168,72 @@ class _RecruitFormState extends State<RecruitForm> {
                     },
                   ),
 
-                  BlocBuilder<RecruitBloc, RecruitState>(
-                      builder: (context, state) {
-                    if (state is SentForApproval) {
-                      return sentForApprovalWidget();
-                    }
-                    return CustomButton(
-                      padding: const EdgeInsets.only(bottom: 25, top: 15),
-                      label: 'Submit for approval',
-                      onPressed: () {
-                        String errorMsg = '';
-                        final form =
-                            recruitProvider.recruitFormKey.currentState!;
-                        if (!form.validate()) {
-                          errorMsg = 'Check missing fields';
-                        } else if (selectedCategory == '') {
-                          errorMsg = 'Category is not selected';
-                        } else if (selectedDateTimeRange?.start.day ==
-                                DateTime.now().day ||
-                            selectedDateTimeRange == null) {
-                          errorMsg = 'Date range is not selected';
-                        } else if (selectedLocation == null) {
-                          errorMsg = 'Location is not selected';
-                        } else if (selectedBadges.isEmpty) {
-                          errorMsg = 'No badges selected';
-                        }
-                        if (errorMsg.isNotEmpty) {
-                          showSnackbar(
-                              context, errorMsg, CupertinoColors.systemRed);
-                          // showErrorSnackBar(context, errorMsg);
-                          return;
-                        }
+                  CustomButton(
+                    padding: const EdgeInsets.only(bottom: 25, top: 15),
+                    label: 'Submit for approval',
+                    onPressed: () {
+                      String errorMsg = '';
+                      final form = recruitProvider.recruitFormKey.currentState!;
+                      if (!form.validate()) {
+                        errorMsg = 'Check missing fields';
+                      } else if (selectedCategory == '') {
+                        errorMsg = 'Category is not selected';
+                      } else if (selectedDateTimeRange?.start.day ==
+                              DateTime.now().day ||
+                          selectedDateTimeRange == null) {
+                        errorMsg = 'Date range is not selected';
+                      } else if (selectedLocation == null) {
+                        errorMsg = 'Location is not selected';
+                      } else if (selectedBadges.isEmpty) {
+                        errorMsg = 'No badges selected';
+                      }
+                      if (errorMsg.isNotEmpty) {
+                        showSnackbar(
+                            context, errorMsg, CupertinoColors.systemRed);
+                        // showErrorSnackBar(context, errorMsg);
+                        return;
+                      }
 
-                        String host = FirebaseAuth.instance.currentUser!.uid;
+                      String host = FirebaseAuth.instance.currentUser!.uid;
 
-                        final data = RecruitmentPost(
-                            host: host,
-                            title: recruitProvider.titleController.text.trim(),
-                            description: recruitProvider
-                                .descriptionController.text
-                                .trim(),
-                            category: selectedCategory,
-                            maximumMembers: int.parse(
-                                recruitProvider.membersController.text),
-                            duration: selectedDateTimeRange!,
-                            location: Location(
-                                address: selectedLocation!.address,
-                                latitude: selectedLocation!.latitude,
-                                longitude: selectedLocation!.longitude),
-                            badges: selectedBadges);
+                      final data = RecruitmentPost(
+                          host: host,
+                          title: recruitProvider.titleController.text.trim(),
+                          description:
+                              recruitProvider.descriptionController.text.trim(),
+                          category: selectedCategory,
+                          maximumMembers:
+                              int.parse(recruitProvider.membersController.text),
+                          duration: selectedDateTimeRange!,
+                          location: Location(
+                              address: selectedLocation!.address,
+                              latitude: selectedLocation!.latitude,
+                              longitude: selectedLocation!.longitude),
+                          badges: selectedBadges);
 
-                        context
-                            .read<RecruitBloc>()
-                            .add(CreateRecruitmentEvent(data: data));
+                      context
+                          .read<RecruitBloc>()
+                          .add(CreateRecruitmentEvent(data: data));
 
-                        showSuccessSnackBar(
-                            context, 'Your post was sent for approval');
-                        recruitProvider.descriptionController.clear();
-                        recruitProvider.titleController.clear();
-                        recruitProvider.membersController.clear();
-                        selectedCategory = '';
-                        selectedDateTimeRange = null;
-                        selectedLocation = null;
-                      },
-                    );
-                  }),
+                      // showSuccessSnackBar(
+                      //     context, 'Your post was sent for approval');
+                      // showSnackbar(context,
+                      //     'Your ${data.title} post was sent for admin approval');
+
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  RecruitSuccessPage(postTitle: data.title)));
+
+                      recruitProvider.descriptionController.clear();
+                      recruitProvider.titleController.clear();
+                      recruitProvider.membersController.clear();
+                      selectedCategory = '';
+                      selectedDateTimeRange = null;
+                      selectedLocation = null;
+                    },
+                  )
                 ],
               ),
             ),

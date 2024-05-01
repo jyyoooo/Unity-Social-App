@@ -43,6 +43,7 @@ class YourStats extends StatelessWidget {
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              const SizedBox(height: 10),
                               _showTotalDonations(snapshot),
                               const SizedBox(height: 15),
                               showDonationChart(size, snapshot),

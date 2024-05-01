@@ -1,13 +1,19 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class WishYellowCard extends StatelessWidget {
   const WishYellowCard({
-    super.key,
+    Key? key,
     this.showVolunteer = true,
-  });
+    this.cardTitle,
+    this.message,
+    this.icon,
+  }) : super(key: key);
   final bool showVolunteer;
+  final String? cardTitle;
+  final String? message;
+  final Icon? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +41,19 @@ class WishYellowCard extends StatelessWidget {
           padding: const EdgeInsets.all(20.0),
           child: Column(
             children: [
+              const SizedBox(height: 10),
               showVolunteer
-                  ? const Text('Happy Volunteering!',
+                  ?  Text(cardTitle?? 'Happy Volunteering!',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
+                         const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))
                   : const SizedBox(),
               const SizedBox(height: 10),
-              const Text(
+               Text(message??
                 'Your kindness makes a positive impact in the world.',
-                style: TextStyle(fontSize: 15),
+                style:const TextStyle(fontSize: 15),
               ),
               const SizedBox(height: 40),
+              icon??
               SvgPicture.asset('assets/heart_in_hand.svg'),
             ],
           ),
