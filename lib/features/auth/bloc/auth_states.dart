@@ -20,19 +20,8 @@ class AuthSuccessState extends AuthState {
 class LoginSuccesState extends AuthState {
   final AuthenticationStatus authStatus;
   final String userName;
-  LoginSuccesState({
-    required this.authStatus,
-    required this.userName,
-  });
+  LoginSuccesState({required this.authStatus, required this.userName});
 }
-
-class UserState extends AuthState {}
-
-class EmailVerifiedState extends AuthState {}
-
-class PasswordResetSuccessState extends AuthState {}
-
-class LogoutSuccessState extends AuthState {}
 
 class UserFoundState extends AuthState {
   final String userName;

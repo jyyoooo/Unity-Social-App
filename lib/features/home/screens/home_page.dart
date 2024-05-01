@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
           _pickACauseTitle(),
           _showCategorySliver(size, context),
           _newsTitle(),
-          // _showNewsList(),
+          _showNewsList(),
           const SliverToBoxAdapter(child: SizedBox(height: 75))
         ],
       ),

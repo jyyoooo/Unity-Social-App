@@ -16,10 +16,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitialState()) {
     on<SignUpEvent>(signUpEvent);
     on<LoginEvent>(loginEvent);
-    on<VerifyEmailEvent>(verifyEmailEvent);
-    on<GoogleSignUpEvent>(googleSignUpEvent);
-    on<PasswordResetEvent>(passwordResetEvent);
-    on<LogoutEvent>(logoutEvent);
+
     on<AppStartEvent>(appStartEvent);
   }
   FutureOr<void> signUpEvent(SignUpEvent event, Emitter<AuthState> emit) async {
@@ -55,15 +52,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(NoUserState());
     }
   }
-
-  FutureOr<void> verifyEmailEvent(
-      VerifyEmailEvent event, Emitter<AuthState> emit) {}
-
-  FutureOr<void> googleSignUpEvent(
-      GoogleSignUpEvent event, Emitter<AuthState> emit) {}
-
-  FutureOr<void> passwordResetEvent(
-      PasswordResetEvent event, Emitter<AuthState> emit) {}
-
-  FutureOr<void> logoutEvent(LogoutEvent event, Emitter<AuthState> emit) {}
 }

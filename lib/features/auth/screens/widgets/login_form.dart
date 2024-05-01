@@ -10,6 +10,7 @@ import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 import 'package:unitysocial/features/auth/data/models/login_model.dart';
 import 'package:unitysocial/core/constants/custom_button.dart';
 import 'package:unitysocial/core/constants/unity_text_field/unity_text_field.dart';
+import 'package:unitysocial/features/auth/data/repository/password_sevice.dart';
 import 'package:unitysocial/features/donation/bloc/donation_button_cubit.dart';
 import 'package:unitysocial/features/home/screens/widgets/navigation_bar.dart';
 
@@ -47,13 +48,20 @@ class LoginForm extends StatelessWidget {
                   controller: passwordController,
                   hintText: 'Password',
                   validator: passwordValidation),
-              Align(alignment: Alignment.centerLeft,
+              Align(
+                alignment: Alignment.centerLeft,
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    _passwordResetSheet(context);
+                  },
                   borderRadius: BorderRadius.circular(12),
                   child: const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    child: Text('Forgot Password?',style: TextStyle(color: CupertinoColors.systemGrey,fontSize: 13),),
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(
+                          color: CupertinoColors.systemGrey, fontSize: 13),
+                    ),
                   ),
                 ),
               ),
@@ -104,6 +112,75 @@ class LoginForm extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  // Refactored widgets
+
+  Future<dynamic> _passwordResetSheet(BuildContext context) {
+    TextEditingController resetEmailController = TextEditingController();
+    final resetPasswordFormKey = GlobalKey<FormState>();
+
+    return showModalBottomSheet(
+      isScrollControlled: true,
+      constraints: const BoxConstraints(
+        maxHeight: 580,
+      ),
+      showDragHandle: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30),
+      ),
+      useSafeArea: true,
+      context: context,
+      builder: (context) {
+        return Scaffold(
+          body: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: resetPasswordFormKey,
+              child: ListView(
+                children: [
+                  const Text(
+                    'Send a mail to reset your password',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 20),
+                  UnityTextField(
+                    hintText: 'Enter your mail address',
+                    validator: emailValidation,
+                    controller: resetEmailController,
+                  ),
+                  CustomButton(
+                    padding: const EdgeInsets.only(top: 20),
+                    label: 'Reset Password',
+                    onPressed: () async {
+                      if (resetPasswordFormKey.currentState!.validate()) {
+                        await PasswordResetService()
+                            .sendPasswordResetEmail(resetEmailController.text);
+                      }
+
+                      showSnackbar(
+                          context,
+                          'A link to reset your password has been sent. Please check your mail.',
+                          CupertinoColors.systemTeal.highContrastColor);
+                    },
+                  ),
+                  const SizedBox(height: 100),
+                  const Text(
+                    'Check your mail after pressing Reset Password button. If we are able to find an account related to the mail address you provided you will recieve a mail to reset your password. After creating a new password, log in to Unity Social again.',
+                    style: TextStyle(color: Colors.grey, fontSize: 11),
+                  ),
+                  const SizedBox(height: 10),
+                  // const Text(
+                  //   'If you didnt recieve any mails, contactprofile us describing your issue in detail',
+                  //   style: TextStyle(color: Colors.grey, fontSize: 11),
+                  // ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/core/constants/widgets.dart';
 import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 import 'package:unitysocial/features/auth/screens/auth_page.dart';
 import 'package:unitysocial/features/profile/screens/widgets/sign_out_button.dart';
@@ -72,7 +73,7 @@ class ProfilePage extends StatelessWidget {
                     _divider(),
                     showContact(context),
                     _divider(),
-                    _version(),
+                    version(),
                   ],
                 ),
               ],
@@ -84,12 +85,9 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  Text _version() {
-    return const Text(
-      'version 1.0',
-      style: TextStyle(color: Colors.grey, fontSize: 12),
-    );
-  }
+  // Refactored widgets
+
+  
 
   Text _divider() {
     return const Text(

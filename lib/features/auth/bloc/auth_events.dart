@@ -20,11 +20,3 @@ class LoginEvent extends AuthEvent {
   final Login login;
   LoginEvent(this.login);
 }
-
-class VerifyEmailEvent extends AuthEvent {}
-
-class GoogleSignUpEvent extends AuthEvent {}
-
-class PasswordResetEvent extends AuthEvent {}
-
-class LogoutEvent extends AuthEvent {}

@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:unitysocial/core/constants/widgets.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
 import 'package:unitysocial/core/constants/snack_bar.dart';
 import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
@@ -36,8 +38,11 @@ class _SplashPageState extends State<SplashPage> {
           ));
         } else if (state is UserFoundState) {
           log(FirebaseAuth.instance.currentUser!.uid);
-          showSnackbar(context, 'Logged in as ${state.userName}',
-              CupertinoColors.systemTeal.highContrastColor,Durations.extralong2);
+          showSnackbar(
+              context,
+              'Logged in as ${state.userName}',
+              CupertinoColors.systemTeal.highContrastColor,
+              Durations.extralong2);
           Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => const UnityNavigator(),
           ));
@@ -45,20 +50,24 @@ class _SplashPageState extends State<SplashPage> {
       },
       child: SafeArea(
         child: Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/UnitySocial-logo.svg'),
-                const SizedBox(height: 20),
-                SizedBox(
-                    width: 80,
-                    child: LinearProgressIndicator(
-                        borderRadius: BorderRadius.circular(12),
-                        color: buttonGreen))
-              ],
+          body: Stack(children: [
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/UnitySocial-logo.svg'),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                      width: 80,
+                      child: LinearProgressIndicator(
+                          borderRadius: BorderRadius.circular(12),
+                          color: buttonGreen))
+                ],
+              ),
             ),
-          ),
+            Positioned(bottom: 10, left: 0, right: 0, child: Center(child: version())),
+
+          ]),
         ),
       ),
     );
