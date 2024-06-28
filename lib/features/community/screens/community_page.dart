@@ -101,7 +101,8 @@ class CommunityPage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('Loading...', style: TextStyle(color: Colors.grey));
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Text('Error: ${snapshot.error}',
+              style: const TextStyle(color: Colors.grey));
         } else if (snapshot.hasData) {
           final Message? lastMessage = snapshot.data;
           if (lastMessage == null) {

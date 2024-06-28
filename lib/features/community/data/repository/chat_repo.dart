@@ -37,20 +37,23 @@ class ChatRepo {
     });
   }
 
-  Future<Message> fetchLastMessage(String roomId) async {
-    try {
-      final messagesCollection = chatRooms.doc(roomId).collection('messages');
-      final lastMsg = await messagesCollection
-          .orderBy('sentAt', descending: true)
-          .limit(1)
-          .get();
-      return Message.fromMap(lastMsg.docs.first.data());
-    } catch (e) {
-      log('fetch last message error: $e');
-      // maybe replace the throw with an empty Message object return
-      throw Exception(e);
+Future<Message> fetchLastMessage(String roomId) async {
+  try {
+    final messagesCollection = chatRooms.doc(roomId).collection('messages');
+    final lastMsg = await messagesCollection
+        .orderBy('sentAt', descending: true)
+        .limit(1)
+        .get();
+    if (lastMsg.docs.isEmpty) {
+      return Message(text: 'No messages', senderId: '', sentAt: DateTime.now());
     }
+    return Message.fromMap(lastMsg.docs.first.data());
+  } catch (e) {
+    log('fetch last message error: $e');
+    return Message(text: 'No messages', senderId: '', sentAt: DateTime.now());
   }
+}
+
 
   Future<String> getSenderUsername(String senderId) async {
     final senderDoc = await users.where('uid', isEqualTo: senderId).get();

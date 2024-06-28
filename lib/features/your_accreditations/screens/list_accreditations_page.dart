@@ -19,14 +19,15 @@ class AccreditationsPage extends StatelessWidget {
             title: 'Your Accreditations',
             showBackBtn: true,
           )),
-      body: Container(
+      body: SizedBox(
         child: FutureBuilder(
           future: VolunteerRepository().getVolunteeredCauses(userId),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CupertinoActivityIndicator());
             } else if (snapshot.hasError) {
-              return const Center(child: Text('Something went wrong, Try again'));
+              return const Center(
+                  child: Text('Something went wrong, Try again'));
             } else {
               List<RecruitmentPost> posts = snapshot.data ?? [];
               return posts.isEmpty

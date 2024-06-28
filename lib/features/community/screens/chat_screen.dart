@@ -82,7 +82,7 @@ class ChatScreenState extends State<ChatScreen> {
               ),
             ),
             Positioned(
-              top: 0, // Place the app bar field at the top of the stack
+              top: 0,
               left: 0,
               right: 0,
               child: UnityAppBar(
@@ -100,7 +100,7 @@ class ChatScreenState extends State<ChatScreen> {
                   }),
             ),
             Positioned(
-              bottom: 0, // Place the chat text field at the top of the stack
+              bottom: 0,
               left: 0,
               right: 0,
               child: ChatTextField(room: widget.room),
@@ -117,6 +117,9 @@ class ChatScreenState extends State<ChatScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.hasClients) {
+        // controller.animateTo(controller.position.maxScrollExtent,
+        //     duration: const Duration(milliseconds: 200),
+        //     curve: Curves.decelerate);
         controller.jumpTo(controller.position.maxScrollExtent);
       }
     });

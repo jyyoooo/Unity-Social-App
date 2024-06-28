@@ -20,8 +20,6 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  // NotificationRepository().initNotification();
-
   runApp(const UnitySocialApp());
 }
 
@@ -49,9 +47,7 @@ class UnitySocialApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Unity Social',
         theme: ThemeData(
-          textTheme: GoogleFonts.interTextTheme(
-            Theme.of(context).textTheme,
-          ),
+          textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
           colorScheme: ColorScheme.fromSeed(
               seedColor: const Color.fromARGB(255, 58, 183, 150)),
           useMaterial3: true,

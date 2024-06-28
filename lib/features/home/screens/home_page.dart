@@ -33,38 +33,58 @@ class HomePage extends StatelessWidget {
   // refactored widgets
 
   FutureBuilder<List<News>> _showNewsList() {
-    return FutureBuilder<List<News>>(
-      future: NewsRepository().fetchLatestNews(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+  return FutureBuilder<List<News>>(
+    future: NewsRepository().fetchLatestNews(),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const SliverToBoxAdapter(
+          child: SizedBox(height: 400, child: CupertinoActivityIndicator()),
+        );
+      } else if (snapshot.hasError) {
+        log('snapshot error: ${snapshot.error}');
+        return const SliverToBoxAdapter(
+          child: Center(
+            child: Text(
+              'Something went wrong. Please check your internet connection and try again.',
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
+        );
+      } else if (snapshot.hasData) {
+        if (snapshot.data!.isEmpty) {
           return const SliverToBoxAdapter(
-              child:
-                  SizedBox(height: 400, child: CupertinoActivityIndicator()));
-        } else if (snapshot.hasError) {
-          log('snap error');
-          return SliverToBoxAdapter(
             child: Center(
               child: Text(
-                snapshot.error.toString(),
-                style: const TextStyle(color: Colors.grey),
+                'No news available at the moment.',
+                style: TextStyle(color: Colors.grey),
               ),
             ),
           );
-        } else {
-          return SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return  NewsCard(
-                  newsData: snapshot.data![index],
-                );
-              },
-              childCount: snapshot.data!.length,
-            ),
-          );
         }
-      },
-    );
-  }
+        return SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return NewsCard(
+                newsData: snapshot.data![index],
+              );
+            },
+            childCount: snapshot.data!.length,
+          ),
+        );
+      }
+      return const SliverToBoxAdapter(
+        child: Center(
+          child: Text(
+            'No data available.',
+            style: TextStyle(color: Colors.grey),
+          ),
+        ),
+      );
+    },
+  );
+}
+
+
 
   SliverToBoxAdapter _newsTitle() {
     return const SliverToBoxAdapter(

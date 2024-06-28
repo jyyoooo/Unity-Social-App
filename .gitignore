@@ -45,3 +45,8 @@ node_modules
 
 # Env files
 .env
+
+# Ignoring the news_api.dart file
+lib/core/secrets/news_api.dart
+lib/core/secrets/*
+

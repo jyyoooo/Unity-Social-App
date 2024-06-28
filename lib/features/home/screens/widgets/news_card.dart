@@ -35,8 +35,7 @@ class NewsCard extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => NewsDetailsPage(newsData: newsData),
-            ),
+                builder: (context) => NewsDetailsPage(newsData: newsData)),
           );
         },
         child: Padding(

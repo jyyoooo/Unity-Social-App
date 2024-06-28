@@ -3,8 +3,9 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:unitysocial/core/enums/search_filters.dart';
+
 import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/core/enums/search_filters.dart';
 import 'package:unitysocial/features/home/screens/widgets/cause_info_card.dart';
 import 'package:unitysocial/features/home/screens/widgets/navigation_bloc.dart';
 import 'package:unitysocial/features/search/bloc/search_bloc.dart';
@@ -132,7 +133,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  _buildDateFilterMenuItem(String title) {
+  PopupMenuItem _buildDateFilterMenuItem(String title) {
     
     return PopupMenuItem(
       height: 35,
@@ -158,7 +159,7 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  _buildCategoryMenuItem(String title) {
+  PopupMenuItem _buildCategoryMenuItem(String title) {
     return PopupMenuItem(
       height: 35,
       child: Text(title),
