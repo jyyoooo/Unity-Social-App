@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unitysocial/features/community/bloc/chat_bloc.dart';
+import 'package:unitysocial/features/community/cubit/segment_cubit.dart';
+import 'package:unitysocial/features/recruit/bloc/cubit/slider_cubit.dart';
 import 'core/constants/unity_text_field/obscurity_cubit.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/screens/splash_page.dart';
@@ -41,7 +43,9 @@ class UnitySocialApp extends StatelessWidget {
         BlocProvider(create: (context) => NavigationCubit()),
         BlocProvider(create: (context) => ChatBloc()),
         BlocProvider(create: (context) => ButtonCubit()),
-        BlocProvider(create: (context) => SignOutCubit())
+        BlocProvider(create: (context) => SignOutCubit()),
+        BlocProvider(create: (context) => SegmentCubit(0)),
+        BlocProvider(create: (context) => SliderCubit())
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -26,7 +26,7 @@ class NotificationPage extends StatelessWidget {
           } else if (snapshot.hasError) {
             return  Center(
                 child: Text('Something went wrong ${snapshot.error.toString()}',
-                    style: TextStyle(color: Colors.grey)));
+                    style: const TextStyle(color: Colors.grey)));
           } else if (snapshot.hasData) {
             return snapshot.data!.isEmpty
                 ? const Center(

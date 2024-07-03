@@ -59,7 +59,7 @@ class HomeAppBar extends StatelessWidget {
     return IconButton(
         iconSize: 20,
         onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).push(CupertinoPageRoute(
             builder: (context) => const NotificationPage(),
           ));
         },

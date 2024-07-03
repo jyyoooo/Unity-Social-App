@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/features/community/cubit/segment_cubit.dart';
 import 'package:unitysocial/features/community/data/models/chat_room_model.dart';
 import 'package:unitysocial/features/community/data/models/message_model.dart';
 import 'package:unitysocial/features/community/data/repository/chat_repo.dart';
@@ -11,34 +13,65 @@ import 'widgets/formatter.dart';
 
 class CommunityPage extends StatelessWidget {
   const CommunityPage({Key? key}) : super(key: key);
+  static const segmentValue = [0, 1];
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: _appbar(),
-        body: StreamBuilder(
-          stream: ChatRoomRepo().fetchChatRooms(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CupertinoActivityIndicator());
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Something went wrong',
-                    style: TextStyle(color: Colors.grey)),
-              );
-            } else if (snapshot.hasData) {
-              final chatRooms = snapshot.data!;
-              return chatRooms.isEmpty
-                  ? const Center(
-                      child: Text('You are not in any active communities',
-                          style: TextStyle(color: Colors.grey)))
-                  : showListOfRooms(snapshot);
-            }
-            return const Center(child: Text('Something went wrong'));
-          },
-        ),
-      ),
+          appBar: _appbar(),
+          body: Column(
+            children: [
+              BlocBuilder<SegmentCubit, int>(builder: (context, segmentValue) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: CupertinoSlidingSegmentedControl<int>(
+                    groupValue: segmentValue,
+                    children: const {
+                      0: Text('Global'),
+                      1: Text('Messages'),
+                    },
+                    onValueChanged: (page) {
+                      context.read<SegmentCubit>().onPressed(page!);
+                    },
+                  ),
+                );
+              }),
+              Expanded(
+                child: BlocBuilder<SegmentCubit, int>(
+                  builder: (context, segmentValue) {
+                    return segmentValue == 0
+                        ? chatRooms()
+                        : const Placeholder();
+                  },
+                ),
+              ),
+            ],
+          )),
+    );
+  }
+
+  StreamBuilder<List<ChatRoom>> chatRooms() {
+    return StreamBuilder(
+      stream: ChatRoomRepo().fetchChatRooms(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CupertinoActivityIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(
+            child: Text('Something went wrong',
+                style: TextStyle(color: Colors.grey)),
+          );
+        } else if (snapshot.hasData) {
+          final chatRooms = snapshot.data!;
+          return chatRooms.isEmpty
+              ? const Center(
+                  child: Text('You are not in any active communities',
+                      style: TextStyle(color: Colors.grey)))
+              : showListOfRooms(snapshot);
+        }
+        return const Center(child: Text('Something went wrong'));
+      },
     );
   }
 
@@ -57,7 +90,8 @@ class CommunityPage extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              _pushRouteWithAnimation(room),
+              CupertinoPageRoute(builder: (context) => ChatScreen(room: room),)
+              // _pushRouteWithAnimation(room),
             );
           },
           child: SizedBox(

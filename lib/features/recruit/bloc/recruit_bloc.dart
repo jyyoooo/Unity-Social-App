@@ -18,7 +18,7 @@ class RecruitBloc extends Bloc<RecruitEvent, RecruitState> {
   final recruitFormKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
-  final membersController = TextEditingController();
+  
   RecruitBloc() : super(RecruitInitial()) {
     on<DateRangeUpdateEvent>(dateRangeUpdateEvent);
     on<LocationSelectEvent>(locationSelectEvent);

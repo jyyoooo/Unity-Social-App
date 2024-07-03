@@ -5,12 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_location_search/flutter_location_search.dart';
+import 'package:unitysocial/core/utils/colors/colors.dart';
 import 'package:unitysocial/core/utils/validators/validators.dart';
 import 'package:unitysocial/core/constants/custom_button.dart';
 import 'package:unitysocial/core/constants/snack_bar.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/core/constants/unity_text_field/unity_text_field.dart';
 import 'package:unitysocial/features/home/screens/widgets/navigation_bloc.dart';
+import 'package:unitysocial/features/recruit/bloc/cubit/slider_cubit.dart';
 import 'package:unitysocial/features/recruit/bloc/recruit_bloc.dart';
 import 'package:unitysocial/features/recruit/data/models/badge_model.dart';
 import 'package:unitysocial/features/recruit/data/models/location_model.dart';
@@ -18,7 +20,6 @@ import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart'
 import 'package:unitysocial/features/recruit/screens/recruit_success_page.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/date_time_range_widgets.dart';
 import 'package:unitysocial/features/recruit/screens/widgets/location_picker_widgets.dart';
-import 'package:unitysocial/features/your_projects/screens/your_projects.dart';
 import 'widgets/badge_grid_widget.dart';
 import 'widgets/category_selector_widget.dart';
 import 'widgets/text_field_header_widget.dart';
@@ -37,6 +38,7 @@ class _RecruitFormState extends State<RecruitForm> {
   LocationData? selectedLocation;
   String selectedCategory = '';
   List<AchievementBadge>? allbadges;
+  
 
   void handleBadgeSelection(AchievementBadge badge, bool isSelected) {
     if (isSelected) {
@@ -59,6 +61,7 @@ class _RecruitFormState extends State<RecruitForm> {
 
   @override
   Widget build(BuildContext context) {
+    final membersController = TextEditingController(text: context.watch<SliderCubit>().state.round().toString());
     final recruitProvider = BlocProvider.of<RecruitBloc>(context);
     return PopScope(
       onPopInvoked: (didPop) async {
@@ -105,10 +108,22 @@ class _RecruitFormState extends State<RecruitForm> {
                   // MAXIMUM MEMBERS
                   const TextFieldHeader(title: 'Maximum members'),
                   UnityTextField(
-                    controller: recruitProvider.membersController,
+                    controller: membersController,
                     hintText: 'How many members do you need?',
                     validator: maximumMembersValidation,
                     onlyNumbers: true,
+                  ),
+                  BlocBuilder<SliderCubit, double>(
+                    builder: (context, state) => CupertinoSlider(
+                      activeColor: CupertinoColors.activeBlue,
+                      value: state,
+                      min: 0,
+                      max: 50,
+                      divisions: 50,
+                      onChanged: (value) {
+                        context.read<SliderCubit>().slide(value);
+                      },
+                    ),
                   ),
 
                   // DATE RANGE WIDGET
@@ -202,8 +217,7 @@ class _RecruitFormState extends State<RecruitForm> {
                           description:
                               recruitProvider.descriptionController.text.trim(),
                           category: selectedCategory,
-                          maximumMembers:
-                              int.parse(recruitProvider.membersController.text),
+                          maximumMembers: int.parse(membersController.text),
                           duration: selectedDateTimeRange!,
                           location: Location(
                               address: selectedLocation!.address,
@@ -228,7 +242,7 @@ class _RecruitFormState extends State<RecruitForm> {
 
                       recruitProvider.descriptionController.clear();
                       recruitProvider.titleController.clear();
-                      recruitProvider.membersController.clear();
+                      membersController.clear();
                       selectedCategory = '';
                       selectedDateTimeRange = null;
                       selectedLocation = null;

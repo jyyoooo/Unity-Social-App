@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
@@ -11,6 +12,7 @@ import 'package:unitysocial/features/auth/bloc/auth_bloc.dart';
 import 'package:unitysocial/features/auth/screens/auth_page.dart';
 import 'package:unitysocial/features/profile/screens/widgets/sign_out_button.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'widgets/sign_out_cubit/cubit.dart';
 import 'widgets/tile_item_widget.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -63,7 +65,54 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            const AnimatedSignOutButton(),
+            // SIGN OUT
+            TileItem(
+                destructive: true,
+                title: 'Sign out',
+                onTap: () {
+                  showCupertinoModalPopup(
+                    context: context,
+                    builder: (context) => CupertinoActionSheet(
+                      title: const Text('Do you want to sign out?'),
+                      cancelButton: CupertinoActionSheetAction(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(color: CupertinoColors.activeBlue),
+                          )),
+                      actions: [
+                        CupertinoActionSheetAction(
+                            isDestructiveAction: true,
+                            onPressed: () async {
+                              try {
+                                await FirebaseAuth.instance.signOut().then((_) {
+                                  context
+                                      .read<SignOutCubit>()
+                                      .completeSignOut();
+                                  Navigator.of(context, rootNavigator: true)
+                                      .pushReplacement(
+                                    CupertinoPageRoute(
+                                      builder: (context) => const AuthPage(),
+                                    ),
+                                  );
+                                });
+                              } on FirebaseAuthException catch (error) {
+                                // Handle sign-out error
+                                print(error.toString());
+                              }
+                            },
+                            child: const Text('Sign out')),
+                      ],
+                    ),
+                  );
+                },
+                icon: const Icon(
+                  CupertinoIcons.square_arrow_left,
+                  color: CupertinoColors.destructiveRed,
+                )),
+            // const AnimatedSignOutButton(),
             Column(
               children: [
                 Row(
@@ -72,6 +121,7 @@ class ProfilePage extends StatelessWidget {
                     showAbout(context),
                     _divider(),
                     showContact(context),
+                    // _aboutUsAndContact(context),
                     _divider(),
                     version(),
                   ],
@@ -86,8 +136,6 @@ class ProfilePage extends StatelessWidget {
   }
 
   // Refactored widgets
-
-  
 
   Text _divider() {
     return const Text(
