@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:unitysocial/features/community/data/models/chat_room_model.dart';
 import 'package:unitysocial/features/home/data/source/posts_repo.dart';
+import 'package:unitysocial/features/push_notification/push_notification_service.dart';
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 
 class ChatRoomRepo {
@@ -27,9 +28,11 @@ class ChatRoomRepo {
     }
   }
 
-  void addMemberToChatRoom(String roomId, String memberId) {
+  void addMemberToChatRoom(String roomId, String memberId) async {
     // user is added to the chatroom when they join as a volunteer
     try {
+      //testing notification subsctiption
+      await PushNotificationService.subscribeToTopic(roomId);
       final room = chatroomsRef.doc(roomId);
       room.get().then((doc) async {
         if (doc.exists) {
@@ -49,7 +52,4 @@ class ChatRoomRepo {
     log(post.data().toString());
     return RecruitmentPost.fromMap(post);
   }
-
 }
-
-// stream updates only work when were using the snapshot

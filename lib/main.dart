@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:unitysocial/features/community/bloc/chat_bloc.dart';
 import 'package:unitysocial/features/community/cubit/segment_cubit.dart';
+import 'package:unitysocial/features/push_notification/push_notification_service.dart';
 import 'package:unitysocial/features/recruit/bloc/cubit/slider_cubit.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'core/constants/unity_text_field/obscurity_cubit.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/screens/splash_page.dart';
@@ -18,10 +20,21 @@ import 'features/search/bloc/search_bloc.dart';
 import 'features/volunteer/bloc/volunteer_bloc.dart';
 import 'features/your_projects/bloc/projects_bloc.dart';
 import 'firebase_options.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:developer';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await PushNotificationService.init();
+  await PushNotificationService.initLocalNotifications();
+  FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onMessage.listen((message) {
+    PushNotificationService.display(message);
+  });
+
+  FirebaseAnalytics.instance;
+
   runApp(const UnitySocialApp());
 }
 

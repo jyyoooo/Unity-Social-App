@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
           _pickACauseTitle(),
           _showCategorySliver(size, context),
           _newsTitle(),
-          _showNewsList(),
+          // _showNewsList(),
           const SliverToBoxAdapter(child: SizedBox(height: 75))
         ],
       ),
@@ -34,7 +34,7 @@ class HomePage extends StatelessWidget {
 
   FutureBuilder<List<News>> _showNewsList() {
   return FutureBuilder<List<News>>(
-    future: NewsRepository().fetchLatestNews(),
+    future: NewsRepository.fetchLatestNews(),
     builder: (context, snapshot) {
       if (snapshot.connectionState == ConnectionState.waiting) {
         return const SliverToBoxAdapter(

@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 import 'package:unitysocial/features/community/screens/community_page.dart';
 import 'package:unitysocial/features/home/screens/home_page.dart';
 import 'package:unitysocial/features/profile/screens/profile_page.dart';

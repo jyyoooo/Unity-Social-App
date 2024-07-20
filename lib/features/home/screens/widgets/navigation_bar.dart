@@ -3,7 +3,8 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
+// import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:unitysocial/core/utils/routes/routes.dart';
 import 'navigation_bloc.dart';
 
@@ -33,24 +34,24 @@ class UnityNavigator extends StatelessWidget {
                 child: PersistentTabView(
                   backgroundColor: CupertinoColors.white.withOpacity(.8),
                   context,
-                  hideNavigationBar: hideNavBar,
+                  // isVisible: hideNavBar,
                   navBarHeight: 70,
                   controller: controller,
                   screens: buildScreens(),
                   items: navBarItems(),
-                  confineInSafeArea: true,
+                  // confineInSafeArea: true,
                   handleAndroidBackButtonPress: true,
                   resizeToAvoidBottomInset: false,
                   stateManagement: false,
-                  hideNavigationBarWhenKeyboardShows: true,
-                  popAllScreensOnTapOfSelectedTab: true,
+                  // hideNavigationBarWhenKeyboardShows: true,
+                  // popAllScreensOnTapOfSelectedTab: true,
                   navBarStyle: NavBarStyle.simple,
                   bottomScreenMargin: 70,
                   decoration: const NavBarDecoration(
                     boxShadow: [],
                     colorBehindNavBar: Colors.transparent,
                   ),
-                  padding: const NavBarPadding.all(10),
+                  padding: const EdgeInsets.all(10),
                 ),
               ),
             ),

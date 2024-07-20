@@ -4,6 +4,7 @@ import 'package:lottie/lottie.dart';
 import 'package:unitysocial/core/constants/custom_button.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
 import 'package:unitysocial/core/utils/colors/colors.dart';
+import 'package:unitysocial/features/recruit/screens/recruit_form.dart';
 
 class RecruitPage extends StatelessWidget {
   const RecruitPage({super.key});
@@ -44,7 +45,8 @@ class RecruitPage extends StatelessWidget {
               CustomButton(
                   label: 'Create post',
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/recruitForm');
+                    Navigator.of(context).push(CupertinoPageRoute(
+                        builder: (context) => const RecruitForm()));
                   }),
             ],
           ),
