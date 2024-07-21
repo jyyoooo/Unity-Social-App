@@ -34,7 +34,8 @@ class UnityNavigator extends StatelessWidget {
                 child: PersistentTabView(
                   backgroundColor: CupertinoColors.white.withOpacity(.8),
                   context,
-                  // isVisible: hideNavBar,
+                  isVisible:
+                      state == NavigationVisibility.hideNavBar ? false : true,
                   navBarHeight: 70,
                   controller: controller,
                   screens: buildScreens(),

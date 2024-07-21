@@ -194,7 +194,7 @@ class ChatScreenState extends State<ChatScreen> {
 
   Widget _senderUsername(Message chat) {
     return FutureBuilder(
-      future: ChatRepo().getSenderUsername(chat.senderId),
+      future: ChatRepo.getSenderUsername(chat.senderId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('      ...',

@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:googleapis/keep/v1.dart';
 import 'package:unitysocial/core/constants/unity_appbar.dart';
+import 'package:unitysocial/core/utils/colors/colors.dart';
 import 'package:unitysocial/features/community/cubit/segment_cubit.dart';
 import 'package:unitysocial/features/community/data/models/chat_room_model.dart';
 import 'package:unitysocial/features/community/data/models/message_model.dart';
@@ -13,7 +15,6 @@ import 'widgets/formatter.dart';
 
 class CommunityPage extends StatelessWidget {
   const CommunityPage({Key? key}) : super(key: key);
-  static const segmentValue = [0, 1];
 
   @override
   Widget build(BuildContext context) {
@@ -21,33 +22,30 @@ class CommunityPage extends StatelessWidget {
       child: Scaffold(
           appBar: _appbar(),
           body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              BlocBuilder<SegmentCubit, int>(builder: (context, segmentValue) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8.0),
-                  child: CupertinoSlidingSegmentedControl<int>(
-                    groupValue: segmentValue,
-                    children: const {
-                      0: Text('Global'),
-                      1: Text('Messages'),
-                    },
-                    onValueChanged: (page) {
-                      context.read<SegmentCubit>().onPressed(page!);
-                    },
-                  ),
-                );
-              }),
               Expanded(
                 child: BlocBuilder<SegmentCubit, int>(
                   builder: (context, segmentValue) {
-                    return segmentValue == 0
-                        ? chatRooms()
-                        : const Placeholder();
+                    return segmentValue == 1 ? chatRooms() : feed();
                   },
                 ),
               ),
             ],
           )),
+    );
+  }
+
+  Scaffold feed() {
+    return const Scaffold(
+      backgroundColor: Colors.white,
+      body: Card(
+        color: Colors.red,
+        child: Padding(
+          padding: EdgeInsets.all(50.0),
+          child: Text('post'),
+        ),
+      ),
     );
   }
 
@@ -89,10 +87,12 @@ class CommunityPage extends StatelessWidget {
         return InkWell(
           onTap: () {
             Navigator.push(
-              context,
-              CupertinoPageRoute(builder: (context) => ChatScreen(room: room),)
-              // _pushRouteWithAnimation(room),
-            );
+                context,
+                CupertinoPageRoute(
+                  builder: (context) => ChatScreen(room: room),
+                )
+                // _pushRouteWithAnimation(room),
+                );
           },
           child: SizedBox(
             height: 85,
@@ -128,9 +128,9 @@ class CommunityPage extends StatelessWidget {
     );
   }
 
-  FutureBuilder<Message> _showLastMessage(ChatRoom room) {
-    return FutureBuilder<Message>(
-      future: ChatRepo().fetchLastMessage(room.roomId!),
+  StreamBuilder<Message> _showLastMessage(ChatRoom room) {
+    return StreamBuilder<Message>(
+      stream: ChatRepo.fetchLastMessage(room.roomId!),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text('Loading...', style: TextStyle(color: Colors.grey));
@@ -191,8 +191,11 @@ class CommunityPage extends StatelessWidget {
 
   PreferredSize _appbar() {
     return const PreferredSize(
-      preferredSize: Size.fromHeight(80),
-      child: UnityAppBar(title: 'Community'),
+      preferredSize: Size.fromHeight(110),
+      child: UnityAppBar(
+        title: 'Community',
+        showSlider: true,
+      ),
     );
   }
 }

@@ -21,7 +21,8 @@ class ChatTextField extends StatelessWidget {
       child: ClipPath(
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-          child: Container(color: Colors.white.withOpacity(.5),
+          child: Container(
+            color: Colors.white.withOpacity(.5),
             constraints: const BoxConstraints(maxHeight: 60),
             padding: const EdgeInsets.fromLTRB(5, 2, 5, 5),
             width: double.infinity,
@@ -84,7 +85,7 @@ class ChatTextField extends StatelessWidget {
                             senderId: senderId,
                             sentAt: DateTime.now());
                         log('sending msg');
-                        ChatRepo().sendMessage(message);
+                        ChatRepo.sendMessage(message, room.name);
                         chatController.clear();
                       }
                     },

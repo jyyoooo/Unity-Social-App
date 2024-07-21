@@ -33,7 +33,7 @@ void main() async {
     PushNotificationService.display(message);
   });
 
-  FirebaseAnalytics.instance;
+
 
   runApp(const UnitySocialApp());
 }

@@ -4,23 +4,26 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:unitysocial/features/community/cubit/segment_cubit.dart';
 import 'package:unitysocial/features/home/screens/widgets/navigation_bloc.dart';
 
 class UnityAppBar extends StatelessWidget {
-  const UnityAppBar({
-    Key? key,
-    required this.title,
-    this.showBackBtn = false,
-    this.enableCloseAction = false,
-    this.search = false,
-    this.onChanged,
-    this.focusNode,
-    this.activateOntap = false,
-    this.onInfoTap,
-    this.showInfoIcon = false,
-    this.smallTitle = false,
-  }) : super(key: key);
+  const UnityAppBar(
+      {Key? key,
+      required this.title,
+      this.showBackBtn = false,
+      this.enableCloseAction = false,
+      this.search = false,
+      this.onChanged,
+      this.focusNode,
+      this.activateOntap = false,
+      this.onInfoTap,
+      this.showInfoIcon = false,
+      this.smallTitle = false,
+      this.showSlider = false})
+      : super(key: key);
 
   final String title;
   final bool showBackBtn;
@@ -32,6 +35,7 @@ class UnityAppBar extends StatelessWidget {
   final bool enableCloseAction;
   final bool showInfoIcon;
   final bool smallTitle;
+  final bool showSlider;
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +69,41 @@ class UnityAppBar extends StatelessWidget {
                 showInfoIcon ? _showInfoIcon() : const SizedBox(),
                 enableCloseAction ? _closeAction(context) : const SizedBox()
               ],
-              bottom: search ? _showSearchField() : null,
+              bottom: showSlider
+                  ? _cupertinoSlider(context)
+                  : search
+                      ? _showSearchField()
+                      : null,
             ),
           ),
         ),
       ),
     );
   }
+
+ PreferredSize _cupertinoSlider(BuildContext context) {
+  return PreferredSize(
+    preferredSize: const Size.fromHeight(25),
+    child: Padding(
+      padding: const EdgeInsets.only(bottom: 15),
+      child: Center(
+        child: BlocBuilder<SegmentCubit, int>(
+          builder: (context, state) =>
+              CupertinoSlidingSegmentedControl<int>(
+            groupValue: context.read<SegmentCubit>().state,
+            children: const {
+              0: Text('Global'),
+              1: Text('Messages'),
+            },
+            onValueChanged: (page) {
+              context.read<SegmentCubit>().onPressed(page!);
+            },
+          ),
+        ),
+      ),
+    ),
+  );
+}
 
   Widget _showInfoIcon() {
     return Align(

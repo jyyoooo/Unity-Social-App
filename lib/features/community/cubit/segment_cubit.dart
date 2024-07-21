@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class SegmentCubit extends Cubit<int> {
   SegmentCubit(super.initialState);
 
-   void onPressed(int page) {
+  static const segmentValue = [0, 1];
+
+  void onPressed(int page) {
     emit(page);
   }
 }

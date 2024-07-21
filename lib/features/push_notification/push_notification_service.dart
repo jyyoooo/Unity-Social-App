@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:googleapis_auth/auth_io.dart' as auth;
@@ -22,12 +23,17 @@ class PushNotificationService {
     await _firebaseMessaging.subscribeToTopic(groupId);
   }
 
-  static sendNotificationToTopic(unityMessage.Message message) async {
+  static void sendNotificationToTopic(
+      unityMessage.Message message, String roomName, String senderName) async {
+    log(senderName);
     final token = await getToken();
     final payload = {
       'message': {
-        'notification': {'title': 'Unity Social', 'body': message.text},
-        'data': {'test': 'hello there mister'},
+        'notification': {
+          'title': '$roomName - Unity Social',
+          'body': '$senderName : ${message.text}'
+        },
+        'data': {'senderId': message.senderId, 'roomId': message.roomId},
         'topic': message.roomId
       }
     };
@@ -53,16 +59,21 @@ class PushNotificationService {
   }
 
   static void display(RemoteMessage message) async {
+    log('display called');
     try {
       const notification = NotificationDetails(
           android: AndroidNotificationDetails('Channel', 'channelName',
               importance: Importance.max, priority: Priority.high));
 
-      await _localNotificationPlugin.show(
-          message.hashCode,
-          message.notification!.title,
-          message.notification!.body,
-          notification);
+      log('sender id ${message.data['senderId']}');
+
+      if (message.data['senderId'] != FirebaseAuth.instance.currentUser!.uid) {
+        await _localNotificationPlugin.show(
+            message.hashCode,
+            message.notification!.title,
+            message.notification!.body,
+            notification);
+      }
     } catch (e) {
       log('failed to display notif : $e');
     }
