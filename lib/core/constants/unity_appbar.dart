@@ -53,7 +53,7 @@ class UnityAppBar extends StatelessWidget {
               // surfaceTintColor: Colors.transparent,
               backgroundColor: Colors.white.withOpacity(.5),
               titleSpacing: showBackBtn ? 0 : 20,
-              scrolledUnderElevation: 1,
+              scrolledUnderElevation: 0,
               leadingWidth: showBackBtn ? 50 : 0,
               automaticallyImplyLeading: false,
               forceMaterialTransparency: false,

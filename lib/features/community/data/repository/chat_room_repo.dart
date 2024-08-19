@@ -9,7 +9,7 @@ import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart'
 class ChatRoomRepo {
   final allPosts = PostsRepository().postsCollection;
   final currentUser = FirebaseAuth.instance.currentUser;
-  final chatroomsRef = FirebaseFirestore.instance.collection('chatrooms');
+  static final chatroomsRef = FirebaseFirestore.instance.collection('chatrooms');
 
   Stream<List<ChatRoom>> fetchChatRooms() async* {
     try {
@@ -47,8 +47,8 @@ class ChatRoomRepo {
     }
   }
 
-  Future<RecruitmentPost> getPostDetails(ChatRoom room) async {
-    final post = await PostsRepository().postsCollection.doc(room.postId).get();
+  Future<RecruitmentPost> getPostDetails(String roomId) async {
+    final post = await PostsRepository().postsCollection.doc(roomId).get();
     log(post.data().toString());
     return RecruitmentPost.fromMap(post);
   }

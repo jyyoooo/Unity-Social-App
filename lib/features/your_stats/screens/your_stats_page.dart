@@ -14,7 +14,6 @@ class YourStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Donation> allDonations = [];
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: _appbar(),
@@ -46,8 +45,8 @@ class YourStats extends StatelessWidget {
                               const SizedBox(height: 10),
                               _showTotalDonations(snapshot),
                               const SizedBox(height: 15),
-                              showDonationChart(size, snapshot),
-                              const SizedBox(height: 15),
+                              // showDonationChart(size, snapshot),
+                              // const SizedBox(height: 15),
                               listUserDonations(allDonations),
                             ],
                           );
@@ -67,9 +66,9 @@ class YourStats extends StatelessWidget {
   Column showDonationChart(Size size, AsyncSnapshot<List<Donation>> snapshot) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('Contribution Chart', style: TextStyle(color: Colors.grey)),
-        DonutChart(size: size, allUserDonations: snapshot.data),
+      children: const [
+        Text('Contribution Chart', style: TextStyle(color: Colors.grey)),
+        // DonutChart(size: size, allUserDonations: snapshot.data),
       ],
     );
   }

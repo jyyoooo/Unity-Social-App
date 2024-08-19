@@ -3,17 +3,19 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:unitysocial/features/community/data/models/chat_room_model.dart';
 import 'package:unitysocial/features/community/data/models/message_model.dart';
 import 'package:unitysocial/features/community/data/repository/chat_repo.dart';
 
 class ChatTextField extends StatelessWidget {
-  const ChatTextField({Key? key, required this.room}) : super(key: key);
-  final ChatRoom room;
+  const ChatTextField({Key? key, required this.roomId, required this.roomName})
+      : super(key: key);
+  // final ChatRoom room;
+  final String roomId;
+  final String roomName;
 
   @override
   Widget build(BuildContext context) {
-    // final focusNode = FocusNode();
+    final focusNode = FocusNode();
     final TextEditingController chatController = TextEditingController();
     final senderId = FirebaseAuth.instance.currentUser!.uid;
     return SafeArea(
@@ -39,12 +41,12 @@ class ChatTextField extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: TextField(
-                    // focusNode: focusNode,
-                    // onTap: () {
-                    //   if (!focusNode.hasFocus) {
-                    //     focusNode.requestFocus();
-                    //   }
-                    // },
+                    focusNode: focusNode,
+                    onTap: () {
+                      if (!focusNode.hasFocus) {
+                        focusNode.requestFocus();
+                      }
+                    },
                     controller: chatController,
                     maxLines: 5,
                     textAlignVertical: TextAlignVertical.top,
@@ -80,12 +82,12 @@ class ChatTextField extends StatelessWidget {
                       log(chatController.text);
                       if (chatController.text.isNotEmpty) {
                         final message = Message(
-                            roomId: room.roomId,
+                            roomId: roomId,
                             text: chatController.text,
                             senderId: senderId,
                             sentAt: DateTime.now());
                         log('sending msg');
-                        ChatRepo.sendMessage(message, room.name);
+                        ChatRepo.sendMessage(message, roomName);
                         chatController.clear();
                       }
                     },

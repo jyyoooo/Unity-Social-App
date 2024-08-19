@@ -7,12 +7,12 @@ import 'package:unitysocial/features/notifications/data/notification_model.dart'
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 
 class DonationRepository {
-  final donations = FirebaseFirestore.instance.collection('postDonations');
-  final notifications = FirebaseFirestore.instance.collection('notifications');
+  static final donations = FirebaseFirestore.instance.collection('postDonations');
+  static final notifications = FirebaseFirestore.instance.collection('notifications');
 
-  final userId = FirebaseAuth.instance.currentUser!.uid;
+  static final userId = FirebaseAuth.instance.currentUser!.uid;
 
-  addDonation({required RecruitmentPost post, required String amount}) async {
+  static addDonation({required RecruitmentPost post, required String amount}) async {
     log('in add donation');
     final donation = Donation(
       postId: post.id!,
@@ -40,7 +40,7 @@ class DonationRepository {
     }
   }
 
-  sendDonationNotification(RecruitmentPost post, num amount) {
+  static sendDonationNotification(RecruitmentPost post, num amount) {
     final notification = UnityNotification(
       recepientId: post.host,
       title: 'Donation received',

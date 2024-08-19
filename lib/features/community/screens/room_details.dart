@@ -10,8 +10,8 @@ import 'package:unitysocial/features/home/screens/widgets/post_details_component
 import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart';
 
 class RoomDetails extends StatelessWidget {
-  const RoomDetails({super.key, required this.room});
-  final ChatRoom room;
+  const RoomDetails({super.key, required this.roomId});
+  final String roomId;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class RoomDetails extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: FutureBuilder(
-          future: ChatRoomRepo().getPostDetails(room),
+          future: ChatRoomRepo().getPostDetails(roomId),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(

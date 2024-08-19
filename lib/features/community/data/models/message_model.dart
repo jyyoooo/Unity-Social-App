@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:unitysocial/core/enums/message_type.dart';
 
 class Message {
@@ -24,12 +25,13 @@ class Message {
     };
   }
 
-  factory Message.fromMap(Map<String, dynamic> map) {
+  factory Message.fromMap(DocumentSnapshot doc) {
+    final Map<String,dynamic> message = doc.data() as Map<String,dynamic>;
     return Message(
-      messageId: map['messageId'],
-      text: map['text'] as String,
-      senderId: map['senderId'] as String,
-      sentAt: DateTime.fromMillisecondsSinceEpoch(map['sentAt']),
+      messageId: doc.id,
+      text: message['text'] as String,
+      senderId: message['senderId'] as String,
+      sentAt: DateTime.fromMillisecondsSinceEpoch(message['sentAt']),
     );
   }
 }

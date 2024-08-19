@@ -33,12 +33,15 @@ class ChatScreenState extends State<ChatScreen> {
   late final ScrollController _scrollController;
   late final ChatBloc _chatBloc;
   final senderId = FirebaseAuth.instance.currentUser!.uid;
+  List<Message> allMessages = [];
+  bool _initialLoadComplete = false;
 
   @override
   void initState() {
     super.initState();
     context.read<NavigationCubit>().hideNavBar();
     _scrollController = ScrollController();
+
     _chatBloc = BlocProvider.of<ChatBloc>(context);
     _chatBloc.add(FetchMessages(widget.room.roomId!));
   }
@@ -46,23 +49,17 @@ class ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (didPop) async {
-        if (didPop) {
-          BlocProvider.of<NavigationCubit>(context).showNavBar();
-          return;
-        }
-        return;
+      onPopInvokedWithResult: (_, __) async {
+        BlocProvider.of<NavigationCubit>(context).showNavBar();
       },
       canPop: true,
       child: Scaffold(
         resizeToAvoidBottomInset: true,
-        // appBar: _appbar(context),
         body: Stack(
           children: [
             Positioned.fill(
               child: GestureDetector(
                 onTap: () {
-                  // Dismiss the keyboard when tapping outside the text field
                   FocusScope.of(context).unfocus();
                 },
                 child: BlocBuilder<ChatBloc, ChatState>(
@@ -71,10 +68,24 @@ class ChatScreenState extends State<ChatScreen> {
                       log('chat loading');
                       return _loadingWidget();
                     } else if (state is ChatError) {
-                      return _errorFetchingMessage();
+                      return _errorFetchingMessage(state.message);
                     } else if (state is ChatLoaded) {
-                      log('chat loaded');
-                      return _showMessages(state.messages, _scrollController);
+                      if (state.isPrevious) {
+                        allMessages.addAll(state.messages);
+                      } else {
+                        allMessages = state.messages;
+
+                        if (!_initialLoadComplete) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            _scrollToBottom();
+                          });
+                          _initialLoadComplete = true;
+                        }
+                      }
+                      return _showMessages(
+                        allMessages.reversed.toList(),
+                        _scrollController,
+                      );
                     }
                     return _undefinedErrorMsg();
                   },
@@ -95,7 +106,8 @@ class ChatScreenState extends State<ChatScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => RoomDetails(room: widget.room),
+                          builder: (context) =>
+                              RoomDetails(roomId: widget.room.roomId!),
                         ));
                   }),
             ),
@@ -103,7 +115,10 @@ class ChatScreenState extends State<ChatScreen> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: ChatTextField(room: widget.room),
+              child: ChatTextField(
+                roomId: widget.room.roomId!,
+                roomName: widget.room.name,
+              ),
             ),
           ],
         ),
@@ -111,18 +126,34 @@ class ChatScreenState extends State<ChatScreen> {
     );
   }
 
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
   Widget _showMessages(List<Message> messages, ScrollController controller) {
     DateTime? currentDate;
     Message? previousChat;
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) {
+        _scrollController.addListener(() {
+          if (_scrollController.position.atEdge) {
+            bool isTop = _scrollController.position.pixels == 0;
+            if (isTop) {
+              log('At the top: calling fetchmore');
+              BlocProvider.of<ChatBloc>(context).add(FetchMoreMessages(
+                  widget.room.roomId!, messages.first.messageId!));
+            }
+          }
+        });
+      },
+    );
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.hasClients) {
-        // controller.animateTo(controller.position.maxScrollExtent,
-        //     duration: const Duration(milliseconds: 200),
-        //     curve: Curves.decelerate);
-        controller.jumpTo(controller.position.maxScrollExtent);
-      }
-    });
     return messages.isEmpty
         ? const Center(
             child: Text('Send a message', style: TextStyle(color: Colors.grey)))
@@ -231,10 +262,8 @@ class ChatScreenState extends State<ChatScreen> {
   Center _undefinedErrorMsg() =>
       const Center(child: Text('Something went wrong'));
 
-  Center _errorFetchingMessage() {
-    return const Center(
-      child: Text('Error fetching messages'),
-    );
+  Center _errorFetchingMessage(String message) {
+    return Center(child: Text(message));
   }
 
   Center _loadingWidget() {

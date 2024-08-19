@@ -8,10 +8,11 @@ class ChatLoading extends ChatState {}
 
 class ChatLoaded extends ChatState {
   final List<Message> messages;
-  ChatLoaded(this.messages);
+  final bool isPrevious;
+  ChatLoaded(this.messages, {this.isPrevious = false});
 }
 
 class ChatError extends ChatState {
-  final String error;
-  ChatError(this.error);
+  final String message;
+  ChatError(this.message);
 }

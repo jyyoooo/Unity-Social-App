@@ -56,7 +56,7 @@ android {
         release {
             signingConfigs {
                 release {
-                    storeFile file('jyyoooo/unityKeyStore.jks') // Replace with your keystore path
+                    storeFile file('jyyoooo/unityKeyStore.jks') 
                     storePassword '6282983296'
                     keyAlias 'UnityAppKey'
                     keyPassword '6282983296'

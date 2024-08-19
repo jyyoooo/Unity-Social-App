@@ -1,15 +1,25 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:unitysocial/features/community/bloc/chat_bloc.dart';
 import 'package:unitysocial/features/community/cubit/segment_cubit.dart';
+import 'package:unitysocial/features/community/screens/chat_screen.dart';
 import 'package:unitysocial/features/push_notification/push_notification_service.dart';
 import 'package:unitysocial/features/recruit/bloc/cubit/slider_cubit.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
+
 import 'core/constants/unity_text_field/obscurity_cubit.dart';
 import 'features/auth/bloc/auth_bloc.dart';
 import 'features/auth/screens/splash_page.dart';
+import 'features/community/cubit/scroll_cubit.dart';
+import 'features/community/screens/community_page.dart';
 import 'features/donation/bloc/donation_button_cubit.dart';
 import 'features/home/bloc/navigation_bloc/navigation_bloc.dart';
 import 'features/home/bloc/posts_bloc.dart';
@@ -20,8 +30,15 @@ import 'features/search/bloc/search_bloc.dart';
 import 'features/volunteer/bloc/volunteer_bloc.dart';
 import 'features/your_projects/bloc/projects_bloc.dart';
 import 'firebase_options.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'dart:developer';
+
+GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  log('background handler called');
+
+  final roomId = message.data['roomId'];
+  final roomName = message.data['roomName'];
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,8 +49,9 @@ void main() async {
   FirebaseMessaging.onMessage.listen((message) {
     PushNotificationService.display(message);
   });
-
-
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessageOpenedApp.listen(
+      (RemoteMessage message) => _firebaseMessagingBackgroundHandler(message));
 
   runApp(const UnitySocialApp());
 }
@@ -58,7 +76,8 @@ class UnitySocialApp extends StatelessWidget {
         BlocProvider(create: (context) => ButtonCubit()),
         BlocProvider(create: (context) => SignOutCubit()),
         BlocProvider(create: (context) => SegmentCubit(0)),
-        BlocProvider(create: (context) => SliderCubit())
+        BlocProvider(create: (context) => SliderCubit()),
+        BlocProvider(create: (context) => ScrollCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -70,6 +89,16 @@ class UnitySocialApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const SplashPage(),
+        
+        // routes: {
+        //   '/chatScreen': (context) {
+        //     final args = ModalRoute.of(context)!.settings.arguments
+        //         as Map<String, String>;
+        //     log('in route $args');
+        //     return ChatScreen(
+        //         roomId: args['roomId'], roomName: args['roomName']);
+        //   }
+        // },
       ),
     );
   }

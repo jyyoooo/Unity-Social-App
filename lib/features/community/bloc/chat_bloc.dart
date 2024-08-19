@@ -11,24 +11,48 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   final _messageController = StreamController<List<Message>>.broadcast();
   Stream<List<Message>> get messageStream => _messageController.stream;
   final chatRepo = ChatRepo();
+  List<Message> allMessages = [];
+  int? lastFetchedAt;
 
   ChatBloc() : super(ChatInitial()) {
-    on<FetchMessages>((event, emit) async {
-      log('on fetch msg bloc');
-      emit(ChatLoading());
-      try {
-        chatRepo.fetchMessages(event.roomId).listen((messagesList) {
-          _messageController.add(messagesList);
-        });
-        await for (final messages in messageStream) {
-          emit(ChatLoaded(messages));
+    on<FetchMessages>(_fetchMessagesStream);
+    on<FetchMoreMessages>(_fetchMoreMessages);
+    on<MessagesReceivedEvent>(_messagesReceivedEvent);
+  }
 
-        }
-      } catch (e) {
-        emit(ChatError('Failed to fetch messages: $e'));
-      } finally {
-        _messageController.close();
+  FutureOr<void> _fetchMessagesStream(
+      FetchMessages event, Emitter<ChatState> emit) async {
+    log('fethching stream');
+    emit(ChatLoading());
+    try {
+      chatRepo.streamNewMessages(event.roomId).listen(
+            (messages) => add(MessagesReceivedEvent(messages)),
+          );
+    } catch (e) {
+      log("FETCH STREAM ERROR: $e");
+      emit(ChatError('Failed to get stream'));
+    }
+  }
+
+  FutureOr<void> _messagesReceivedEvent(
+      MessagesReceivedEvent event, Emitter<ChatState> emit) {
+    emit(ChatLoaded(event.messages));
+  }
+
+  FutureOr<void> _fetchMoreMessages(
+      FetchMoreMessages event, Emitter<ChatState> emit) async {
+    try {
+      final messages = await chatRepo.fetchPreviousMessages(
+          event.roomId, event.previousDocId);
+      if (messages.isEmpty) {
+        emit(ChatError('Something went wrong'));
+      } else {
+        emit(ChatLoaded(messages, isPrevious: true));
       }
-    });
+    } catch (e) {
+      log("FETCH MORE ERROR: $e");
+      emit(ChatError('Failed to load chat'));
+    }
   }
 }
+ 

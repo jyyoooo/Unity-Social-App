@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:razorpay_web/razorpay_web.dart';
 import 'package:unitysocial/core/constants/snack_bar.dart';
+import 'package:unitysocial/core/secrets/secrets.dart';
 import 'package:unitysocial/features/donation/bloc/donation_button_cubit.dart';
 import 'package:unitysocial/features/donation/screens/dontaion_success_page.dart';
 import 'package:unitysocial/features/donation/screens/widgets/donation_repository.dart';
@@ -11,10 +12,10 @@ import 'package:unitysocial/features/recruit/data/models/recruitment_model.dart'
 class RazorPayService {
   void openCheckout(Razorpay razorpay, String amount) {
     var options = {
-      "key": "rzp_test_KVdVVjVysrpQS4",
+      "key": razorKey,
       "amount": num.parse(amount) * 100,
       "name": "Unity Social",
-      "description": 'Donation test',
+      "description": 'Donation',
       "timeout": "180",
       "currency": "INR",
       "prefill": {
@@ -35,7 +36,7 @@ class RazorPayService {
         ),
         (route) => route.isFirst);
 
-    await DonationRepository().addDonation(amount: amount, post: post);
+    await DonationRepository.addDonation(amount: amount, post: post);
   }
 
   handlePaymentError(BuildContext context, PaymentFailureResponse response) {
