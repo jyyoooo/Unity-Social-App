@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 
 import 'package:chat_bubbles/chat_bubbles.dart';
@@ -158,6 +157,7 @@ class ChatScreenState extends State<ChatScreen> {
         ? const Center(
             child: Text('Send a message', style: TextStyle(color: Colors.grey)))
         : CustomScrollView(
+            scrollBehavior: const CupertinoScrollBehavior(),
             controller: controller,
             physics: const BouncingScrollPhysics(),
             slivers: [

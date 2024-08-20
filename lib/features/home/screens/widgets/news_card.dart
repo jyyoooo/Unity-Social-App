@@ -154,7 +154,7 @@ class NewsCard extends StatelessWidget {
       child: Text(
         overflow: TextOverflow.ellipsis,
         maxLines: 1,
-        newsData.description ?? 'No Description',
+        newsData.description ?? 'Unavailable',
         style: const TextStyle(
           fontSize: 12,
           color: CupertinoColors.systemGrey,
@@ -166,7 +166,7 @@ class NewsCard extends StatelessWidget {
   Widget _newsTitle() {
     return Flexible(
       child: Text(
-        newsData.title ?? 'No title',
+        newsData.title ?? 'Unavailable',
         style: TextStyle(
           color: Colors.grey[850],
           fontSize: 13.5,

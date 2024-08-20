@@ -18,12 +18,12 @@ class NewsDetailsPage extends StatelessWidget {
       appBar: PreferredSize(
           preferredSize: const Size.fromHeight(80),
           child: UnityAppBar(
-            title: newsData.source['name'] as String,
+            title: newsData.author as String,
             smallTitle: true,
             // enableCloseAction: true,
             showBackBtn: true,
           )),
-      body: SingleChildScrollView(
+      body: SingleChildScrollView(physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
           child: Column(
@@ -46,7 +46,7 @@ class NewsDetailsPage extends StatelessWidget {
                   ),
                   newsData.url == 'https://removed.com'
                       ? const IconButton(
-                          color: CupertinoColors.systemGrey,
+                          color: Color.fromARGB(255, 47, 47, 219),
                           onPressed: null,
                           icon: Icon(CupertinoIcons.share),
                         )
